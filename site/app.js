@@ -164,3 +164,11 @@
     $('rows').innerHTML='<tr><td colspan="8" style="height:120px;text-align:center" class="muted">Brak danych z testu. Bot nie opublikował jeszcze wyników.</td></tr>';
   });
 })();
+
+(function(){
+  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .hsteps li, .tl > div, .provsec, .brief, .faq details');
+  if(!('IntersectionObserver' in window)||!els.length)return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
+  Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});
+  setTimeout(function(){Array.prototype.forEach.call(els,function(el){el.classList.add('in')})},2500);
+})();

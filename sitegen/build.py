@@ -35,6 +35,7 @@ def layout(path, title, desc, body):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/style.css">
+<script>document.documentElement.className="js"</script>
 </head>
 <body>
 <header class="top"><div class="wrap">
@@ -52,11 +53,13 @@ def layout(path, title, desc, body):
 """
 
 
-def band(crumb, h1, lead, extra="", image=False):
+def band(crumb, h1, lead, extra="", image=False, figure=""):
     img = ('<img class="hero" src="/hero-uk.webp" srcset="/hero-uk-sm.webp 887w, /hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 780px" '
            'width="1774" height="887" alt="Ilustracja: połączenie z zagranicy do Polski">') if image else ""
     credit = '<div class="credit">Ilustracja. To nie jest zrzut ekranu z testu.</div>' if image else ""
-    return f"""<div class="open{'' if image else ' solo'}"><div class="wrap">
+    if figure:
+        img = figure
+    return f"""<div class="open{'' if (image or figure) else ' solo'}{' hasfig' if figure else ''}"><div class="wrap">
   <div class="otext">
     <div class="crumb">{crumb}</div>
     <h1>{h1}</h1>
@@ -152,7 +155,44 @@ def steps(service):
 </div></section>"""
 
 
+def frame(src, url, cap):
+    """A real bot screenshot inside a plain browser frame."""
+    return (f'<figure class="bframe"><div class="bbar"><i></i><i></i><i></i><span>{url}</span></div>'
+            f'<img src="{src}" alt="{cap}" width="1440" height="900"><figcaption>{cap}</figcaption></figure>')
+
+
+def flow(service, logo=""):
+    flags = "".join(f'<img src="https://flagcdn.com/{c}.svg" alt="" width="30" height="20">' for c in ("gb", "de", "nl", "us"))
+    end = f'<span class="slogo"><img src="{logo}" alt=""></span>' if logo else '<span class="slogo stext">TV</span>'
+    return f"""<div class="flow" role="img" aria-label="Ty za granicą, serwer VPN w Polsce, {service}">
+  <div class="fnode"><div class="fico">{flags}</div><b>Ty, za granicą</b><span>Zagraniczny adres IP</span></div>
+  <div class="fline"><span>szyfrowane połączenie</span></div>
+  <div class="fnode mid"><div class="fico"><img src="https://flagcdn.com/pl.svg" alt="" width="42" height="28"></div><b>Serwer VPN w Polsce</b><span>Polski adres IP</span></div>
+  <div class="fline"><span>polski adres IP</span></div>
+  <div class="fnode"><div class="fico">{end}</div><b>{service}</b><span>Widzi widza z Polski</span></div>
+</div>"""
+
+
+FLOWS = {}
+
+
+def provstrip(note=""):
+    rows = ""
+    for pid, name, url, pl, refund, dev, tv, src, srcname, n in FACTS:
+        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
+                 f'<span><em>Serwer w Polsce</em>{pl}</span><span><em>Zwrot pieniędzy</em>{refund}</span>'
+                 f'<span data-prov-status="{pid}"><span class="muted">…</span></span>'
+                 f'<a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona dostawcy</a></div>')
+    return f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców. Ostatnia kolumna przed przyciskiem to wynik naszego testu, jeśli już testujemy danego dostawcę.'}</p></div>
+  <div class="pstrip">{rows}</div>
+  <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
+</div></section>"""
+
+
 def prose(html, cls="faqs", aside=""):
+    for k, v in FLOWS.items():
+        html = html.replace(f"<!--flow:{k}-->", v)
     side = f'<aside class="side2">{aside}</aside>' if aside else ""
     return f'<section class="{cls}"><div class="wrap pgrid"><div class="prose">{html}</div>{side}</div></section>'
 
@@ -225,6 +265,8 @@ def facts_sections():
     return out
 
 
+FLOWS.update({"tvpvod": flow("TVP VOD", "/logos/tvpvod.png"), "player": flow("Player", "/logos/player.svg"), "polsat": flow("Polsat Box Go", "/logos/polsat.svg")})
+
 # ---------------------------------------------------------------- pages
 
 PAGES = {}
@@ -241,6 +283,10 @@ PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Stre
     <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
     <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
   </ul>
+</div></section>"""
+              + f"""<section class="howflow"><div class="wrap narrowpad">
+  <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
+  {flow("Polski serwis", "")}
 </div></section>"""
               + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Porównanie VPN z serwerem w Polsce</h2><p>Żeby oglądać polskie serwisy, VPN musi mieć serwer w Polsce. Fakty pochodzą ze stron dostawców, a kolumna „Nasz test” z naszego bota.</p></div>
@@ -268,8 +314,8 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny te
     "TVP VOD za granicą: trzy sposoby, wynik codziennego testu VPN i zrzut ekranu jako dowód.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
          "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Poniżej są trzy sposoby i wynik naszego codziennego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
-    + svc_result("tvpvod", "TVP VOD")
+         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>',
+         figure=frame("/img/tvpvod-test.webp", "vod.tvp.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Film gra."))
     + prose("""
 <h2>Dlaczego TVP VOD nie działa za granicą</h2>
 <p>TVP kupuje prawa do wielu filmów, seriali i transmisji tylko na terytorium Polski. Serwis sprawdza adres IP urządzenia. Gdy adres jest zagraniczny, część materiałów się nie włącza.</p>
@@ -281,9 +327,12 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny te
 <h3>2. W Unii Europejskiej: przenośność płatnych usług</h3>
 <p>Unijne rozporządzenie o przenośności (2017/1128) daje dostęp do <b>płatnych</b> subskrypcji podczas czasowego pobytu w innym kraju UE. Dla darmowych serwisów to nie jest obowiązek. Po Brexicie ta zasada nie obejmuje Wielkiej Brytanii (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="noopener">źródło: gov.uk</a>).</p>
 <h3>3. VPN z serwerem w Polsce</h3>
+<!--flow:tvpvod-->
 <p>VPN daje Twojemu urządzeniu polski adres IP. Serwis widzi wtedy użytkownika z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia. Dlatego sprawdzamy to codziennie.</p>
 """, "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "Nie zawsze potrzebne"), ("Blokada", "Po adresie IP, zależy od materiału"), ("Nasz test", "Codziennie, program „Jeden z dziesięciu”")],
                      [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
+    + provstrip()
+    + svc_result("tvpvod", "TVP VOD")
     + steps("TVP VOD")
     + prose(f"""
 <h2>Co zauważyliśmy w testach</h2>
@@ -301,8 +350,8 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test
     "Player za granicą: darmowa część serwisu, pakiet Player International i wynik codziennego testu VPN.",
     band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
          "Player ma darmowe materiały z reklamami i płatne pakiety. Za granicą część z nich jest zablokowana. Poniżej są sposoby i wynik naszego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
-    + svc_result("player", "Player")
+         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>',
+         figure=frame("/img/player-test.webp", "player.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Film gra."))
     + prose("""
 <h2>Co wybrać</h2>
 <h3>1. Player International: oficjalna opcja</h3>
@@ -310,9 +359,12 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test
 <h3>2. W Unii Europejskiej: przenośność płatnych pakietów</h3>
 <p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, unijne przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Nie dotyczy to Wielkiej Brytanii.</p>
 <h3>3. VPN z serwerem w Polsce</h3>
+<!--flow:player-->
 <p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. Testujemy darmowy materiał: bot włącza „Fakty” bez logowania i sprawdza, czy film gra 60 sekund.</p>
 """, "prosec", brief([("Darmowa część", "Tak, z reklamami"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, program „Fakty”")],
                      [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
+    + provstrip()
+    + svc_result("player", "Player")
     + steps("Player")
     + prose(f"""
 <h2>Co zauważyliśmy w testach</h2>
@@ -345,9 +397,11 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
 <h3>2. Pakiet dla widzów za granicą</h3>
 <p>Według serwisów <a href="https://bezprawnik.pl/jak-ogladac-tv-za-granica/" target="_blank" rel="noopener">Bezprawnik</a> i <a href="https://android.com.pl/sponsorowany/436490-polsat-box-go-co-wybrac-roznice-grupa-plus/" target="_blank" rel="noopener">Android.com.pl</a> Polsat Box Go ma pakiet „Polonia” dla osób przebywających poza Polską, z treściami, na które licencja pozwala za granicą. Nie potwierdziliśmy tego w oficjalnym cenniku. Aktualną ofertę sprawdź na <a href="https://polsatboxgo.pl/pakiety" target="_blank" rel="noopener">polsatboxgo.pl/pakiety</a>.</p>
 <h3>3. VPN z serwerem w Polsce</h3>
+<!--flow:polsat-->
 <p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Zobacz <a href="/porownanie-vpn">porównanie VPN</a> i wyniki dla serwisów, które testujemy: <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Player</a>.</p>
 """, "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Przenośność płatnych pakietów"), ("Nasz test", "Jeszcze nie testujemy")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce. Nie testowaliśmy ich z Polsat Box Go, więc wynik testu dotyczy tylko innych serwisów.")
     + faq([LEGAL_Q, TV_Q,
            ("Kiedy zaczniecie testować Polsat Box Go?", "Gdy strona będzie miała budżet na płatny pakiet. Do tego czasu ta strona zawiera tylko fakty ze źródeł.")]))
 
@@ -472,6 +526,48 @@ a.prov{text-decoration:none}
 .lastrow img{width:30px;height:30px}
 .lastrow .pst{display:inline-block;margin-right:22px;font-size:14px}
 .egrid{grid-template-columns:minmax(0,760px) minmax(0,420px);justify-content:space-between}
+.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,640px);gap:56px;padding-top:36px;padding-bottom:36px}
+.bframe{margin:0;border:1px solid #d9cfbf;border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 18px 40px -22px rgba(23,35,45,.45)}
+.bbar{display:flex;align-items:center;gap:6px;padding:9px 12px;background:#efe6d8;border-bottom:1px solid #d9cfbf}
+.bbar i{width:9px;height:9px;border-radius:50%;background:#c9bda9}
+.bbar span{margin-left:10px;font:400 12px var(--mono);color:#5A6570;background:#fff;border-radius:4px;padding:2px 10px;flex:1}
+.bframe img{display:block;width:100%;height:auto}
+.bframe figcaption{font-size:12px;color:#5A6570;padding:8px 12px;background:#fff;border-top:1px solid #e7dfd2}
+.howflow{background:var(--surface);border-bottom:1px solid var(--line)}
+.flow{display:grid;grid-template-columns:auto minmax(60px,1fr) auto minmax(60px,1fr) auto;align-items:center;gap:0;margin:22px 0 26px;padding:26px 28px;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+.prosec.alt .flow{background:var(--surface)}
+.fnode{display:grid;justify-items:center;text-align:center;gap:4px;min-width:150px}
+.fnode b{font-size:15px}
+.fnode span{font-size:13px;color:var(--muted)}
+.fico{height:54px;display:flex;align-items:center;justify-content:center;gap:4px;padding:0 14px;background:var(--surface);border:1px solid var(--line);border-radius:27px;margin-bottom:6px}
+.fico img{display:block;border-radius:2px}
+.fnode.mid .fico{border-color:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 14%,transparent)}
+.fline{position:relative;height:2px;margin:0 10px 44px;background:repeating-linear-gradient(90deg,var(--ok) 0 8px,transparent 8px 16px);background-size:16px 2px}
+.fline span{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
+.fline::after{content:"";position:absolute;right:-2px;top:-4px;border-left:8px solid var(--ok);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.pstrip{border-top:2px solid var(--ink)}
+.prow{display:grid;grid-template-columns:34px 150px minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) auto;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;transition:background .2s}
+.prow:hover{background:var(--zebra)}
+.prow b{font-size:16px}
+.prow em{display:block;font-style:normal;font-size:12px;color:var(--muted)}
+.btn{transition:transform .15s ease,opacity .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px -8px rgba(23,35,45,.6)}
+.btn:active{transform:translateY(0)}
+.glist a{transition:background .2s,padding .2s}
+.glist a:hover{background:var(--surface);padding-left:14px;padding-right:14px}
+.glist a::after{transition:transform .2s}
+.glist a:hover::after{transform:translateX(4px)}
+.hero{transition:transform .6s ease}
+@media (prefers-reduced-motion:no-preference){
+  .fline{animation:dash 1.1s linear infinite}
+  .js .rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+  .js .rv.in{opacity:1;transform:none}
+  .open .otext>*{animation:rise .55s ease both}
+  .open .otext>*:nth-child(2){animation-delay:.05s}.open .otext>*:nth-child(3){animation-delay:.1s}.open .otext>*:nth-child(4){animation-delay:.15s}
+  .open .hero,.open .bframe{animation:rise .7s ease .1s both}
+}
+@keyframes dash{to{background-position:16px 0}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .scrollx{overflow-x:auto}
 .monly{display:none}
 table.facts{min-width:980px}
@@ -486,8 +582,11 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .kv dt,.kv dd{margin:0;padding:9px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--muted)}
 .provsec p{margin:0 0 12px;font-size:14px}
-@media (max-width:1180px){.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 130px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(2){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
+  .open.hasfig .wrap{grid-template-columns:minmax(0,1fr);gap:8px;padding-bottom:24px}
+  .flow{grid-template-columns:minmax(0,1fr);justify-items:center;padding:20px}.fline{width:2px;height:34px;margin:8px 0;background:repeating-linear-gradient(180deg,var(--ok) 0 8px,transparent 8px 16px);animation:none}.fline span{left:14px;top:8px;transform:none}.fline::after{right:-4px;top:auto;bottom:-2px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid var(--ok);border-bottom:0}
+  .prow{grid-template-columns:34px minmax(0,1fr);gap:6px 12px}.prow>span,.prow>a{grid-column:2}.prow>a{justify-self:start}
   .lastrow{grid-template-columns:30px minmax(0,1fr);gap:6px 12px}.lastrow>span{grid-column:2}
   .scrollx{display:none}.monly{display:block}
   .cnav a{padding:10px 12px}
@@ -540,6 +639,15 @@ def build_js():
         rep(old, "'/" + old[1:])
     rep("'<img class=\"t\" src=\"'+esc(rr.shot)+'\"", "'<img class=\"t\" src=\"/'+esc(rr.shot)+'\"")
     rep("'<a href=\"'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"'+esc(r.shot)+'\"", "'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\"")
+    s += """
+(function(){
+  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .hsteps li, .tl > div, .provsec, .brief, .faq details');
+  if(!('IntersectionObserver' in window)||!els.length)return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
+  Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});
+  setTimeout(function(){Array.prototype.forEach.call(els,function(el){el.classList.add('in')})},2500);
+})();
+"""
     (SITE / "app.js").write_text(s)
 
 
