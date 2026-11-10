@@ -7,16 +7,73 @@
   "watch_seconds": 60,
   "max_wait_seconds": 330,
   "providers": [
-    {"id": "proton", "name": "Proton VPN", "plan": "plan darmowy", "server": "PL-FREE#1", "secret_env": "PROTON_PL_WG", "enabled": true},
-    {"id": "nord", "name": "NordVPN", "secret_env": "NORD_PL_WG", "enabled": false},
-    {"id": "surf", "name": "Surfshark", "secret_env": "SURFSHARK_PL_WG", "enabled": false},
-    {"id": "expr", "name": "ExpressVPN", "secret_env": "EXPRESS_PL_WG", "enabled": false},
-    {"id": "cybr", "name": "CyberGhost", "secret_env": "CYBERGHOST_PL_WG", "enabled": false}
+    {
+      "id": "proton",
+      "name": "Proton VPN",
+      "plan": "plan darmowy",
+      "server": "PL-FREE#1",
+      "secret_env": "PROTON_PL_WG",
+      "enabled": true
+    },
+    {
+      "id": "nord",
+      "name": "NordVPN",
+      "secret_env": "NORD_PL_WG",
+      "enabled": false
+    },
+    {
+      "id": "surf",
+      "name": "Surfshark",
+      "secret_env": "SURFSHARK_PL_WG",
+      "enabled": false
+    },
+    {
+      "id": "expr",
+      "name": "ExpressVPN",
+      "secret_env": "EXPRESS_PL_WG",
+      "enabled": false
+    },
+    {
+      "id": "cybr",
+      "name": "CyberGhost",
+      "secret_env": "CYBERGHOST_PL_WG",
+      "enabled": false
+    }
   ],
   "services": [
-    {"id": "tvpvod", "name": "TVP VOD", "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174", "play": "odtw[óo]rz|oglądaj", "enabled": true},
-    {"id": "player", "name": "Player", "url": "https://player.pl/programy-online/fakty-odcinki,516", "play": "oglądaj", "enabled": true},
-    {"id": "polsat", "name": "Polsat Box Go", "enabled": false},
-    {"id": "canal", "name": "Canal+ Online", "enabled": false}
+    {
+      "id": "tvpvod",
+      "name": "TVP VOD",
+      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174",
+      "play": "odtw[óo]rz|oglądaj",
+      "enabled": true
+    },
+    {
+      "id": "player",
+      "name": "Player",
+      "url": "https://player.pl/programy-online/fakty-odcinki,516",
+      "play": "oglądaj",
+      "enabled": true
+    },
+    {
+      "id": "tvpsport",
+      "name": "TVP Sport",
+      "listing": "https://sport.tvp.pl/wideo",
+      "listing_link": "sport\\.tvp\\.pl/\\d+/.+-wideo$",
+      "play_selector": "[class*=\"play\"]",
+      "enabled": true
+    },
+    {
+      "id": "polsat",
+      "name": "Polsat Box Go",
+      "enabled": false,
+      "note": "paid plan needed"
+    },
+    {
+      "id": "canal",
+      "name": "Canal+ Online",
+      "enabled": false,
+      "note": "paid plan needed"
+    }
   ]
 }

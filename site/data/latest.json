@@ -1,8 +1,12 @@
 {
  "date": "2026-11-10",
+<<<<<<< Updated upstream
  "started_at": "2026-11-10T11:46:31+01:00",
+=======
+ "started_at": "2026-11-10T12:07:52+01:00",
+>>>>>>> Stashed changes
  "runner": {
-  "country": "US"
+  "country": "PL"
  },
  "watch_seconds": 60,
  "providers": [
@@ -16,22 +20,46 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
+<<<<<<< Updated upstream
      "tested_at": "2026-11-10T11:46:47+01:00",
      "played_seconds": 60.8,
      "wait_seconds": 65,
+=======
+     "tested_at": "2026-11-10T12:08:00+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3643,S01E3643,3513267",
+     "played_seconds": 60.9,
+     "wait_seconds": 156,
+>>>>>>> Stashed changes
      "resolution": "1920x1080",
      "drm": false,
      "shot": "data/shots/2026-11-10/proton-tvpvod.webp"
     },
     "player": {
+     "status": "blocked",
+     "reason": "Film nie ruszył w ciągu 330 s",
+     "tested_at": "2026-11-10T12:11:47+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "shot": "data/shots/2026-11-10/proton-player.webp"
+    },
+    "tvpsport": {
      "status": "ok",
      "reason": null,
+<<<<<<< Updated upstream
      "tested_at": "2026-11-10T11:49:06+01:00",
      "played_seconds": 60.7,
      "wait_seconds": 56,
      "resolution": "640x360",
      "drm": true,
      "shot": "data/shots/2026-11-10/proton-player.webp"
+=======
+     "tested_at": "2026-11-10T12:17:28+01:00",
+     "url": "https://sport.tvp.pl/96390684/dawid-kubacki-o-skakaniu-do-czterdziestki-nie-mam-w-glowie-zadnego-terminu-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 46,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-10/proton-tvpsport.webp"
+>>>>>>> Stashed changes
     }
    },
    "exit": {
@@ -40,7 +68,11 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
+<<<<<<< Updated upstream
    "speed_mbps": 58.3
+=======
+   "speed_mbps": 157.2
+>>>>>>> Stashed changes
   },
   {
    "id": "nord",
@@ -87,6 +119,11 @@
    "enabled": true
   },
   {
+   "id": "tvpsport",
+   "name": "TVP Sport",
+   "enabled": true
+  },
+  {
    "id": "polsat",
    "name": "Polsat Box Go",
    "enabled": false
@@ -97,5 +134,9 @@
    "enabled": false
   }
  ],
+<<<<<<< Updated upstream
  "finished_at": "2026-11-10T11:51:15+01:00"
+=======
+ "finished_at": "2026-11-10T12:21:36+01:00"
+>>>>>>> Stashed changes
 }

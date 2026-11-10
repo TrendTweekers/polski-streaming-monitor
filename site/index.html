@@ -89,6 +89,7 @@ tbody td{height:66px;padding:0 16px;border-bottom:1px solid var(--line)}
 tbody tr.row:nth-child(4n+3) td{background:var(--zebra)}
 tbody tr.row:hover td{background:var(--bg)}
 .slogo{display:inline-flex;align-items:center;height:34px;padding:4px 8px;background:#fff;border:1px solid var(--line);border-radius:4px}
+.slogo.stext{font-size:13px;font-weight:700;color:#17232D}
 .slogo img{display:block;height:24px;width:auto}
 .sname{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:5px}
 .prov{display:flex;align-items:center;gap:14px;font-size:16px;font-weight:600;background:none;border:0;color:var(--ink);padding:0;cursor:pointer;text-align:left}
@@ -171,7 +172,7 @@ tr.detail td{height:auto;padding:16px 16px 18px 60px;background:var(--bg);text-a
 .evidence dt,.evidence dd{padding:11px 0;border-bottom:1px solid var(--line);margin:0}
 .evidence dt{color:var(--muted);padding-right:24px}
 .evidence dd{font-weight:500;text-align:right}
-.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
 .thumbs button{background:none;border:0;padding:0;text-align:left;cursor:pointer;color:var(--ink);font-size:14px}
 .thumbs .t{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--bg);border:1px solid var(--line);margin-bottom:8px}
 #shot img{display:block;width:100%;height:auto;border:1px solid var(--line)}
@@ -293,7 +294,7 @@ footer a{color:var(--navy-muted)}
   </div>
   <div class="desk">
     <table>
-      <thead><tr><th>Dostawca VPN</th><th><span class="slogo"><img src="logos/tvpvod.png" alt="TVP VOD"></span><span class="sname">TVP VOD</span></th><th><span class="slogo"><img src="logos/player.svg" alt="Player"></span><span class="sname">Player</span></th><th><span class="slogo"><img src="logos/polsat.svg" alt="Polsat Box Go"></span><span class="sname">Polsat Box Go</span></th><th><span class="slogo"><img src="logos/canal.svg" alt="Canal+ Online"></span><span class="sname">Canal+ Online</span></th><th>Pobieranie</th><th>Cena za miesiąc</th><th>Oferta partnera</th></tr></thead>
+      <thead><tr id="thead"></tr></thead>
       <tbody id="rows"></tbody>
     </table>
   </div>
@@ -416,7 +417,7 @@ footer a{color:var(--navy-muted)}
     us:{label:'USA',short:'USA',where:'w USA',flag:'us'}
   };
   var LABEL={ok:'Działa',blocked:'Zablokowany',unstable:'Niestabilny',none:'Nie przetestowano'};
-  var DESC={ok:'Film grał 60 sekund bez przerwy.',unstable:'Film ruszył, ale się zatrzymał.',blocked:'Film nie ruszył albo serwis pokazał blokadę.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
+  var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach albo serwis pokazał blokadę.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
   var ICON={
     ok:'<path d="M20 6 9 17l-5-5"/>',
     blocked:'<path d="M18 6 6 18M6 6l12 12"/>',
@@ -425,6 +426,7 @@ footer a{color:var(--navy-muted)}
   };
   function st(s){return '<span class="st '+s+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
   function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function slogo(x){return SLOGO[x.id]?'<span class="slogo"><img src="'+SLOGO[x.id]+'" alt="'+esc(x.name)+'"></span>':'<span class="slogo stext">'+esc(x.name)+'</span>'}
   function logo(id){return '<img src="'+LOGO[id]+'" alt="" width="30" height="30">'}
   function fmtDT(iso){if(!iso)return '—';return iso.slice(8,10)+'.'+iso.slice(5,7)+'.'+iso.slice(0,4)+', '+iso.slice(11,16)}
   function fmtT(iso){return iso?iso.slice(11,19):'—'}
@@ -456,14 +458,14 @@ footer a{color:var(--navy-muted)}
     $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' z '+SV.length+' serwisów. Pozostałe mają status „Nie przetestowano”.';
+    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.';
     var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
     var h='',m='';
     data.forEach(function(p){
       var w=works(p),sub=p.tested?(w+' z '+SVON.length+' testowanych serwisów działa'):'jeszcze nie testujemy';
       var pr=PRICE[p.id];
       h+='<tr class="row"><td><button class="prov" type="button" data-open="'+p.id+'" aria-expanded="'+(open===p.id)+'">'+logo(p.id)+'<span>'+esc(p.name)+'<small>'+sub+'</small></span></button></td>';
-      SV.forEach(function(s){h+='<td>'+st(stat(p,s.id))+'</td>'});
+      SVON.forEach(function(s){h+='<td>'+st(stat(p,s.id))+'</td>'});
       h+='<td class="mono">'+(p.speed_mbps?p.speed_mbps+' Mb/s<span class="sub">pomiar z: '+esc(where)+'</span>':'<span class="muted">—</span>')+'</td>';
       h+='<td class="mono">'+(pr?pr[0]+'<span class="sub">'+pr[1]+'</span>':'<span class="muted">—</span>')+'</td>';
       h+='<td><button class="btn" type="button" data-cta aria-label="Sprawdź ofertę '+esc(p.name)+'">Sprawdź ofertę</button></td></tr>';
@@ -473,12 +475,12 @@ footer a{color:var(--navy-muted)}
             '<div><span>Adres IP serwera</span><b class="mono">'+esc(p.exit&&p.exit.ip||'—')+'</b></div>'+
             '<div><span>Lokalizacja IP</span><b>'+esc(p.exit?p.exit.city+', '+p.exit.country:'—')+'</b></div>'+
             '<div><span>Sieć</span><b>'+esc(p.exit&&p.exit.org||'—')+'</b></div>';
-        SVON.forEach(function(s){var r=p.services[s.id];if(!r)return;det+='<div><span>'+esc(s.name)+'</span><b class="mono">'+(r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+esc(r.resolution||''):esc(r.reason||'—'))+'</b></div>'});
+        SVON.forEach(function(s){var r=p.services[s.id];if(!r)return;det+='<div><span>'+esc(s.name)+'</span><b class="mono">'+(r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+esc(r.resolution||''):'')+(r.reason?' '+esc(r.reason):'')+'</b></div>'});
       }else det='<div><span>Status</span><b>'+esc(p.note||'Nie mamy jeszcze konta testowego u tego dostawcy.')+'</b></div>';
-      h+='<tr class="detail"'+(open===p.id?'':' hidden')+'><td colspan="8"><div class="dgrid">'+det+'</div></td></tr>';
+      h+='<tr class="detail"'+(open===p.id?'':' hidden')+'><td colspan="'+(SVON.length+4)+'"><div class="dgrid">'+det+'</div></td></tr>';
       var sum=!p.tested?'none':w===SVON.length?'ok':w===0?'blocked':'unstable';
       m+='<details><summary>'+logo(p.id)+'<b>'+esc(p.name)+'<small>'+sub+'</small></b><span class="st '+sum+'">'+(sum==='unstable'?'Częściowo':LABEL[sum])+'</span></summary><div class="rows">';
-      SV.forEach(function(s){m+='<div><span class="slogo"><img src="'+SLOGO[s.id]+'" alt="'+esc(s.name)+'"></span>'+st(stat(p,s.id))+'</div>'});
+      SVON.forEach(function(s){m+='<div>'+slogo(s)+st(stat(p,s.id))+'</div>'});
       m+='<div><span>Pobieranie</span><span class="mono">'+(p.speed_mbps?p.speed_mbps+' Mb/s':'—')+'</span></div><div><span>Cena za miesiąc</span><span class="mono">'+(pr?pr[0]:'—')+'</span></div></div>'+
          '<button class="btn" type="button" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>';
     });
@@ -490,14 +492,14 @@ footer a{color:var(--navy-muted)}
 
   function renderEvidence(){
     var top=best(),r=top.services&&top.services[es],s=SVON.filter(function(x){return x.id===es})[0]||{},t='';
-    SVON.forEach(function(x){var rr=top.services[x.id]||{};t+='<button type="button" data-es="'+x.id+'" aria-pressed="'+(x.id===es)+'">'+(rr.shot?'<img class="t" src="'+esc(rr.shot)+'" alt="" loading="lazy">':'<div class="t"></div>')+'<span class="slogo"><img src="'+SLOGO[x.id]+'" alt="'+esc(x.name)+'"></span>'+st(rr.status||'none')+'</button>'});
+    SVON.forEach(function(x){var rr=top.services[x.id]||{};t+='<button type="button" data-es="'+x.id+'" aria-pressed="'+(x.id===es)+'">'+(rr.shot?'<img class="t" src="'+esc(rr.shot)+'" alt="" loading="lazy">':'<div class="t"></div>')+slogo(x)+st(rr.status||'none')+'</button>'});
     $('thumbs').innerHTML=t;
     $('shot').innerHTML=r&&r.shot?'<a href="'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="'+esc(r.shot)+'" alt="Zrzut ekranu z testu: '+esc(s.name)+' przez '+esc(top.name)+'" width="1440" height="900"></a>':'<div class="slot"><span><b>Brak zrzutu ekranu</b>Dla tego testu nie ma jeszcze zrzutu.</span></div>';
     $('e0').textContent=s.name||'—';$('e1').textContent=top.name+(top.plan?' ('+top.plan+')':'');
     $('e2').textContent=top.exit?top.exit.city+', Polska ('+(top.exit.ip||'')+')':'—';$('e2b').textContent=top.server||'—';
     $('e4').textContent=r?fmtDT(r.tested_at).slice(0,10):'—';$('e5').textContent=r?fmtT(r.tested_at):'—';
     $('e3').innerHTML=st(r?r.status:'none');
-    $('e6').textContent=r&&r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+(r.resolution||'')+(r.drm?', z DRM':''):(r&&r.reason||'—');
+    $('e6').textContent=r?((r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+(r.resolution||'')+(r.drm?', z DRM':'')+'. ':'')+(r.reason||'')).trim()||'—':'—';
   }
 
   function renderHistory(){
@@ -540,6 +542,7 @@ footer a{color:var(--navy-muted)}
       cn+='<button type="button" data-c="'+k+'">'+C[k].short+'</button>';
       cs+='<button type="button" data-c="'+k+'"><img src="https://flagcdn.com/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
     });
+    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Cena za miesiąc</th><th>Oferta partnera</th>';
     $('cnav').innerHTML=cn;$('countries').innerHTML=cs;
     $('hprov').innerHTML=RUN.providers.map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button>'}).join('');
     $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');

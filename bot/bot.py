@@ -38,7 +38,7 @@ BLOCK_TEXTS = [
     (r"niedostępn\w+ w twoim kraju|poza granicami polski|tylko na terytorium|nie jest dostępn\w+ w twoim regionie|geoblok", "Serwis pokazał komunikat o blokadzie regionalnej"),
     (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN"),
 ]
-VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,src:(v.currentSrc||'')}))"""
+VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,d:(isFinite(v.duration)?v.duration:0),src:(v.currentSrc||'')}))"""
 
 
 def now():
@@ -148,20 +148,65 @@ def save_shot(page, path):
     tmp.unlink()
 
 
+def listing_urls(page, svc):
+    """Open a listing page and return the video page links on it (newest first)."""
+    page.goto(svc["listing"], wait_until="domcontentloaded", timeout=90000)
+    page.wait_for_timeout(5000)
+    click_first(page, CONSENT)
+    page.wait_for_timeout(1500)
+    hrefs = page.eval_on_selector_all("a[href]", "els=>els.map(e=>e.href)")
+    out = []
+    for h in hrefs:
+        if re.search(svc["listing_link"], h) and h not in out:
+            out.append(h)
+    return out
+
+
+def start_playback(page, svc):
+    if svc.get("play_selector"):
+        for f in page.frames:
+            try:
+                e = f.locator(svc["play_selector"]).first
+                if e.is_visible():
+                    e.click(timeout=3000)
+                    return
+            except Exception:
+                pass
+        return
+    loc = page.locator("a,button").filter(has_text=re.compile(svc["play"], re.I))
+    cands = [e for e in loc.all() if e.is_visible() and (e.bounding_box() or {}).get("y", 0) > 100]
+    if cands:
+        cands[0].click(timeout=8000)
+
+
+def long_enough(page):
+    """For clips picked from a listing: is the clip long enough for the 60 s check?"""
+    for _ in range(9):
+        page.wait_for_timeout(5000)
+        ds = [v["d"] for v in videos(page) if v["src"].startswith("blob:") and v["d"] > 0]
+        if ds:
+            return max(ds) >= CFG["watch_seconds"] + 20
+    return True
+
+
 def test_service(browser, svc, shot_path):
     """Return a result dict. status: ok | unstable | blocked | none."""
     res = {"status": "none", "reason": None, "tested_at": now().isoformat(timespec="seconds")}
     ctx = browser.new_context(viewport={"width": 1440, "height": 900}, locale="pl-PL", timezone_id="Europe/Warsaw")
     page = ctx.new_page()
     try:
-        page.goto(svc["url"], wait_until="domcontentloaded", timeout=90000)
-        page.wait_for_timeout(6000)
-        click_first(page, CONSENT)
-        page.wait_for_timeout(2500)
-        loc = page.locator("a,button").filter(has_text=re.compile(svc["play"], re.I))
-        cands = [e for e in loc.all() if e.is_visible() and (e.bounding_box() or {}).get("y", 0) > 100]
-        if cands:
-            cands[0].click(timeout=8000)
+        urls = listing_urls(page, svc) if svc.get("listing") else [svc["url"]]
+        if not urls:
+            raise RuntimeError("no video link on the listing page")
+        for url in urls[:6]:
+            page.goto(url, wait_until="domcontentloaded", timeout=90000)
+            page.wait_for_timeout(6000)
+            click_first(page, CONSENT)
+            page.wait_for_timeout(2500)
+            start_playback(page, svc)
+            if not svc.get("listing") or long_enough(page):
+                break
+        res["url"] = page.url
         t0 = time.time()
         start = None       # (wall time, video time) when the real programme began
         last = None
@@ -262,6 +307,14 @@ def main():
                         log("  testing", svc["name"])
                         shot = DATA / "shots" / day / f'{prov["id"]}-{svc["id"]}.webp'
                         r = test_service(browser, svc, shot)
+                        if r["status"] == "blocked":
+                            # One failed try is not proof of a block. Try one more time.
+                            log("   first try failed:", r.get("reason"), "- second try")
+                            first_reason = r.get("reason")
+                            r = test_service(browser, svc, shot)
+                            r["attempts"] = 2
+                            if r["status"] == "ok":
+                                r.update(status="unstable", reason="Pierwsza próba nieudana (%s), druga udana" % first_reason)
                         entry["services"][svc["id"]] = r
                         log("   ->", r["status"], r.get("reason") or "", r.get("played_seconds"))
                 finally:

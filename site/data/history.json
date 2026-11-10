@@ -3,7 +3,8 @@
   "2026-11-10": {
    "proton": {
     "tvpvod": "ok",
-    "player": "ok"
+    "player": "blocked",
+    "tvpsport": "ok"
    }
   }
  }
