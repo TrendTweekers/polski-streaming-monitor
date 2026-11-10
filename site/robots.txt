@@ -1,29 +1,29 @@
 User-agent: *
-Disallow: /
+Allow: /
 Content-Signal: search=yes, ai-input=yes, ai-train=no
 
 User-agent: GPTBot
-Disallow: /
+Allow: /
 
 User-agent: OAI-SearchBot
-Disallow: /
+Allow: /
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
 
 User-agent: ClaudeBot
-Disallow: /
+Allow: /
 
 User-agent: Claude-User
-Disallow: /
+Allow: /
 
 User-agent: PerplexityBot
-Disallow: /
+Allow: /
 
 User-agent: Google-Extended
-Disallow: /
+Allow: /
 
 User-agent: CCBot
-Disallow: /
+Allow: /
 
 Sitemap: https://polskistreaming.pl/sitemap.xml

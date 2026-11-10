@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Darmowy VPN do polskiej telewizji: test i instrukcja | Polski Streaming</title>
+<meta name="description" content="Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.">
+<link rel="canonical" href="https://polskistreaming.pl/darmowy-vpn-polska-telewizja">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#17232D">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Polski Streaming">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:title" content="Darmowy VPN do polskiej telewizji: test i instrukcja">
+<meta property="og:description" content="Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.">
+<meta property="og:url" content="https://polskistreaming.pl/darmowy-vpn-polska-telewizja">
+<meta property="og:image" content="https://polskistreaming.pl/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/fonts/ibm-plex-sans-400-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/style.css">
+<script>document.documentElement.className="js"</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://polskistreaming.pl/#org", "name": "Polski Streaming", "url": "https://polskistreaming.pl", "logo": "https://polskistreaming.pl/apple-touch-icon.png"}, {"@type": "Article", "headline": "Darmowy VPN do polskiej telewizji: test i instrukcja", "description": "Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.", "inLanguage": "pl", "mainEntityOfPage": "https://polskistreaming.pl/darmowy-vpn-polska-telewizja", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "image": "https://polskistreaming.pl/og.jpg", "author": {"@id": "https://polskistreaming.pl/#org"}, "publisher": {"@id": "https://polskistreaming.pl/#org"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Polska telewizja za granicą", "item": "https://polskistreaming.pl"}, {"@type": "ListItem", "position": 2, "name": "Darmowy VPN", "item": "https://polskistreaming.pl/darmowy-vpn-polska-telewizja"}]}]}</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
+  <nav class="cnav" aria-label="Główne"><a href="/tvp-vod-za-granica">TVP VOD</a><a href="/player-za-granica">Player</a><a href="/tvp-sport-za-granica">TVP Sport</a><a href="/darmowy-vpn-polska-telewizja" aria-current="page">Darmowy VPN</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/wyniki-testow">Wyniki testów</a><a href="/jak-testujemy">Jak testujemy</a></nav>
+</div></header>
+<main>
+<div class="open solo"><div class="wrap">
+  <div class="otext">
+    <div class="crumb"><a href="/">Polska telewizja za granicą</a> / Darmowy VPN</div>
+    <h1>Darmowy VPN do polskiej telewizji: czy to działa?</h1>
+    <p>Testujemy codziennie darmowy serwer w Polsce. Krótko: czasem działa, czasem nie, a ustawienie wymaga jednego obejścia.</p>
+    <div class="when mono"><span>Autor: <a href="/o-nas">Redakcja Polski Streaming</a></span><span>Aktualizacja: <b>10 listopada 2026</b></span><span>Ostatni test: <b id="last">10.11.2026, 12:48</b></span></div>
+  </div>
+  
+</div></div><section class="prosec"><div class="wrap pgrid"><div class="prose">
+<p class="answer"><b>Krótka odpowiedź.</b> Tak, da się oglądać polskie serwisy przez darmowy VPN, ale nie codziennie. W naszych testach ten sam darmowy serwer rano odtwarzał TVP VOD i Playera, a w południe już nie. Jeśli oglądasz od czasu do czasu, wystarczy. Jeśli chcesz mieć pewność przed meczem, nie.</p>
+
+<h2>Który darmowy VPN ma serwer w Polsce</h2>
+<p>Testujemy Proton VPN w planie darmowym, bo ma darmowy serwer w Polsce (PL-FREE#1). Innych darmowych VPN nie sprawdzaliśmy, więc o nich nie piszemy.</p>
+<p>Ograniczenia planu darmowego według <a href="https://protonvpn.com/pricing" target="_blank" rel="nofollow noopener">cennika Proton VPN</a> (sprawdzone 10.11.2026): jedno urządzenie naraz i serwery w 10 krajach, przy czym kraj wybiera aplikacja.</p>
+
+<h2>Problem: aplikacja sama wybiera kraj</h2>
+<p>W darmowym planie nie wskażesz Polski w aplikacji. Aplikacja połączy Cię z jednym z 10 krajów i może to być na przykład Holandia. Wtedy polskie serwisy dalej widzą zagraniczny adres.</p>
+<p>Obejście: w panelu konta Proton można pobrać plik konfiguracji WireGuard dla konkretnego darmowego serwera, także polskiego. Tak właśnie łączy się nasz bot.</p>
+<div class="flow" role="img" aria-label="Ty za granicą, serwer VPN w Polsce, Polski serwis">
+  <div class="fnode"><div class="fico"><img src="/flags/gb.svg" alt="" width="30" height="20"><img src="/flags/de.svg" alt="" width="30" height="20"><img src="/flags/nl.svg" alt="" width="30" height="20"><img src="/flags/us.svg" alt="" width="30" height="20"></div><b>Ty, za granicą</b><span>Zagraniczny adres IP</span></div>
+  <div class="fline"><span>szyfrowane połączenie</span></div>
+  <div class="fnode mid"><div class="fico"><img src="/flags/pl.svg" alt="" width="42" height="28"></div><b>Serwer VPN w Polsce</b><span>Polski adres IP</span></div>
+  <div class="fline"><span>polski adres IP</span></div>
+  <div class="fnode"><div class="fico"><svg class="tvico" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="12.5" rx="1.6"/><path d="M8 20.5h8M12 17v3.5"/><path d="M10.2 8.6v4.3l3.8-2.15z" fill="currentColor" stroke="none"/></svg></div><b>Polski serwis</b><span>Widzi widza z Polski</span></div>
+</div>
+
+<h2>Co pokazały nasze testy</h2>
+<p>Jednego dnia (10.11.2026) uruchomiliśmy test kilka razy przez ten sam darmowy serwer:</p>
+<ul>
+  <li><b>Rano:</b> TVP VOD i Player grały 60 sekund bez przerwy, cztery razy z rzędu.</li>
+  <li><b>W południe:</b> Player pokazał czarny ekran, a druga próba zadziałała.</li>
+  <li><b>Pół godziny później:</b> TVP VOD dwa razy pokazał błąd „Wystąpił problem z materiałem”. TVP Sport w tym samym czasie działał.</li>
+  <li><b>Prędkość pobierania:</b> od 51 do 157 Mb/s, zależnie od pory i miejsca pomiaru.</li>
+</ul>
+<p>W panelu Proton serwer PL-FREE#1 pokazywał tego dnia obciążenie 100%. To prawdopodobna przyczyna wahań, ale nie mamy na to dowodu.</p>
+</div><aside class="side2"><div class="brief"><h3>W skrócie</h3><dl><dt>Testowany VPN</dt><dd>Proton VPN, plan darmowy</dd><dt>Serwer</dt><dd>PL-FREE#1, Warszawa</dd><dt>Urządzenia</dt><dd>1 naraz</dd><dt>Wynik</dt><dd>Zmienny, zobacz historię</dd></dl><div class="blinks"><a href="/wyniki-testow">Wyniki testów i historia</a><a href="/porownanie-vpn">Porównanie z płatnymi VPN</a><a href="/jak-testujemy">Jak testujemy</a></div></div></aside></div></section><section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Wynik ostatniego testu darmowego serwera</h2><p>Ten sam serwer, trzy serwisy, codziennie rano.</p></div>
+  <div class="svc lastbox" data-last><div class="lastrow"><img src="/logos/proton.svg" alt="" width="30" height="30"><b>Proton VPN (plan darmowy)</b><span><span class="pst">TVP VOD:<span class="st blocked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Nie działa</span></span><span class="pst">Player:<span class="st unstable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Niestabilny</span></span><span class="pst">TVP Sport:<span class="st ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Działa</span></span></span><span class="muted">Test: 10.11.2026, 12:48</span></div></div>
+  <p class="after"><a href="/wyniki-testow">Historia 30 dni i zrzuty ekranu</a></p>
+</div></section><section class="howto"><div class="wrap">
+  <div class="side"><h2>Jak ustawić darmowy serwer w Polsce</h2><p>Potrzebujesz darmowego konta Proton i aplikacji WireGuard.</p></div>
+  <ol class="hsteps"><li><span class="n">01</span><h3>Załóż darmowe konto Proton VPN</h3><p>Wystarczy adres e-mail. Karta nie jest potrzebna.</p></li><li><span class="n">02</span><h3>W panelu konta otwórz „Pobieranie”</h3><p>Na dole strony jest część „Konfiguracja WireGuard”. Wpisz dowolną nazwę i wybierz swój system.</p></li><li><span class="n">03</span><h3>Wybierz darmowy serwer w Polsce</h3><p>Zaznacz konfigurację dla serwerów darmowych, rozwiń „Polska” i kliknij „Utwórz” przy PL-FREE. Pobierz plik .conf.</p></li><li><span class="n">04</span><h3>Zmień linię DNS w pliku</h3><p>Otwórz plik w notatniku i zamień wartość DNS na 1.1.1.1. Bez tego TVP VOD i Player pokazują komunikat o adblocku.</p></li><li><span class="n">05</span><h3>Zaimportuj plik do aplikacji WireGuard</h3><p>Darmowa aplikacja WireGuard jest na Windows, macOS, Android i iOS. Włącz tunel i otwórz serwis.</p></li></ol>
+</div></section><section class="prosec alt"><div class="wrap pgrid"><div class="prose">
+<h2>Dlaczego zmiana DNS jest konieczna</h2>
+<p>Pobrany plik ma wpisany serwer DNS dostawcy. W naszych testach ten serwer blokował domeny reklamowe. TVP VOD pokazywał wtedy „Wykryto wtyczkę adblock”, a Player „Wyłącz blokowanie reklam, aby oglądać”. Po zmianie DNS na neutralny (1.1.1.1) oba serwisy ruszyły. Plik zawiera Twój klucz prywatny, więc nie wysyłaj go nikomu.</p>
+
+<h2>Kiedy darmowy VPN wystarczy, a kiedy nie</h2>
+<ul>
+  <li><b>Wystarczy,</b> gdy oglądasz od czasu do czasu, na jednym urządzeniu, i możesz spróbować ponownie za godzinę.</li>
+  <li><b>Nie wystarczy,</b> gdy chcesz oglądać na telewizorze bez komputera, na kilku urządzeniach albo o konkretnej godzinie.</li>
+</ul>
+<p>Płatne plany mają więcej polskich serwerów, więc gdy jeden nie działa, można przełączyć się na inny. Których płatnych VPN jeszcze nie przetestowaliśmy, widać w <a href="/porownanie-vpn">porównaniu</a>.</p>
+<p class="note">Ta strona opisuje nasze własne testy jednego darmowego serwera. Nie jest to ocena całej usługi Proton VPN.</p>
+</div></div></section><section class="faqs" id="faq"><div class="wrap"><div class="shead"><h2>Częste pytania</h2></div><div class="faq"><details><summary>Czy darmowy VPN jest bezpieczny?</summary><p>To zależy od dostawcy. Opisujemy tylko ten, którego sami używamy w testach. Nie instaluj nieznanych darmowych aplikacji VPN tylko dlatego, że obiecują polski serwer.</p></details><details><summary>Dlaczego w aplikacji Proton nie widzę Polski?</summary><p>W planie darmowym aplikacja sama wybiera kraj. Polski serwer ustawisz tylko przez plik konfiguracji WireGuard z panelu konta.</p></details><details><summary>Czy to działa na telewizorze?</summary><p>Trudno. Plan darmowy to jedno urządzenie, a plik WireGuard trzeba zaimportować ręcznie. Najprościej oglądać na komputerze albo telefonie.</p></details></div></div></section>
+</main>
+<footer><div class="wrap">
+  <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
+  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
+</div></footer>
+<script src="/app.js" defer></script>
+</body>
+</html>

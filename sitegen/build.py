@@ -17,7 +17,7 @@ UPDATED = "10 listopada 2026"
 CHECKED = "10.11.2026"
 PUBLISHED = "2026-11-10"
 MODIFIED = "2026-11-10"
-INDEXABLE = False  # set True when the owner opens the site to search engines
+INDEXABLE = True  # set True when the owner opens the site to search engines
 # Pages kept out of search until they have enough substance of their own.
 NOINDEX = {"/polsat-box-go-za-granica", "/wyniki-testow", "/prywatnosc"}
 _latest = SITE / "data" / "latest.json"
@@ -71,7 +71,7 @@ def last_rows_html():
                 f'<span class="muted">Test: {fmt_dt(RUN.get("finished_at"))}</span></div>')
     return out or '<p class="muted">Brak wyniku testu.</p>'
 
-NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/polsat-box-go-za-granica", "Polsat Box Go"),
+NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/tvp-sport-za-granica", "TVP Sport"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN"),
        ("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]
 
 
@@ -127,7 +127,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 </main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/o-nas">O nas</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
+  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 </body>
@@ -358,7 +358,7 @@ def facts_sections():
     return out
 
 
-FLOWS.update({"tvpvod": flow("TVP VOD", "/logos/tvpvod.png"), "player": flow("Player", "/logos/player.svg"), "polsat": flow("Polsat Box Go", "/logos/polsat.svg")})
+FLOWS.update({"tvpsport": flow("TVP Sport", ""), "free": flow("Polski serwis", ""), "tvpvod": flow("TVP VOD", "/logos/tvpvod.png"), "player": flow("Player", "/logos/player.svg"), "polsat": flow("Polsat Box Go", "/logos/polsat.svg")})
 
 # ---------------------------------------------------------------- pages
 
@@ -374,6 +374,8 @@ PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Stre
   <ul class="glist">
     <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
     <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
+    <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik codziennego testu i liczby z pomiarów.</span></a></li>
+    <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test: raz działa, raz nie.</span></a></li>
     <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
   </ul>
 </div></section>"""
@@ -518,6 +520,112 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test
            ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin Playera może zabraniać omijania blokad regionalnych. Oficjalną drogą jest Player International.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player")])
 
+PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: codzienny test VPN | Polski Streaming",
+    "TVP Sport za granicą: czym różnią się materiały wideo od transmisji na żywo, wynik codziennego testu VPN i liczby z naszych pomiarów.",
+    band('<a href="/">Polska telewizja za granicą</a> / TVP Sport', "Jak oglądać TVP Sport za granicą",
+         "TVP Sport jest darmowy i działa w przeglądarce. Za granicą część materiałów jest zablokowana. Sprawdzamy codziennie, czy wideo gra przez VPN.",
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
+         figure=frame("/img/tvpsport-test.webp", "sport.tvp.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Wideo gra."))
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Materiały wideo z TVP Sport grały w naszym teście przez VPN z serwerem w Polsce, bez konta i w pełnej jakości. Transmisji na żywo nie testujemy, a to one są najczęściej ograniczone licencją.</p>
+
+<h2>Dwa rodzaje treści w TVP Sport</h2>
+<p>Serwis sport.tvp.pl ma w menu osobne działy. Dla widza za granicą różnica między nimi jest ważna:</p>
+<ul>
+  <li><b>Wideo:</b> rozmowy, skróty i komentarze. To krótkie materiały własne TVP. Ten dział testujemy.</li>
+  <li><b>Transmisje:</b> mecze i zawody na żywo. Prawa do nich TVP kupuje na Polskę, więc blokada regionalna dotyczy ich najczęściej.</li>
+  <li><b>Retransmisje:</b> powtórki całych wydarzeń.</li>
+</ul>
+<p>W dniu sprawdzenia (10.11.2026) na liście transmisji były między innymi: Liga Narodów UEFA, Liga Mistrzyń, FIBA Europe Cup, NHL, Betclic 2 Liga i Igrzyska Olimpijskie Młodzieży.</p>
+
+<h2>Jak oglądać</h2>
+<h3>1. Najpierw spróbuj bez VPN</h3>
+<p>Krótkie materiały wideo często działają także za granicą. Otwórz materiał i sprawdź, czy rusza.</p>
+<h3>2. VPN z serwerem w Polsce</h3>
+<!--flow:tvpsport-->
+<p>Gdy materiał jest zablokowany, polski adres IP z VPN zwykle wystarcza. W naszym teście wideo ruszyło za pierwszym razem także wtedy, gdy TVP VOD przez ten sam serwer nie działał.</p>
+<h3>3. Transmisje na żywo</h3>
+<p>Nie mamy jeszcze wyniku testu dla transmisji na żywo. Jeśli zależy Ci na konkretnym meczu, sprawdź połączenie wcześniej na innej transmisji i miej w zapasie drugi polski serwer.</p>
+""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed wideo", "Około 50 sekund"), ("Nasz test", "Codziennie, najnowsze wideo")],
+                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/wyniki-testow", "Wyniki testów"), ("/porownanie-vpn", "Porównanie VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce. Przy dostawcy, którego testujemy, widać wynik dla TVP Sport.")
+    + svc_result("tvpsport", "TVP Sport", "Bot otwiera dział „Wideo”, wybiera najnowszy materiał dłuższy niż 80 sekund i sprawdza, czy gra 60 sekund.")
+    + steps("Jak włączyć wideo z TVP Sport przez VPN", "Odtwarzacz jest na stronie artykułu, pod tytułem.", [
+        ("Połącz VPN z serwerem w Polsce", "Najlepiej przed otwarciem strony."),
+        ("Otwórz sport.tvp.pl i kliknij „Akceptuję”", "Okienko zgody zasłania stronę przy pierwszej wizycie."),
+        ("Wejdź w dział „Wideo” i wybierz materiał", "Materiały wideo mają w tytule dopisek [WIDEO]."),
+        ("Kliknij przycisk odtwarzania na obrazie", "Najpierw lecą reklamy. W naszych testach trwały od 46 do 55 sekund.")])
+    + prose(facts_box("Liczby z naszego testu", [
+        ("Materiał testowy", "Najnowsze wideo z działu „Wideo”"),
+        ("Czas reklam przed wideo", "46 do 55 sekund"),
+        ("Jakość obrazu", "1920 × 1080"),
+        ("Zabezpieczenie DRM", "Nie"),
+        ("Logowanie", "Nie było potrzebne"),
+        ("Dni pomiarów", "10.11.2026, dwa uruchomienia")],
+        "To są pomiary naszego bota. Dotyczą materiałów wideo, a nie transmisji na żywo.")
+    + '<p class="note">TVP Sport był w naszych testach najbardziej stabilny z trzech serwisów: działał w obu uruchomieniach, także gdy TVP VOD pokazywał błąd.</p>',
+    "prosec alt", shot("tvpsport", "TVP Sport"))
+    + faq([("Czy transmisje na żywo z TVP Sport działają przez VPN?", "Tego jeszcze nie testujemy. Testujemy materiały z działu „Wideo”. Transmisje mają osobne licencje i mogą zachowywać się inaczej."),
+           ("Czy TVP Sport to to samo co TVP VOD?", "Nie. To dwa osobne serwisy z osobnymi odtwarzaczami. Dlatego testujemy je osobno i wyniki bywają różne."),
+           ("Czy potrzebuję konta?", "W naszym teście materiały wideo grały bez logowania.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/tvp-sport-za-granica", "TVP Sport")])
+
+PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: test i instrukcja | Polski Streaming",
+    "Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.",
+    band('<a href="/">Polska telewizja za granicą</a> / Darmowy VPN', "Darmowy VPN do polskiej telewizji: czy to działa?",
+         "Testujemy codziennie darmowy serwer w Polsce. Krótko: czasem działa, czasem nie, a ustawienie wymaga jednego obejścia.",
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Tak, da się oglądać polskie serwisy przez darmowy VPN, ale nie codziennie. W naszych testach ten sam darmowy serwer rano odtwarzał TVP VOD i Playera, a w południe już nie. Jeśli oglądasz od czasu do czasu, wystarczy. Jeśli chcesz mieć pewność przed meczem, nie.</p>
+
+<h2>Który darmowy VPN ma serwer w Polsce</h2>
+<p>Testujemy Proton VPN w planie darmowym, bo ma darmowy serwer w Polsce (PL-FREE#1). Innych darmowych VPN nie sprawdzaliśmy, więc o nich nie piszemy.</p>
+<p>Ograniczenia planu darmowego według <a href="https://protonvpn.com/pricing" target="_blank" rel="nofollow noopener">cennika Proton VPN</a> (sprawdzone 10.11.2026): jedno urządzenie naraz i serwery w 10 krajach, przy czym kraj wybiera aplikacja.</p>
+
+<h2>Problem: aplikacja sama wybiera kraj</h2>
+<p>W darmowym planie nie wskażesz Polski w aplikacji. Aplikacja połączy Cię z jednym z 10 krajów i może to być na przykład Holandia. Wtedy polskie serwisy dalej widzą zagraniczny adres.</p>
+<p>Obejście: w panelu konta Proton można pobrać plik konfiguracji WireGuard dla konkretnego darmowego serwera, także polskiego. Tak właśnie łączy się nasz bot.</p>
+<!--flow:free-->
+
+<h2>Co pokazały nasze testy</h2>
+<p>Jednego dnia (10.11.2026) uruchomiliśmy test kilka razy przez ten sam darmowy serwer:</p>
+<ul>
+  <li><b>Rano:</b> TVP VOD i Player grały 60 sekund bez przerwy, cztery razy z rzędu.</li>
+  <li><b>W południe:</b> Player pokazał czarny ekran, a druga próba zadziałała.</li>
+  <li><b>Pół godziny później:</b> TVP VOD dwa razy pokazał błąd „Wystąpił problem z materiałem”. TVP Sport w tym samym czasie działał.</li>
+  <li><b>Prędkość pobierania:</b> od 51 do 157 Mb/s, zależnie od pory i miejsca pomiaru.</li>
+</ul>
+<p>W panelu Proton serwer PL-FREE#1 pokazywał tego dnia obciążenie 100%. To prawdopodobna przyczyna wahań, ale nie mamy na to dowodu.</p>
+""", "prosec", brief([("Testowany VPN", "Proton VPN, plan darmowy"), ("Serwer", "PL-FREE#1, Warszawa"), ("Urządzenia", "1 naraz"), ("Wynik", "Zmienny, zobacz historię")],
+                     [("/wyniki-testow", "Wyniki testów i historia"), ("/porownanie-vpn", "Porównanie z płatnymi VPN"), ("/jak-testujemy", "Jak testujemy")]))
+    + f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Wynik ostatniego testu darmowego serwera</h2><p>Ten sam serwer, trzy serwisy, codziennie rano.</p></div>
+  <div class="svc lastbox" data-last>{last_rows_html()}</div>
+  <p class="after"><a href="/wyniki-testow">Historia 30 dni i zrzuty ekranu</a></p>
+</div></section>"""
+    + steps("Jak ustawić darmowy serwer w Polsce", "Potrzebujesz darmowego konta Proton i aplikacji WireGuard.", [
+        ("Załóż darmowe konto Proton VPN", "Wystarczy adres e-mail. Karta nie jest potrzebna."),
+        ("W panelu konta otwórz „Pobieranie”", "Na dole strony jest część „Konfiguracja WireGuard”. Wpisz dowolną nazwę i wybierz swój system."),
+        ("Wybierz darmowy serwer w Polsce", "Zaznacz konfigurację dla serwerów darmowych, rozwiń „Polska” i kliknij „Utwórz” przy PL-FREE. Pobierz plik .conf."),
+        ("Zmień linię DNS w pliku", "Otwórz plik w notatniku i zamień wartość DNS na 1.1.1.1. Bez tego TVP VOD i Player pokazują komunikat o adblocku."),
+        ("Zaimportuj plik do aplikacji WireGuard", "Darmowa aplikacja WireGuard jest na Windows, macOS, Android i iOS. Włącz tunel i otwórz serwis.")])
+    + prose("""
+<h2>Dlaczego zmiana DNS jest konieczna</h2>
+<p>Pobrany plik ma wpisany serwer DNS dostawcy. W naszych testach ten serwer blokował domeny reklamowe. TVP VOD pokazywał wtedy „Wykryto wtyczkę adblock”, a Player „Wyłącz blokowanie reklam, aby oglądać”. Po zmianie DNS na neutralny (1.1.1.1) oba serwisy ruszyły. Plik zawiera Twój klucz prywatny, więc nie wysyłaj go nikomu.</p>
+
+<h2>Kiedy darmowy VPN wystarczy, a kiedy nie</h2>
+<ul>
+  <li><b>Wystarczy,</b> gdy oglądasz od czasu do czasu, na jednym urządzeniu, i możesz spróbować ponownie za godzinę.</li>
+  <li><b>Nie wystarczy,</b> gdy chcesz oglądać na telewizorze bez komputera, na kilku urządzeniach albo o konkretnej godzinie.</li>
+</ul>
+<p>Płatne plany mają więcej polskich serwerów, więc gdy jeden nie działa, można przełączyć się na inny. Których płatnych VPN jeszcze nie przetestowaliśmy, widać w <a href="/porownanie-vpn">porównaniu</a>.</p>
+<p class="note">Ta strona opisuje nasze własne testy jednego darmowego serwera. Nie jest to ocena całej usługi Proton VPN.</p>
+""", "prosec alt")
+    + faq([("Czy darmowy VPN jest bezpieczny?", "To zależy od dostawcy. Opisujemy tylko ten, którego sami używamy w testach. Nie instaluj nieznanych darmowych aplikacji VPN tylko dlatego, że obiecują polski serwer."),
+           ("Dlaczego w aplikacji Proton nie widzę Polski?", "W planie darmowym aplikacja sama wybiera kraj. Polski serwer ustawisz tylko przez plik konfiguracji WireGuard z panelu konta."),
+           ("Czy to działa na telewizorze?", "Trudno. Plan darmowy to jedno urządzenie, a plik WireGuard trzeba zaimportować ręcznie. Najprościej oglądać na komputerze albo telefonie.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])
+
 PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
     band('<a href="/">Polska telewizja za granicą</a> / Polsat Box Go', "Jak oglądać Polsat Box Go za granicą",
@@ -656,8 +764,8 @@ PAGES["/o-nas"] = ("O nas | Polski Streaming",
 <h2>Z czego się utrzymujemy</h2>
 <p>Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie wpływa na wyniki testów. Szczegóły są w części <a href="/jak-testujemy#linki">Linki partnerskie</a>.</p>
 
-<h2>Poprawki</h2>
-<p>Jeśli znajdziesz błąd, poprawimy go i opiszemy zmianę w dzienniku zmian na stronie <a href="/jak-testujemy">Jak testujemy</a>.</p>
+<h2>Kontakt i poprawki</h2>
+<p>Napisz na adres <a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a>. Jeśli znajdziesz błąd, poprawimy go i opiszemy zmianę w dzienniku zmian na stronie <a href="/jak-testujemy">Jak testujemy</a>.</p>
 """, "prosec"),
     "page", [("/", "Polska telewizja za granicą"), ("/o-nas", "O nas")])
 
