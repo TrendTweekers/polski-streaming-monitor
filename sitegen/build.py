@@ -203,7 +203,7 @@ PAGES["/"] = ("Polska telewizja za granicą: który VPN działa? | Polski Stream
                      LEGAL_Q, FREE_Q,
                      ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności w tabeli.")]))
 
-PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą (test z " + CHECKED + ") | Polski Streaming Monitor",
+PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny test VPN | Polski Streaming Monitor",
     "TVP VOD za granicą: trzy sposoby, wynik codziennego testu VPN i zrzut ekranu jako dowód.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
          "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Poniżej są trzy sposoby i wynik naszego codziennego testu.",
@@ -236,7 +236,7 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą (test z " + C
     + faq([LEGAL_Q, FREE_Q, TV_Q,
            ("Czy potrzebuję konta w TVP VOD?", "W naszym teście program „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty.")]))
 
-PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą (test z " + CHECKED + ") | Polski Streaming Monitor",
+PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test VPN | Polski Streaming Monitor",
     "Player za granicą: darmowa część serwisu, pakiet Player International i wynik codziennego testu VPN.",
     band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
          "Player ma darmowe materiały z reklamami i płatne pakiety. Za granicą część z nich jest zablokowana. Poniżej są sposoby i wynik naszego testu.",
@@ -347,6 +347,7 @@ PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Stream
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców. „Nie sprawdziliśmy” znaczy, że nie mamy potwierdzenia ze źródła.</p></div>
   {facts_table()}
+  <p class="monly muted">Na telefonie pełne dane każdego dostawcy są niżej, w części „Dostawcy po kolei”.</p>
   <p class="after">Cen nie podajemy, bo zmieniają się co kilka dni i zależą od promocji. Aktualną cenę zobaczysz na stronie dostawcy.</p>
 </div></section>"""
     + prose("""
@@ -454,6 +455,7 @@ a.prov{text-decoration:none}
 .sidefig img{display:block;width:100%;height:auto;border:1px solid var(--line)}
 .figcap{font-size:13px;color:var(--muted);margin-top:8px}
 .scrollx{overflow-x:auto}
+.monly{display:none}
 table.facts{min-width:980px}
 table.facts td{height:auto;padding-top:16px;padding-bottom:16px;vertical-align:middle}
 table.facts td:last-child,table.facts th:last-child{text-align:right}
@@ -468,6 +470,7 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .provsec p{margin:0 0 12px;font-size:14px}
 @media (max-width:1180px){.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
+  .scrollx{display:none}.monly{display:block}
   .cnav a{padding:10px 12px}
   .svcrow{grid-template-columns:30px minmax(0,1fr) auto;gap:6px 12px}
   .svcrow .muted,.svcrow a{grid-column:2/-1}
