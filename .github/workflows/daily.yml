@@ -31,8 +31,9 @@ jobs:
         run: xvfb-run -a python bot/bot.py
       - name: Publish results
         run: |
-          git config user.name "streaming-bot"
-          git config user.email "bot@users.noreply.github.com"
+          # Vercel only deploys commits from the repo owner, so the bot commits as the owner.
+          git config user.name "TrendTweekers"
+          git config user.email "224116307+TrendTweekers@users.noreply.github.com"
           git add site/data
           git diff --cached --quiet || git commit -m "Test results $(date -u +%F)"
           git push
