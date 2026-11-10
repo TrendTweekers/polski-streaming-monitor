@@ -3,34 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="noindex, follow">
 <title>Jak testujemy VPN z polskimi serwisami | Polski Streaming</title>
 <meta name="description" content="Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.">
 <link rel="canonical" href="https://polskistreaming.pl/jak-testujemy">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#17232D">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Polski Streaming">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:title" content="Jak testujemy VPN z polskimi serwisami">
+<meta property="og:description" content="Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.">
+<meta property="og:url" content="https://polskistreaming.pl/jak-testujemy">
+<meta property="og:image" content="https://polskistreaming.pl/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/fonts/ibm-plex-sans-400-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/style.css">
 <script>document.documentElement.className="js"</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://polskistreaming.pl/#org", "name": "Polski Streaming", "url": "https://polskistreaming.pl", "logo": "https://polskistreaming.pl/apple-touch-icon.png"}, {"@type": "Article", "headline": "Jak testujemy VPN z polskimi serwisami", "description": "Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.", "inLanguage": "pl", "mainEntityOfPage": "https://polskistreaming.pl/jak-testujemy", "datePublished": "2026-11-10", "dateModified": "2026-11-10", "image": "https://polskistreaming.pl/og.jpg", "author": {"@id": "https://polskistreaming.pl/#org"}, "publisher": {"@id": "https://polskistreaming.pl/#org"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Polska telewizja za granicą", "item": "https://polskistreaming.pl"}, {"@type": "ListItem", "position": 2, "name": "Jak testujemy", "item": "https://polskistreaming.pl/jak-testujemy"}]}]}</script>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
   <nav class="cnav" aria-label="Główne"><a href="/tvp-vod-za-granica">TVP VOD</a><a href="/player-za-granica">Player</a><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/wyniki-testow">Wyniki testów</a><a href="/jak-testujemy" aria-current="page">Jak testujemy</a></nav>
 </div></header>
+<main>
 <div class="open solo"><div class="wrap">
   <div class="otext">
     <div class="crumb"><a href="/">Polska telewizja za granicą</a> / Jak testujemy</div>
     <h1>Jak testujemy</h1>
     <p>Ten sam test każdego ranka. Wyniki publikujemy także wtedy, gdy są złe dla dostawcy.</p>
     <div class="when mono">
-      <span>Ostatni test: <b id="last">—</b></span>
+      <span>Ostatni test: <b id="last">10.11.2026, 12:48</b></span>
       <span>Kolejny: <b id="next">—</b></span>
     </div>
   </div>
   
 </div></div><section class="method"><div class="wrap">
-  <div class="shead"><h2>Przebieg testu</h2><p id="scope"></p></div>
+  <div class="shead"><h2>Przebieg testu</h2><p>Test jest automatyczny. Nikt nie poprawia wyników ręcznie.</p></div>
   <div class="tl">
     <div><time>Krok 1</time><h3>Połączenie z VPN</h3><p>Polski serwer dostawcy, protokół WireGuard.</p></div>
     <div><time>Krok 2</time><h3>Kontrola adresu IP</h3><p>Adres musi być polski. Inaczej test się nie odbywa.</p></div>
@@ -41,33 +53,56 @@
     <div><time>Krok 7</time><h3>Zrzut ekranu</h3><p>Zapis obrazu po 20 sekundach filmu.</p></div>
   </div>
   <div class="mcols">
-    <div><h3>Co oznaczają wyniki</h3><ul id="cats"></ul></div>
+    <div><h3>Co oznaczają wyniki</h3><ul id="cats"><li><span class="st ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Działa</span><span>Film grał 60 sekund bez przerwy w pierwszej próbie.</span></li><li><span class="st unstable"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Niestabilny</span><span>Film zatrzymał się albo ruszył dopiero w drugiej próbie.</span></li><li><span class="st blocked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>Nie działa</span><span>Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu.</span></li><li><span class="st none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg>Nie przetestowano</span><span>Test się nie odbył. Nie liczymy tego jako blokady.</span></li></ul></div>
     <div><h3>Ograniczenia</h3>
       <ul class="plain">
         <li>Wynik dotyczy serwera i przeglądarki użytych w teście.</li>
         <li>Prędkość mierzymy z jednego miejsca (podanego w tabeli), nie z każdego kraju.</li>
-        <li>Test używa neutralnego serwera DNS (1.1.1.1).</li>
         <li>Po nieudanej próbie bot próbuje drugi raz. Dopiero dwie nieudane próby dają wynik „Nie działa”.</li>
         <li>Nie widzimy przyczyny. „Nie działa” może wynikać z blokady, z obciążenia serwera VPN albo z awarii serwisu.</li>
       </ul>
     </div>
   </div>
 </div></section><section class="prosec"><div class="wrap pgrid"><div class="prose">
+<h2>Czym testujemy</h2>
+<ul>
+  <li><b>Przeglądarka:</b> Chrome z obsługą DRM, okno 1440 × 900, język polski. Taka sama, jakiej używa zwykły widz.</li>
+  <li><b>VPN:</b> konfiguracja WireGuard od dostawcy. Ruch przeglądarki idzie przez tunel, reszta systemu nie.</li>
+  <li><b>Miejsce:</b> test uruchamia się na serwerze w chmurze. Kraj serwera podajemy przy wyniku prędkości.</li>
+  <li><b>Pora:</b> raz dziennie rano czasu polskiego. Dokładną godzinę widać przy każdym wyniku.</li>
+</ul>
+
+<h2>Dlaczego używamy neutralnego serwera DNS</h2>
+<p>Pierwsze testy z serwerem DNS dostawcy VPN kończyły się komunikatem o adblocku w TVP VOD i w Playerze. Serwer DNS dostawcy blokował domeny reklamowe, a oba serwisy nie puszczają filmu bez reklam. Po zmianie na neutralny DNS (1.1.1.1) film ruszył. Dlatego bot zawsze używa neutralnego DNS, a w poradnikach radzimy wyłączyć blokowanie reklam w aplikacji VPN.</p>
+
+<h2>Co i kogo testujemy dziś</h2>
+<p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy na razie Proton VPN w planie darmowym. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
+
 <h2 id="linki">Linki partnerskie</h2>
 <p>Strona będzie zarabiać na linkach partnerskich: gdy kupisz VPN przez nasz link, dostaniemy prowizję, a Ty zapłacisz tyle samo. <b>Dziś żaden link na stronie nie jest jeszcze partnerski.</b> Gdy to się zmieni, oznaczymy to przy każdym przycisku.</p>
-<p>Prowizja nie zmienia wyników testu ani kolejności w tabeli. Kolejność zależy tylko od liczby działających serwisów i od prędkości.</p>
+<p>Prowizja nie zmienia wyników testu ani kolejności w tabeli.</p>
+
 <h2>Skąd są dane w porównaniu</h2>
-<p>Fakty o dostawcach (serwery, zwrot pieniędzy, liczba urządzeń) pochodzą z ich własnych stron. Przy każdej pozycji jest źródło i data sprawdzenia. Gdy czegoś nie potwierdziliśmy, piszemy „Nie sprawdziliśmy”.</p>
+<p>Fakty o dostawcach (serwery, zwrot pieniędzy, liczba urządzeń) pochodzą z ich własnych stron. Przy każdej pozycji jest źródło i data sprawdzenia. Gdy czegoś nie potwierdzimy w źródle, nie podajemy tego.</p>
+
 <h2>Czego nie robimy</h2>
 <ul>
   <li>Nie publikujemy wyników, których bot nie zmierzył.</li>
   <li>Nie piszemy recenzji produktów, których nie używaliśmy.</li>
   <li>Nie usuwamy złych dni z historii.</li>
 </ul>
-</div><aside class="side2"><div class="brief"><h3>W skrócie</h3><dl><dt>Częstotliwość</dt><dd>Raz dziennie, rano</dd><dt>Kryterium</dt><dd>60 s filmu bez przerwy</dd><dt>Dowód</dt><dd>Zrzut ekranu z każdej próby</dd><dt>Historia</dt><dd>30 dni, także złe dni</dd></dl><div class="blinks"><a href="/wyniki-testow">Wyniki ostatniego testu</a><a href="/wyniki-testow#dowod">Zrzuty ekranu</a></div></div></aside></div></section>
+
+<h2>Dziennik zmian</h2>
+<ul>
+  <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
+  <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
+  <li><b>10.11.2026:</b> dodana druga próba po nieudanym teście i wynik „Niestabilny”.</li>
+</ul>
+</div><aside class="side2"><div class="brief"><h3>W skrócie</h3><dl><dt>Częstotliwość</dt><dd>Raz dziennie, rano</dd><dt>Kryterium</dt><dd>60 s filmu bez przerwy</dd><dt>Dowód</dt><dd>Zrzut ekranu z każdej próby</dd><dt>Historia</dt><dd>30 dni, także złe dni</dd></dl><div class="blinks"><a href="/wyniki-testow">Wyniki ostatniego testu</a><a href="/wyniki-testow#dowod">Zrzuty ekranu</a><a href="/o-nas">Kto prowadzi stronę</a></div></div></aside></div></section>
+</main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/jak-testujemy">Jak testujemy</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy#linki">Linki partnerskie</a></nav>
+  <nav><a href="/o-nas">O nas</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 </body>

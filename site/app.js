@@ -1,5 +1,5 @@
 (function(){
-  var LOGO={proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn',cybr:'/logos/cyberghost-icon.png'};
+  var LOGO={proton:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',cybr:'/logos/cyberghost-icon.png'};
   var SLOGO={tvpvod:'/logos/tvpvod.png',player:'/logos/player.svg',polsat:'/logos/polsat.svg',canal:'/logos/canal.svg'};
   var PRICE={proton:['darmowy','0 zł']};
   var C={
@@ -133,7 +133,7 @@
     var cn='',cs='';
     Object.keys(C).forEach(function(k){
       cn+='<button type="button" data-c="'+k+'">'+C[k].short+'</button>';
-      cs+='<button type="button" data-c="'+k+'"><img src="https://flagcdn.com/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
+      cs+='<button type="button" data-c="'+k+'"><img src="/flags/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
     });
     $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Plan w teście</th><th>Oferta</th>';
     $('cnav').innerHTML=cn;$('countries').innerHTML=cs;

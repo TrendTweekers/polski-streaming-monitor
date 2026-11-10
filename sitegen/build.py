@@ -7,6 +7,7 @@ Content rules:
 - No invented test results. A provider or service that the bot did not test says so.
 - Provider facts come from the provider's own pages; each has a source and a check date.
 """
+import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -14,15 +15,83 @@ SITE = HERE.parent / "site"
 DOMAIN = "https://polskistreaming.pl"
 UPDATED = "10 listopada 2026"
 CHECKED = "10.11.2026"
+PUBLISHED = "2026-11-10"
+MODIFIED = "2026-11-10"
 INDEXABLE = False  # set True when the owner opens the site to search engines
+# Pages kept out of search until they have enough substance of their own.
+NOINDEX = {"/polsat-box-go-za-granica", "/wyniki-testow", "/prywatnosc"}
+_latest = SITE / "data" / "latest.json"
+RUN = json.loads(_latest.read_text()) if _latest.exists() else {"providers": [], "services": []}
+SVON = [x for x in RUN.get("services", []) if x.get("enabled")]
+ST_LABEL = {"ok": "Działa", "blocked": "Nie działa", "unstable": "Niestabilny", "none": "Nie przetestowano"}
+ST_ICON = {"ok": '<path d="M20 6 9 17l-5-5"/>', "blocked": '<path d="M18 6 6 18M6 6l12 12"/>',
+           "unstable": '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>', "none": '<path d="M5 12h14"/>'}
+
+
+def st(status):
+    return (f'<span class="st {status}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" '
+            f'stroke-linejoin="round" aria-hidden="true">{ST_ICON[status]}</svg>{ST_LABEL[status]}</span>')
+
+
+def fmt_dt(iso):
+    return f"{iso[8:10]}.{iso[5:7]}.{iso[0:4]}, {iso[11:16]}" if iso else "—"
+
+
+def tested():
+    return [p for p in RUN.get("providers", []) if p.get("tested")]
+
+
+def prov_status_html(pid):
+    """Static copy of what app.js renders, so the result is in the HTML that search engines read."""
+    p = next((x for x in RUN.get("providers", []) if x["id"] == pid), None)
+    if not p or not p.get("tested"):
+        return st("none")
+    return "".join(f'<span class="pst">{x["name"]}:{st(p["services"].get(x["id"], {}).get("status", "none"))}</span>' for x in SVON)
+
+
+def svc_rows_html(sid):
+    out = ""
+    for p in tested():
+        r = p["services"].get(sid)
+        if not r:
+            continue
+        plan = f' ({p["plan"]})' if p.get("plan") else ""
+        why = f'. {r["reason"]}' if r.get("reason") else ""
+        link = f'<a href="/{r["shot"]}" target="_blank" rel="noopener">zrzut ekranu</a>' if r.get("shot") else "<span></span>"
+        out += (f'<div class="svcrow"><img src="{LOGOS[p["id"]]}" alt="" width="30" height="30"><b>{p["name"]}{plan}</b>{st(r["status"])}'
+                f'<span class="muted">Test: {fmt_dt(r.get("tested_at"))}{why}</span>{link}</div>')
+    return out or '<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'
+
+
+def last_rows_html():
+    out = ""
+    for p in tested():
+        plan = f' ({p["plan"]})' if p.get("plan") else ""
+        out += (f'<div class="lastrow"><img src="{LOGOS[p["id"]]}" alt="" width="30" height="30"><b>{p["name"]}{plan}</b><span>{prov_status_html(p["id"])}</span>'
+                f'<span class="muted">Test: {fmt_dt(RUN.get("finished_at"))}</span></div>')
+    return out or '<p class="muted">Brak wyniku testu.</p>'
 
 NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/polsat-box-go-za-granica", "Polsat Box Go"),
        ("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]
 
 
-def layout(path, title, desc, body):
+def layout(path, title, desc, body, kind="page", crumbs=None):
     nav = "".join('<a href="%s"%s>%s</a>' % (h, ' aria-current="page"' if h == path else "", t) for h, t in NAV)
-    robots = "" if INDEXABLE else '<meta name="robots" content="noindex, nofollow">\n'
+    index = INDEXABLE and path not in NOINDEX
+    robots = "" if index else '<meta name="robots" content="noindex, follow">\n'
+    url = DOMAIN + ("" if path == "/" else path)
+    org = {"@type": "Organization", "@id": DOMAIN + "/#org", "name": "Polski Streaming", "url": DOMAIN, "logo": DOMAIN + "/apple-touch-icon.png"}
+    graph = [org]
+    if path == "/":
+        graph.append({"@type": "WebSite", "@id": DOMAIN + "/#site", "url": DOMAIN, "name": "Polski Streaming", "inLanguage": "pl", "publisher": {"@id": DOMAIN + "/#org"}})
+    if kind == "article":
+        graph.append({"@type": "Article", "headline": title.split(" | ")[0], "description": desc, "inLanguage": "pl", "mainEntityOfPage": url,
+                      "datePublished": PUBLISHED, "dateModified": MODIFIED, "image": DOMAIN + "/og.jpg",
+                      "author": {"@id": DOMAIN + "/#org"}, "publisher": {"@id": DOMAIN + "/#org"}})
+    if crumbs:
+        graph.append({"@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": i + 1, "name": n, "item": DOMAIN + ("" if h == "/" else h)} for i, (h, n) in enumerate(crumbs)]})
+    ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
     return f"""<!doctype html>
 <html lang="pl">
 <head>
@@ -30,22 +99,35 @@ def layout(path, title, desc, body):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {robots}<title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="canonical" href="{DOMAIN}{'' if path == '/' else path}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="canonical" href="{url}">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#17232D">
+<meta property="og:type" content="{'article' if kind == 'article' else 'website'}">
+<meta property="og:site_name" content="Polski Streaming">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:title" content="{title.split(' | ')[0]}">
+<meta property="og:description" content="{desc}">
+<meta property="og:url" content="{url}">
+<meta property="og:image" content="{DOMAIN}/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="/fonts/ibm-plex-sans-400-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/style.css">
 <script>document.documentElement.className="js"</script>
+<script type="application/ld+json">{ld}</script>
 </head>
 <body>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
   <nav class="cnav" aria-label="Główne">{nav}</nav>
 </div></header>
+<main>
 {body}
+</main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/jak-testujemy">Jak testujemy</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy#linki">Linki partnerskie</a></nav>
+  <nav><a href="/o-nas">O nas</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 </body>
@@ -70,8 +152,10 @@ def band(crumb, h1, lead, extra="", image=False, figure=""):
 </div>{credit}</div>"""
 
 
-WHEN = """<div class="when mono">
-      <span>Ostatni test: <b id="last">—</b></span>
+LAST = fmt_dt(RUN.get("finished_at"))
+
+WHEN = f"""<div class="when mono">
+      <span>Ostatni test: <b id="last">{LAST}</b></span>
       <span>Kolejny: <b id="next">—</b></span>
     </div>"""
 
@@ -135,24 +219,34 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 </div></section>"""
 
 
-def svc_result(sid, name):
+def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Wynik ostatniego testu: {name}</h2><p>Bot sprawdza to każdego ranka. Wynik poniżej pochodzi z ostatniego testu, a nie z opisu producenta.</p></div>
-  <div class="svc" data-svc="{sid}"><p class="muted">Ładowanie wyniku testu…</p></div>
+  <div class="shead"><h2>Wynik ostatniego testu: {name}</h2><p>{note}</p></div>
+  <div class="svc" data-svc="{sid}">{svc_rows_html(sid)}</div>
   <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
 
 
-def steps(service):
+def steps(title, lead, items):
+    lis = "".join(f'<li><span class="n">{i + 1:02d}</span><h3>{h}</h3><p>{t}</p></li>' for i, (h, t) in enumerate(items))
     return f"""<section class="howto"><div class="wrap">
-  <div class="side"><h2>Jak włączyć {service} przez VPN</h2><p>Cztery kroki. Zajmuje to około 5 minut.</p></div>
-  <ol class="hsteps">
-    <li><span class="n">01</span><h3>Wybierz VPN z polskim serwerem</h3><p>Zobacz <a href="/porownanie-vpn">porównanie VPN</a> i wynik ostatniego testu.</p></li>
-    <li><span class="n">02</span><h3>Zainstaluj aplikację</h3><p>Na komputerze, telefonie albo telewizorze z Android TV lub Fire TV.</p></li>
-    <li><span class="n">03</span><h3>Połącz się z serwerem w Polsce</h3><p>Urządzenie dostaje polski adres IP. Serwis widzi ten adres, a nie Twój.</p></li>
-    <li><span class="n">04</span><h3>Otwórz {service}</h3><p>Nie działa? Zmień serwer na inny polski, wyłącz blokowanie reklam i odśwież stronę.</p></li>
-  </ol>
+  <div class="side"><h2>{title}</h2><p>{lead}</p></div>
+  <ol class="hsteps">{lis}</ol>
 </div></section>"""
+
+
+def facts_box(title, rows, note=""):
+    trs = "".join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in rows)
+    return f'<h2>{title}</h2><table class="mini"><tbody>{trs}</tbody></table>' + (f'<p class="muted small">{note}</p>' if note else "")
+
+
+def errors_box(rows):
+    trs = "".join(f"<tr><td>„{m}”</td><td>{w}</td><td>{d}</td></tr>" for m, w, d in rows)
+    return ('<h2>Komunikaty błędów i co z nimi zrobić</h2><div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Co oznacza</th><th>Co zrobić</th></tr></thead>'
+            f"<tbody>{trs}</tbody></table></div>")
+
+
+BYLINE = '<span>Autor: <a href="/o-nas">Redakcja Polski Streaming</a></span>'
 
 
 def frame(src, url, cap):
@@ -162,12 +256,14 @@ def frame(src, url, cap):
 
 
 def flow(service, logo=""):
-    flags = "".join(f'<img src="https://flagcdn.com/{c}.svg" alt="" width="30" height="20">' for c in ("gb", "de", "nl", "us"))
-    end = f'<span class="slogo"><img src="{logo}" alt=""></span>' if logo else '<span class="slogo stext">TV</span>'
+    flags = "".join(f'<img src="/flags/{c}.svg" alt="" width="30" height="20">' for c in ("gb", "de", "nl", "us"))
+    tv = ('<svg class="tvico" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+          '<rect x="2.5" y="4.5" width="19" height="12.5" rx="1.6"/><path d="M8 20.5h8M12 17v3.5"/><path d="M10.2 8.6v4.3l3.8-2.15z" fill="currentColor" stroke="none"/></svg>')
+    end = f'<span class="slogo"><img src="{logo}" alt=""></span>' if logo else tv
     return f"""<div class="flow" role="img" aria-label="Ty za granicą, serwer VPN w Polsce, {service}">
   <div class="fnode"><div class="fico">{flags}</div><b>Ty, za granicą</b><span>Zagraniczny adres IP</span></div>
   <div class="fline"><span>szyfrowane połączenie</span></div>
-  <div class="fnode mid"><div class="fico"><img src="https://flagcdn.com/pl.svg" alt="" width="42" height="28"></div><b>Serwer VPN w Polsce</b><span>Polski adres IP</span></div>
+  <div class="fnode mid"><div class="fico"><img src="/flags/pl.svg" alt="" width="42" height="28"></div><b>Serwer VPN w Polsce</b><span>Polski adres IP</span></div>
   <div class="fline"><span>polski adres IP</span></div>
   <div class="fnode"><div class="fico">{end}</div><b>{service}</b><span>Widzi widza z Polski</span></div>
 </div>"""
@@ -181,7 +277,7 @@ def provstrip(note=""):
     for pid, name, url, pl, refund, dev, tv, src, srcname, n in FACTS:
         rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
                  f'<span><em>Serwer w Polsce</em>{pl}</span><span><em>Zwrot pieniędzy</em>{refund}</span>'
-                 f'<span data-prov-status="{pid}"><span class="muted">…</span></span>'
+                 f'<span data-prov-status="{pid}">{prov_status_html(pid)}</span>'
                  f'<a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona dostawcy</a></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców. Ostatnia kolumna przed przyciskiem to wynik naszego testu, jeśli już testujemy danego dostawcę.'}</p></div>
@@ -217,33 +313,30 @@ FREE_Q = ("Czy darmowy VPN wystarczy?", "Czasem tak. Testujemy darmowy plan Prot
 TV_Q = ("Czy to działa na telewizorze?", "Tak, jeśli Twój telewizor albo przystawka ma aplikację VPN. Większość dostawców ma aplikacje na Android TV, Fire TV i Apple TV. Szczegóły są w <a href=\"/porownanie-vpn\">porównaniu VPN</a>.")
 
 FACTS = [
-    ("proton", "Proton VPN", "https://protonvpn.com", "Tak. Polska jest też w planie darmowym.", "30 dni", "Nie podano na sprawdzonej stronie", "Android TV, Apple TV, Fire TV",
-     "https://protonvpn.com/vpn-servers/poland", "protonvpn.com/vpn-servers/poland",
+    ("proton", "Proton VPN", "https://protonvpn.com", "Tak. W planie darmowym aplikacja sama wybiera kraj.", "30 dni", "10 (plan płatny), 1 (darmowy)", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
+     "https://protonvpn.com/pricing", "protonvpn.com/pricing",
      "Jedyny dostawca, którego dziś testujemy. Bot używa darmowego serwera PL-FREE#1."),
-    ("nord", "NordVPN", "https://nordvpn.com", "Nie sprawdziliśmy", "30 dni", "10", "Nie sprawdziliśmy",
-     "https://nordvpn.com/pricing/", "cennik nordvpn.com",
-     "Strona z listą serwerów była niedostępna dla naszego narzędzia. Dane o zwrocie i urządzeniach pochodzą z cennika."),
-    ("surf", "Surfshark", "https://surfshark.com", "Tak, Warszawa", "30 dni", "Nie podano na sprawdzonej stronie", "Fire TV, Apple TV",
-     "https://surfshark.com/servers/poland", "surfshark.com/servers/poland", ""),
-    ("expr", "ExpressVPN", "https://www.expressvpn.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Do 14", "Android TV, Apple TV, Fire TV",
+    ("nord", "NordVPN", "https://nordvpn.com", "Tak, 61 serwerów (Warszawa)", "30 dni", "10", "Windows, macOS, Linux, Android, iOS, Android TV",
+     "https://nordvpn.com/servers/poland/", "nordvpn.com/servers/poland", ""),
+    ("surf", "Surfshark", "https://surfshark.com", "Tak, Warszawa", "30 dni", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
+     "https://surfshark.com/pricing", "surfshark.com/pricing", ""),
+    ("expr", "ExpressVPN", "https://www.expressvpn.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Do 14", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.expressvpn.com/vpn-server/poland-vpn", "expressvpn.com/vpn-server/poland-vpn", ""),
-    ("cybr", "CyberGhost", "https://www.cyberghostvpn.com", "Nie sprawdziliśmy", "Nie sprawdziliśmy", "Nie sprawdziliśmy", "Nie sprawdziliśmy",
-     "https://www.cyberghostvpn.com", "cyberghostvpn.com",
-     "Nie udało się nam otworzyć strony z danymi o serwerach w Polsce. Uzupełnimy tę pozycję."),
+    ("cybr", "CyberGhost", "https://www.cyberghostvpn.com", "Tak, 1 lokalizacja", "45 dni (14 dni w planie miesięcznym)", "7", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
+     "https://www.cyberghostvpn.com/vpn-server", "cyberghostvpn.com/vpn-server", ""),
 ]
 
-LOGOS = {"proton": "https://cdn.simpleicons.org/protonvpn", "nord": "https://cdn.simpleicons.org/nordvpn", "surf": "https://cdn.simpleicons.org/surfshark",
-         "expr": "https://cdn.simpleicons.org/expressvpn", "cybr": "/logos/cyberghost-icon.png"}
+LOGOS = {"proton": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
 
 
 def facts_table():
     rows = ""
     for pid, name, url, pl, refund, dev, tv, src, srcname, note in FACTS:
         rows += (f'<tr><td><a class="prov" href="#{pid}"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span>{name}</span></a></td>'
-                 f'<td data-prov-status="{pid}"><span class="muted">…</span></td><td>{pl}</td><td>{refund}</td><td>{dev}</td><td>{tv}</td>'
+                 f'<td data-prov-status="{pid}">{prov_status_html(pid)}</td><td>{pl}</td><td>{refund}</td><td>{dev}</td><td>{tv}</td>'
                  f'<td><a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona dostawcy</a></td></tr>')
     return ('<div class="scrollx"><table class="facts"><thead><tr><th>Dostawca VPN</th><th>Nasz test</th><th>Serwer w Polsce</th><th>Zwrot pieniędzy</th>'
-            '<th>Urządzenia jednocześnie</th><th>Aplikacje na TV</th><th>Oferta</th></tr></thead><tbody>' + rows + '</tbody></table></div>')
+            '<th>Urządzenia jednocześnie</th><th>Aplikacje</th><th>Oferta</th></tr></thead><tbody>' + rows + '</tbody></table></div>')
 
 
 def facts_sections():
@@ -252,11 +345,11 @@ def facts_sections():
         out += f"""<div class="provsec" id="{pid}">
   <h3><img src="{LOGOS[pid]}" alt="" width="26" height="26"> {name}</h3>
   <dl class="kv">
-    <dt>Nasz test</dt><dd data-prov-status="{pid}"><span class="muted">…</span></dd>
+    <dt>Nasz test</dt><dd data-prov-status="{pid}">{prov_status_html(pid)}</dd>
     <dt>Serwer w Polsce</dt><dd>{pl}</dd>
     <dt>Zwrot pieniędzy</dt><dd>{refund}</dd>
     <dt>Urządzenia jednocześnie</dt><dd>{dev}</dd>
-    <dt>Aplikacje na TV</dt><dd>{tv}</dd>
+    <dt>Aplikacje</dt><dd>{tv}</dd>
     <dt>Źródło danych</dt><dd><a href="{src}" target="_blank" rel="nofollow noopener">{srcname}</a>, sprawdzone {CHECKED}</dd>
   </dl>
   {f'<p class="muted">{note}</p>' if note else ''}
@@ -296,7 +389,7 @@ PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Stre
 </div></section>"""
               + """<section class="history"><div class="wrap narrowpad">
   <div class="shead"><h2>Ostatni test</h2><p>Bot łączy się przez VPN z serwerem w Polsce, włącza film i sprawdza, czy gra 60 sekund. Robi to każdego ranka i zapisuje zrzut ekranu.</p></div>
-  <div class="svc lastbox" data-last><p class="muted">Ładowanie wyniku testu…</p></div>
+  <div class="svc lastbox" data-last>{last_rows_html()}</div>
   <p class="after"><a href="/wyniki-testow">Pełne wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
@@ -311,107 +404,153 @@ PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Str
     + RESULTS + HISTORY + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny test VPN | Polski Streaming",
-    "TVP VOD za granicą: trzy sposoby, wynik codziennego testu VPN i zrzut ekranu jako dowód.",
+    "TVP VOD za granicą: co działa bez VPN, co jest zablokowane, wynik codziennego testu i komunikaty błędów z rozwiązaniami.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
-         "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Poniżej są trzy sposoby i wynik naszego codziennego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>',
+         "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Sprawdzamy to codziennie na programie „Jeden z dziesięciu”.",
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
          figure=frame("/img/tvpvod-test.webp", "vod.tvp.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Film gra."))
     + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Część materiałów TVP VOD działa za granicą bez niczego. Reszta wymaga polskiego adresu IP, czyli VPN z serwerem w Polsce. To, czy film ruszy, zmienia się z dnia na dzień, dlatego niżej jest wynik naszego ostatniego testu.</p>
+
 <h2>Dlaczego TVP VOD nie działa za granicą</h2>
 <p>TVP kupuje prawa do wielu filmów, seriali i transmisji tylko na terytorium Polski. Serwis sprawdza adres IP urządzenia. Gdy adres jest zagraniczny, część materiałów się nie włącza.</p>
-<p>Nie wszystko jest zablokowane. Własne produkcje TVP często działają także za granicą. TVP ma w menu serwisu stronę <a href="https://vod.tvp.pl/tvp-vod-za-granica" target="_blank" rel="noopener">TVP VOD za granicą</a>, na której można sprawdzić dostępność.</p>
+<p>Nie wszystko jest zablokowane. Własne produkcje TVP często działają także za granicą. W menu serwisu jest strona <a href="https://vod.tvp.pl/tvp-vod-za-granica" target="_blank" rel="noopener">TVP VOD za granicą</a>, na której można sprawdzić dostępność.</p>
+
+<h2>Co jest w TVP VOD</h2>
+<p>Lista z serwisu vod.tvp.pl, sprawdzona 10.11.2026:</p>
+<ul>
+  <li><b>Kanały na żywo:</b> TVP 1, TVP 2, TVP Info, TVP Kultura oraz kanały tematyczne, na przykład TVP Kryminały i TVP Klan.</li>
+  <li><b>Seriale:</b> M jak miłość, Ojciec Mateusz, Na dobre i na złe, Klan, Barwy szczęścia, Komisarz Alex, Na sygnale.</li>
+  <li><b>Programy:</b> Jeden z dziesięciu, The Voice of Poland, Rolnik szuka żony, Jaka to melodia?</li>
+  <li><b>Filmy i klasyka:</b> Pan Tadeusz, Znachor, Pianista, Stawka większa niż życie, Czterdziestolatek.</li>
+  <li><b>Działy:</b> Sport, Teatr, Dokumenty, Dla dzieci, News.</li>
+</ul>
 
 <h2>Trzy sposoby</h2>
 <h3>1. Sprawdź, czy materiał działa bez VPN</h3>
-<p>Otwórz program na vod.tvp.pl. Jeśli gra, nie potrzebujesz niczego więcej. To dotyczy głównie produkcji własnych TVP.</p>
-<h3>2. W Unii Europejskiej: przenośność płatnych usług</h3>
-<p>Unijne rozporządzenie o przenośności (2017/1128) daje dostęp do <b>płatnych</b> subskrypcji podczas czasowego pobytu w innym kraju UE. Dla darmowych serwisów to nie jest obowiązek. Po Brexicie ta zasada nie obejmuje Wielkiej Brytanii (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="noopener">źródło: gov.uk</a>).</p>
+<p>Otwórz program na vod.tvp.pl. Jeśli gra, nie potrzebujesz niczego więcej. Dotyczy to głównie produkcji własnych TVP.</p>
+<h3>2. W Unii Europejskiej: zasada przenośności</h3>
+<p>Unijne rozporządzenie 2017/1128 gwarantuje dostęp za granicą tylko do <b>płatnych</b> usług i tylko podczas czasowego pobytu. TVP VOD jest w większości darmowy, więc ta zasada go nie obowiązuje. Po Brexicie nie dotyczy też Wielkiej Brytanii (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="noopener">źródło: gov.uk</a>).</p>
 <h3>3. VPN z serwerem w Polsce</h3>
 <!--flow:tvpvod-->
-<p>VPN daje Twojemu urządzeniu polski adres IP. Serwis widzi wtedy użytkownika z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia. Dlatego sprawdzamy to codziennie.</p>
-""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "Nie zawsze potrzebne"), ("Blokada", "Po adresie IP, zależy od materiału"), ("Nasz test", "Codziennie, program „Jeden z dziesięciu”")],
+<p>VPN daje Twojemu urządzeniu polski adres IP, więc TVP VOD widzi widza z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia.</p>
+""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed filmem", "Około 2,5 minuty"), ("Nasz test", "Codziennie, „Jeden z dziesięciu”")],
                      [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
     + provstrip()
-    + svc_result("tvpvod", "TVP VOD")
-    + steps("TVP VOD")
-    + prose(f"""
-<h2>Co zauważyliśmy w testach</h2>
-<ul>
-  <li><b>Reklamy przed programem.</b> W naszych testach TVP VOD pokazywał około 2,5 minuty reklam, zanim ruszył program. Poczekaj, zanim uznasz, że coś nie działa.</li>
-  <li><b>Komunikat o adblocku.</b> Gdy bot używał serwera DNS dostawcy VPN (Proton VPN, {CHECKED}), TVP VOD pokazał komunikat „Wykryto wtyczkę adblock”. Po zmianie DNS na neutralny (1.1.1.1) film ruszył. Jeśli widzisz ten komunikat, wyłącz w aplikacji VPN blokowanie reklam.</li>
-  <li><b>Błąd „Wystąpił problem z materiałem”.</b> Tego samego dnia ten sam serwer raz działał, a raz TVP VOD pokazał ten błąd dwa razy z rzędu. Zmiana serwera na inny polski albo ponowna próba po kilku minutach często pomaga.</li>
-</ul>
-<p class="note">To są obserwacje z naszych testów, nie obietnica. Aktualny wynik jest zawsze na górze tej strony.</p>
-""", "prosec alt", shot("tvpvod", "TVP VOD"))
-    + faq([LEGAL_Q, FREE_Q, TV_Q,
-           ("Czy potrzebuję konta w TVP VOD?", "W naszym teście program „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty.")]))
+    + svc_result("tvpvod", "TVP VOD", "Bot włącza najnowszy odcinek programu „Jeden z dziesięciu” i sprawdza, czy gra 60 sekund.")
+    + steps("Jak włączyć TVP VOD przez VPN", "Kolejność ma znaczenie: najpierw VPN, potem strona.", [
+        ("Połącz VPN z serwerem w Polsce", "Zrób to przed otwarciem strony. Jeśli strona była już otwarta, odśwież ją po połączeniu."),
+        ("Otwórz vod.tvp.pl i kliknij „Akceptuję”", "Bez zgody w okienku prywatności reklamy się nie ładują, a wtedy film nie rusza."),
+        ("Wybierz program i kliknij „Odtwórz”", "Przycisk jest pod tytułem programu. Serwis przeniesie Cię do najnowszego odcinka."),
+        ("Poczekaj na koniec reklam", "W naszych testach trwały od 156 do 176 sekund. Nie odświeżaj strony, bo reklamy zaczną się od nowa.")])
+    + prose(facts_box("Liczby z naszego testu", [
+        ("Program testowy", "„Jeden z dziesięciu”, najnowszy odcinek"),
+        ("Czas reklam przed filmem", "156 do 176 sekund"),
+        ("Jakość obrazu", "1920 × 1080 na zwykłym komputerze, 640 × 360 na serwerze testowym"),
+        ("Zabezpieczenie DRM", "Nie, w tym programie"),
+        ("Logowanie", "Nie było potrzebne"),
+        ("Dni pomiarów", "10.11.2026, kilka uruchomień")],
+        "To są pomiary naszego bota, a nie dane producenta.")
+    + errors_box([
+        ("Wykryto wtyczkę adblock", "Reklamy się nie załadowały. Zdarza się, gdy VPN blokuje reklamy na poziomie DNS.", "Wyłącz w aplikacji VPN blokowanie reklam i odśwież stronę."),
+        ("Wystąpił problem z materiałem. Spróbuj ponownie za chwilę", "Serwis nie podał filmu. W naszym teście ten sam serwer VPN godzinę wcześniej działał.", "Zmień serwer na inny polski albo spróbuj po kilku minutach."),
+        ("Materiał niedostępny w Twoim kraju", "Serwis widzi zagraniczny adres IP.", "Sprawdź, czy VPN jest połączony z Polską, i odśwież stronę.")])
+    + '<p class="note">Dwa pierwsze komunikaty widzieliśmy w naszych testach 10.11.2026. Trzeci to zwykła blokada regionalna.</p>',
+    "prosec alt", shot("tvpvod", "TVP VOD"))
+    + faq([("Czy potrzebuję konta w TVP VOD?", "W naszym teście „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty."),
+           ("Czy TVP Sport działa tak samo?", "TVP Sport to osobny serwis (sport.tvp.pl) i testujemy go osobno. Wynik jest na stronie <a href=\"/wyniki-testow\">Wyniki testów</a>."),
+           ("Czy mogę oglądać TVP VOD na telewizorze za granicą?", "Tak, jeśli telewizor albo przystawka ma aplikację VPN. TVP VOD ma aplikację na Android TV. Listę aplikacji każdego dostawcy VPN znajdziesz w <a href=\"/porownanie-vpn\">porównaniu</a>."),
+           ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin TVP VOD może jednak zabraniać omijania blokad regionalnych, więc przeczytaj go przed użyciem.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/tvp-vod-za-granica", "TVP VOD")])
 
 PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test VPN | Polski Streaming",
-    "Player za granicą: darmowa część serwisu, pakiet Player International i wynik codziennego testu VPN.",
+    "Player za granicą: darmowe odcinki „BEZ OPŁAT”, pakiet Player International, wynik codziennego testu VPN i typowe błędy.",
     band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
-         "Player ma darmowe materiały z reklamami i płatne pakiety. Za granicą część z nich jest zablokowana. Poniżej są sposoby i wynik naszego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>',
-         figure=frame("/img/player-test.webp", "player.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Film gra."))
+         "Player ma darmowe odcinki z reklamami i płatne pakiety. Sprawdzamy codziennie, czy darmowe „Fakty” grają przez VPN.",
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
+         figure=frame("/img/player-test.webp", "player.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. „Fakty” grają."))
     + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Masz dwie drogi. Oficjalna to pakiet Player International, który działa bez VPN, ale nie obejmuje całej oferty. Druga to VPN z serwerem w Polsce: wtedy Player działa jak w kraju, a darmowe odcinki grają bez konta.</p>
+
+<h2>Co jest w Playerze</h2>
+<p>Stan ze strony player.pl, sprawdzony 10.11.2026:</p>
+<ul>
+  <li><b>Darmowe odcinki z etykietą „BEZ OPŁAT”.</b> Grają z reklamami i bez logowania. Są dostępne krótko: przy odcinkach „Faktów” widzieliśmy etykiety „ZNIKNIE W PONIEDZIAŁEK”.</li>
+  <li><b>Programy i seriale TVN:</b> Fakty, Dzień Dobry TVN, Na Wspólnej, Chyłka, Hotel Paradise.</li>
+  <li><b>Płatne działy w menu:</b> HBO, discovery+, Eurosport Pass, Canal+ oraz kanały na żywo.</li>
+  <li><b>Wypożyczalnia</b> filmów płatnych osobno.</li>
+</ul>
+
 <h2>Co wybrać</h2>
 <h3>1. Player International: oficjalna opcja</h3>
-<p>Player ma własny pakiet dla widzów za granicą. Serwis opisuje go tak: „dostęp do twoich ulubionych kanałów TVN i VOD z zagranicy”. To legalna droga bez VPN. Zakres i cenę sprawdź na stronie <a href="https://player.pl/playerplus/player-international" target="_blank" rel="noopener">Player International</a>, bo nie obejmuje całej oferty.</p>
-<h3>2. W Unii Europejskiej: przenośność płatnych pakietów</h3>
-<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, unijne przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Nie dotyczy to Wielkiej Brytanii.</p>
+<p>To pakiet Playera dla widzów za granicą. Serwis opisuje go słowami „dostęp do twoich ulubionych kanałów TVN i VOD z zagranicy”. Działa bez VPN. Zakres i cenę sprawdź na stronie <a href="https://player.pl/playerplus/player-international" target="_blank" rel="noopener">Player International</a>, bo nie obejmuje całej oferty.</p>
+<h3>2. Płatny pakiet podczas wyjazdu w Unii Europejskiej</h3>
+<p>Jeśli płacisz za pakiet Playera w Polsce i wyjeżdżasz na krótko do innego kraju UE, rozporządzenie 2017/1128 daje Ci dostęp do Twojej subskrypcji. Nie dotyczy to stałego pobytu ani Wielkiej Brytanii.</p>
 <h3>3. VPN z serwerem w Polsce</h3>
 <!--flow:player-->
-<p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. Testujemy darmowy materiał: bot włącza „Fakty” bez logowania i sprawdza, czy film gra 60 sekund.</p>
-""", "prosec", brief([("Darmowa część", "Tak, z reklamami"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, program „Fakty”")],
+<p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. To jedyny sposób na darmowe odcinki poza krajem.</p>
+""", "prosec", brief([("Darmowe odcinki", "Tak, z etykietą „BEZ OPŁAT”"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, „Fakty”")],
                      [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
-    + provstrip()
-    + svc_result("player", "Player")
-    + steps("Player")
-    + prose(f"""
-<h2>Co zauważyliśmy w testach</h2>
-<ul>
-  <li><b>Materiały są zabezpieczone (DRM).</b> Player szyfruje wideo. W zwykłej przeglądarce Chrome działa to bez dodatków, także przez VPN.</li>
-  <li><b>Blokowanie reklam zatrzymuje film.</b> Gdy reklamy się nie ładują, Player pokazuje „Wyłącz blokowanie reklam, aby oglądać”. Zdarzyło się to z serwerem DNS dostawcy VPN (Proton VPN, {CHECKED}). Wyłącz w aplikacji VPN blokowanie reklam.</li>
-  <li><b>Czarny ekran.</b> W jednym z testów ekran odtwarzacza został czarny, a druga próba po chwili zadziałała. Taki wynik oznaczamy jako „Niestabilny”.</li>
-</ul>
-<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy.</p>
-""", "prosec alt", shot("player", "Player"))
-    + faq([LEGAL_Q, FREE_Q, TV_Q]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce. Przy dostawcy, którego testujemy, widać wynik dla Playera.")
+    + svc_result("player", "Player", "Bot włącza najnowszy darmowy odcinek „Faktów” bez logowania i sprawdza, czy gra 60 sekund.")
+    + steps("Jak włączyć Player przez VPN", "Darmowe odcinki nie wymagają konta.", [
+        ("Połącz VPN z serwerem w Polsce", "Player sprawdza adres IP przy starcie filmu, więc VPN musi działać, zanim klikniesz „Oglądaj”."),
+        ("Otwórz player.pl i kliknij „Akceptuję”", "Okienko zgody pojawia się przy pierwszej wizycie. Bez niej reklamy się nie włączą."),
+        ("Wybierz odcinek z etykietą „BEZ OPŁAT”", "Odcinki bez tej etykiety wymagają płatnego pakietu i logowania."),
+        ("Kliknij „Oglądaj” i poczekaj na reklamę", "W naszym teście reklama trwała około 40 sekund, potem ruszył odcinek.")])
+    + prose(facts_box("Liczby z naszego testu", [
+        ("Materiał testowy", "„Fakty”, najnowszy odcinek „BEZ OPŁAT”"),
+        ("Czas reklam przed filmem", "Około 40 sekund"),
+        ("Jakość obrazu w teście", "640 × 360"),
+        ("Zabezpieczenie DRM", "Tak"),
+        ("Logowanie", "Nie było potrzebne"),
+        ("Dni pomiarów", "10.11.2026, kilka uruchomień")],
+        "Jakość 640 × 360 dotyczy przeglądarki bota. Na zwykłym komputerze może być wyższa, tego nie mierzyliśmy.")
+    + errors_box([
+        ("Wyłącz blokowanie reklam, aby oglądać", "Reklamy się nie załadowały. W naszym teście powodem był serwer DNS dostawcy VPN.", "Wyłącz w aplikacji VPN blokowanie reklam albo zmień DNS i odśwież stronę."),
+        ("Czarny ekran po kliknięciu „Oglądaj”", "Film się nie załadował. U nas druga próba po chwili zadziałała.", "Odśwież stronę. Jeśli to nie pomoże, zmień serwer VPN na inny polski."),
+        ("Przekierowanie na stronę logowania", "Wybrany materiał jest w płatnym pakiecie.", "Wybierz odcinek „BEZ OPŁAT” albo zaloguj się na konto z pakietem.")])
+    + '<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy.</p>',
+    "prosec alt", shot("player", "Player"))
+    + faq([("Czym różni się Player International od VPN?", "Player International to płatny pakiet od Playera, legalny i bez VPN, ale z ograniczoną ofertą. Z VPN widzisz polską wersję serwisu, w tym darmowe odcinki."),
+           ("Dlaczego darmowy odcinek zniknął?", "Darmowe odcinki są dostępne przez kilka dni. Przy „Faktach” serwis pokazuje etykietę z dniem, w którym odcinek zniknie."),
+           ("Czy potrzebuję konta?", "Do odcinków „BEZ OPŁAT” nie. W naszym teście „Fakty” grały bez logowania."),
+           ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin Playera może zabraniać omijania blokad regionalnych. Oficjalną drogą jest Player International.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player")])
 
 PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
     band('<a href="/">Polska telewizja za granicą</a> / Polsat Box Go', "Jak oglądać Polsat Box Go za granicą",
          "Polsat Box Go wymaga konta, a większość treści jest płatna. Tego serwisu jeszcze nie testujemy, więc na tej stronie są tylko sprawdzone fakty i źródła.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span></div>')
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span></div>')
     + prose(f"""
 <p class="note"><b>Nie testujemy jeszcze Polsat Box Go.</b> Do testu potrzebny jest płatny pakiet. Nie publikujemy wyników, których sami nie zmierzyliśmy. Gdy zaczniemy testy, wynik pojawi się na tej stronie.</p>
 
 <h2>Co sprawdziliśmy sami ({CHECKED})</h2>
 <ul>
   <li>Adres polsatgo.pl przekierowuje teraz do polsatboxgo.pl. Osobnego darmowego serwisu Polsat Go już tam nie ma.</li>
-  <li>Próba odtworzenia serialu bez konta kończy się przekierowaniem na stronę logowania.</li>
+  <li>Próba odtworzenia serialu „Świat według Kiepskich” bez konta kończy się przekierowaniem na stronę logowania.</li>
 </ul>
 
 <h2>Sposoby</h2>
-<h3>1. W Unii Europejskiej: przenośność</h3>
-<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Kluczowe jest słowo „czasowo”: dotyczy to wyjazdu, a nie stałego mieszkania za granicą. Zasada nie obejmuje Wielkiej Brytanii ani USA.</p>
+<h3>1. Wyjazd w Unii Europejskiej</h3>
+<p>Płatny pakiet działa podczas czasowego pobytu w innym kraju UE na mocy rozporządzenia 2017/1128. Kluczowe jest słowo „czasowo”: chodzi o wyjazd, a nie o stałe mieszkanie za granicą. Zasada nie obejmuje Wielkiej Brytanii ani USA.</p>
 <h3>2. Pakiet dla widzów za granicą</h3>
-<p>Według serwisów <a href="https://bezprawnik.pl/jak-ogladac-tv-za-granica/" target="_blank" rel="noopener">Bezprawnik</a> i <a href="https://android.com.pl/sponsorowany/436490-polsat-box-go-co-wybrac-roznice-grupa-plus/" target="_blank" rel="noopener">Android.com.pl</a> Polsat Box Go ma pakiet „Polonia” dla osób przebywających poza Polską, z treściami, na które licencja pozwala za granicą. Nie potwierdziliśmy tego w oficjalnym cenniku. Aktualną ofertę sprawdź na <a href="https://polsatboxgo.pl/pakiety" target="_blank" rel="noopener">polsatboxgo.pl/pakiety</a>.</p>
+<p>Według serwisów <a href="https://bezprawnik.pl/jak-ogladac-tv-za-granica/" target="_blank" rel="noopener">Bezprawnik</a> i <a href="https://android.com.pl/sponsorowany/436490-polsat-box-go-co-wybrac-roznice-grupa-plus/" target="_blank" rel="noopener">Android.com.pl</a> Polsat Box Go ma pakiet „Polonia” dla osób przebywających poza Polską. Nie potwierdziliśmy tego w oficjalnym cenniku. Aktualną ofertę sprawdź na <a href="https://polsatboxgo.pl/pakiety" target="_blank" rel="noopener">polsatboxgo.pl/pakiety</a>.</p>
 <h3>3. VPN z serwerem w Polsce</h3>
 <!--flow:polsat-->
-<p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Zobacz <a href="/porownanie-vpn">porównanie VPN</a> i wyniki dla serwisów, które testujemy: <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Player</a>.</p>
-""", "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Przenośność płatnych pakietów"), ("Nasz test", "Jeszcze nie testujemy")],
-                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce. Nie testowaliśmy ich z Polsat Box Go, więc wynik testu dotyczy tylko innych serwisów.")
-    + faq([LEGAL_Q, TV_Q,
-           ("Kiedy zaczniecie testować Polsat Box Go?", "Gdy strona będzie miała budżet na płatny pakiet. Do tego czasu ta strona zawiera tylko fakty ze źródeł.")]))
+<p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Wyniki mamy dla <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Playera</a>.</p>
+""", "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Działa na czasowym wyjeździe"), ("Nasz test", "Jeszcze nie testujemy")],
+                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")])),
+    "article", [("/", "Polska telewizja za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go")])
 
 PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Streaming",
     "Pięciu dostawców VPN: serwery w Polsce, zwrot pieniędzy, liczba urządzeń i wyniki naszych testów z polskimi serwisami.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Porównanie VPN z serwerem w Polsce",
          "Dwa rodzaje danych w jednej tabeli: nasze wyniki testów i fakty ze stron producentów. Zawsze widać, które jest które.",
-         f'<div class="when mono"><span>Dane producentów sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
+         f'<div class="when mono"><span>Dane producentów sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
     + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców. „Nie sprawdziliśmy” znaczy, że nie mamy potwierdzenia ze źródła.</p></div>
+  <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców. Przy każdym dostawcy niżej jest źródło i data sprawdzenia.</p></div>
   {facts_table()}
   <p class="monly muted">Na telefonie pełne dane każdego dostawcy są niżej, w części „Dostawcy po kolei”.</p>
   <p class="after">Cen nie podajemy, bo zmieniają się co kilka dni i zależą od promocji. Aktualną cenę zobaczysz na stronie dostawcy.</p>
@@ -426,7 +565,8 @@ PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Stream
 </ul>
 """, "prosec", brief([("Testujemy dziś", "Proton VPN, plan darmowy"), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Dane producentów", "Ze źródłem i datą")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go za granicą")]))
-    + f'<section class="faqs"><div class="wrap"><div class="shead"><h2>Dostawcy po kolei</h2><p>Fakty i źródła. To nie są recenzje: recenzję napiszemy dopiero dla dostawcy, którego sami używaliśmy w testach.</p></div><div class="provgrid">{facts_sections()}</div></div></section>')
+    + f'<section class="faqs"><div class="wrap"><div class="shead"><h2>Dostawcy po kolei</h2><p>Fakty i źródła. To nie są recenzje: recenzję napiszemy dopiero dla dostawcy, którego sami używaliśmy w testach.</p></div><div class="provgrid">{facts_sections()}</div></div></section>',
+    "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
 
 PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Streaming",
     "Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.",
@@ -434,7 +574,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
          "Ten sam test każdego ranka. Wyniki publikujemy także wtedy, gdy są złe dla dostawcy.",
          WHEN)
     + """<section class="method"><div class="wrap">
-  <div class="shead"><h2>Przebieg testu</h2><p id="scope"></p></div>
+  <div class="shead"><h2>Przebieg testu</h2><p>Test jest automatyczny. Nikt nie poprawia wyników ręcznie.</p></div>
   <div class="tl">
     <div><time>Krok 1</time><h3>Połączenie z VPN</h3><p>Polski serwer dostawcy, protokół WireGuard.</p></div>
     <div><time>Krok 2</time><h3>Kontrola adresu IP</h3><p>Adres musi być polski. Inaczej test się nie odbywa.</p></div>
@@ -445,12 +585,13 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
     <div><time>Krok 7</time><h3>Zrzut ekranu</h3><p>Zapis obrazu po 20 sekundach filmu.</p></div>
   </div>
   <div class="mcols">
-    <div><h3>Co oznaczają wyniki</h3><ul id="cats"></ul></div>
+    <div><h3>Co oznaczają wyniki</h3><ul id="cats">""" + "".join(f"<li>{st(k)}<span>{d}</span></li>" for k, d in [
+        ("ok", "Film grał 60 sekund bez przerwy w pierwszej próbie."), ("unstable", "Film zatrzymał się albo ruszył dopiero w drugiej próbie."),
+        ("blocked", "Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu."), ("none", "Test się nie odbył. Nie liczymy tego jako blokady.")]) + """</ul></div>
     <div><h3>Ograniczenia</h3>
       <ul class="plain">
         <li>Wynik dotyczy serwera i przeglądarki użytych w teście.</li>
         <li>Prędkość mierzymy z jednego miejsca (podanego w tabeli), nie z każdego kraju.</li>
-        <li>Test używa neutralnego serwera DNS (1.1.1.1).</li>
         <li>Po nieudanej próbie bot próbuje drugi raz. Dopiero dwie nieudane próby dają wynik „Nie działa”.</li>
         <li>Nie widzimy przyczyny. „Nie działa” może wynikać z blokady, z obciążenia serwera VPN albo z awarii serwisu.</li>
       </ul>
@@ -458,19 +599,85 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
   </div>
 </div></section>"""
     + prose("""
+<h2>Czym testujemy</h2>
+<ul>
+  <li><b>Przeglądarka:</b> Chrome z obsługą DRM, okno 1440 × 900, język polski. Taka sama, jakiej używa zwykły widz.</li>
+  <li><b>VPN:</b> konfiguracja WireGuard od dostawcy. Ruch przeglądarki idzie przez tunel, reszta systemu nie.</li>
+  <li><b>Miejsce:</b> test uruchamia się na serwerze w chmurze. Kraj serwera podajemy przy wyniku prędkości.</li>
+  <li><b>Pora:</b> raz dziennie rano czasu polskiego. Dokładną godzinę widać przy każdym wyniku.</li>
+</ul>
+
+<h2>Dlaczego używamy neutralnego serwera DNS</h2>
+<p>Pierwsze testy z serwerem DNS dostawcy VPN kończyły się komunikatem o adblocku w TVP VOD i w Playerze. Serwer DNS dostawcy blokował domeny reklamowe, a oba serwisy nie puszczają filmu bez reklam. Po zmianie na neutralny DNS (1.1.1.1) film ruszył. Dlatego bot zawsze używa neutralnego DNS, a w poradnikach radzimy wyłączyć blokowanie reklam w aplikacji VPN.</p>
+
+<h2>Co i kogo testujemy dziś</h2>
+<p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy na razie Proton VPN w planie darmowym. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
+
 <h2 id="linki">Linki partnerskie</h2>
 <p>Strona będzie zarabiać na linkach partnerskich: gdy kupisz VPN przez nasz link, dostaniemy prowizję, a Ty zapłacisz tyle samo. <b>Dziś żaden link na stronie nie jest jeszcze partnerski.</b> Gdy to się zmieni, oznaczymy to przy każdym przycisku.</p>
-<p>Prowizja nie zmienia wyników testu ani kolejności w tabeli. Kolejność zależy tylko od liczby działających serwisów i od prędkości.</p>
+<p>Prowizja nie zmienia wyników testu ani kolejności w tabeli.</p>
+
 <h2>Skąd są dane w porównaniu</h2>
-<p>Fakty o dostawcach (serwery, zwrot pieniędzy, liczba urządzeń) pochodzą z ich własnych stron. Przy każdej pozycji jest źródło i data sprawdzenia. Gdy czegoś nie potwierdziliśmy, piszemy „Nie sprawdziliśmy”.</p>
+<p>Fakty o dostawcach (serwery, zwrot pieniędzy, liczba urządzeń) pochodzą z ich własnych stron. Przy każdej pozycji jest źródło i data sprawdzenia. Gdy czegoś nie potwierdzimy w źródle, nie podajemy tego.</p>
+
 <h2>Czego nie robimy</h2>
 <ul>
   <li>Nie publikujemy wyników, których bot nie zmierzył.</li>
   <li>Nie piszemy recenzji produktów, których nie używaliśmy.</li>
   <li>Nie usuwamy złych dni z historii.</li>
 </ul>
+
+<h2>Dziennik zmian</h2>
+<ul>
+  <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
+  <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
+  <li><b>10.11.2026:</b> dodana druga próba po nieudanym teście i wynik „Niestabilny”.</li>
+</ul>
 """, "prosec", brief([("Częstotliwość", "Raz dziennie, rano"), ("Kryterium", "60 s filmu bez przerwy"), ("Dowód", "Zrzut ekranu z każdej próby"), ("Historia", "30 dni, także złe dni")],
-                     [("/wyniki-testow", "Wyniki ostatniego testu"), ("/wyniki-testow#dowod", "Zrzuty ekranu")])))
+                     [("/wyniki-testow", "Wyniki ostatniego testu"), ("/wyniki-testow#dowod", "Zrzuty ekranu"), ("/o-nas", "Kto prowadzi stronę")])),
+    "article", [("/", "Polska telewizja za granicą"), ("/jak-testujemy", "Jak testujemy")])
+
+PAGES["/o-nas"] = ("O nas | Polski Streaming",
+    "Kto prowadzi Polski Streaming, po co powstała strona, jak powstają treści i z czego się utrzymuje.",
+    band('<a href="/">Polska telewizja za granicą</a> / O nas', "O nas",
+         "Polski Streaming to niezależna strona dla Polaków za granicą, którzy chcą oglądać polską telewizję.")
+    + prose("""
+<h2>Po co jest ta strona</h2>
+<p>Strony o VPN zwykle piszą, że „wszystko działa”. My to sprawdzamy. Każdego ranka automatyczny test łączy się przez VPN z serwerem w Polsce, włącza film i zapisuje zrzut ekranu. Wynik publikujemy bez względu na to, czy jest dobry.</p>
+
+<h2>Jak powstają treści</h2>
+<ul>
+  <li><b>Wyniki testów</b> pochodzą z naszego bota. Opis metody jest na stronie <a href="/jak-testujemy">Jak testujemy</a>.</li>
+  <li><b>Fakty o dostawcach VPN</b> pochodzą z ich własnych stron, ze źródłem i datą.</li>
+  <li><b>Poradniki</b> opisują to, co sami sprawdziliśmy w serwisach, oraz oficjalne opcje bez VPN.</li>
+  <li>Przy pisaniu i programowaniu korzystamy z narzędzi AI. Każdy fakt na stronie ma źródło albo pochodzi z naszego testu.</li>
+</ul>
+
+<h2>Z czego się utrzymujemy</h2>
+<p>Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie wpływa na wyniki testów. Szczegóły są w części <a href="/jak-testujemy#linki">Linki partnerskie</a>.</p>
+
+<h2>Poprawki</h2>
+<p>Jeśli znajdziesz błąd, poprawimy go i opiszemy zmianę w dzienniku zmian na stronie <a href="/jak-testujemy">Jak testujemy</a>.</p>
+""", "prosec"),
+    "page", [("/", "Polska telewizja za granicą"), ("/o-nas", "O nas")])
+
+PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
+    "Polski Streaming nie używa plików cookie, analityki ani reklam śledzących.",
+    band('<a href="/">Polska telewizja za granicą</a> / Prywatność', "Prywatność",
+         "Krótko: nie śledzimy Cię.")
+    + prose("""
+<h2>Czego nie robimy</h2>
+<ul>
+  <li>Nie ustawiamy plików cookie.</li>
+  <li>Nie używamy analityki ani pikseli reklamowych.</li>
+  <li>Nie ładujemy czcionek, ikon ani skryptów z cudzych serwerów. Wszystko jest na naszej domenie.</li>
+</ul>
+<h2>Co widzi serwer</h2>
+<p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
+<h2>Linki do dostawców</h2>
+<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Gdy linki staną się partnerskie, napiszemy o tym na tej stronie.</p>
+""", "prosec"),
+    "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
 EXTRA_CSS = """
 /* multi-page additions */
@@ -568,6 +775,17 @@ a.prov{text-decoration:none}
 }
 @keyframes dash{to{background-position:16px 0}}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.answer{font-size:18px;border-left:4px solid var(--ok);background:var(--bg);padding:16px 20px;margin-bottom:28px!important}
+.when a{color:inherit}
+table.mini{width:100%;min-width:0;font-size:15px;margin:0 0 10px;border-top:2px solid var(--ink)}
+table.mini th{text-align:left;font-weight:400;color:var(--muted);padding:10px 20px 10px 0;border-bottom:1px solid var(--line);width:42%;height:auto;position:static;background:none}
+table.mini td{height:auto;padding:10px 0;border-bottom:1px solid var(--line);font-weight:500;text-align:left!important}
+table.mini3{width:100%;min-width:560px;font-size:14px;border-top:2px solid var(--ink);margin-bottom:14px}
+table.mini3 th{position:static;background:none;height:auto;padding:10px 16px 10px 0;border-top:0}
+table.mini3 td{height:auto;padding:12px 16px 12px 0;vertical-align:top;text-align:left!important}
+table.mini3 td:first-child{font-weight:600;width:30%}
+.small{font-size:13px}
+.tvico{color:var(--ink)}
 .scrollx{overflow-x:auto}
 .monly{display:none}
 table.facts{min-width:980px}
@@ -588,7 +806,7 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:center;padding:20px}.fline{width:2px;height:34px;margin:8px 0;background:repeating-linear-gradient(180deg,var(--ok) 0 8px,transparent 8px 16px);animation:none}.fline span{left:14px;top:8px;transform:none}.fline::after{right:-4px;top:auto;bottom:-2px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid var(--ok);border-bottom:0}
   .prow{grid-template-columns:34px minmax(0,1fr);gap:6px 12px}.prow>span,.prow>a{grid-column:2}.prow>a{justify-self:start}
   .lastrow{grid-template-columns:30px minmax(0,1fr);gap:6px 12px}.lastrow>span{grid-column:2}
-  .scrollx{display:none}.monly{display:block}
+  .scrollx{display:none}.scrollx.keep{display:block}.monly{display:block}
   .cnav a{padding:10px 12px}
   .svcrow{grid-template-columns:30px minmax(0,1fr) auto;gap:6px 12px}
   .svcrow .muted,.svcrow a{grid-column:2/-1}
@@ -635,6 +853,9 @@ def build_js():
         "    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\" alt=\"Zrzut ekranu z testu\" loading=\"lazy\" width=\"1440\" height=\"900\"></a>':''});\n"
         "    render();\n  }")
     rep("get('data/latest.json'),get('data/history.json')", "get('/data/latest.json'),get('/data/history.json')")
+    rep("proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn'",
+        "proton:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg'")
+    rep("https://flagcdn.com/", "/flags/")
     for old in ["'logos/tvpvod.png'", "'logos/player.svg'", "'logos/polsat.svg'", "'logos/canal.svg'", "'logos/cyberghost-icon.png'"]:
         rep(old, "'/" + old[1:])
     rep("'<img class=\"t\" src=\"'+esc(rr.shot)+'\"", "'<img class=\"t\" src=\"/'+esc(rr.shot)+'\"")
@@ -652,15 +873,29 @@ def build_js():
 
 
 def main():
-    (SITE / "style.css").write_text((HERE / "base.css").read_text() + EXTRA_CSS)
+    (SITE / "style.css").write_text((HERE / "fonts.css").read_text() + (HERE / "base.css").read_text() + EXTRA_CSS)
     build_js()
-    for path, (title, desc, body) in PAGES.items():
+    listed = []
+    for path, page in PAGES.items():
+        title, desc, body = page[:3]
+        kind = page[3] if len(page) > 3 else "page"
+        crumbs = page[4] if len(page) > 4 else None
         name = "index.html" if path == "/" else path.strip("/") + ".html"
-        (SITE / name).write_text(layout(path, title, desc, body))
-    urls = "".join(f"<url><loc>{DOMAIN}{'' if p == '/' else p}</loc></url>" for p in PAGES)
+        (SITE / name).write_text(layout(path, title, desc, body, kind, crumbs))
+        if path not in NOINDEX:
+            listed.append((path, title.split(" | ")[0], desc))
+    urls = "".join(f"<url><loc>{DOMAIN}{'' if p == '/' else p}</loc><lastmod>{MODIFIED}</lastmod></url>" for p, _, _ in listed)
     (SITE / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>')
-    (SITE / "robots.txt").write_text(("User-agent: *\nAllow: /\n" if INDEXABLE else "User-agent: *\nDisallow: /\n") + f"Sitemap: {DOMAIN}/sitemap.xml\n")
-    print("built", len(PAGES), "pages")
+    bots = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "PerplexityBot", "Google-Extended", "CCBot"]
+    rule = "Allow: /" if INDEXABLE else "Disallow: /"
+    robots = f"User-agent: *\n{rule}\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n\n"
+    robots += "".join(f"User-agent: {b}\n{rule}\n\n" for b in bots)
+    (SITE / "robots.txt").write_text(robots + f"Sitemap: {DOMAIN}/sitemap.xml\n")
+    llms = "# Polski Streaming\n\n> Poradniki dla Polaków za granicą i codzienne testy VPN z polskimi serwisami streamingowymi. Wyniki testów pochodzą z własnego bota i mają zrzuty ekranu.\n\n## Strony\n\n"
+    llms += "".join(f"- [{t}]({DOMAIN}{'' if p == '/' else p}): {d}\n" for p, t, d in listed)
+    llms += f"\n## Dane\n\n- [Wynik ostatniego testu (JSON)]({DOMAIN}/data/latest.json)\n- [Historia testów (JSON)]({DOMAIN}/data/history.json)\n"
+    (SITE / "llms.txt").write_text(llms)
+    print("built", len(PAGES), "pages,", len(listed), "in sitemap")
 
 
 if __name__ == "__main__":
