@@ -465,6 +465,8 @@ table.mini3 td:first-child{font-weight:600;width:30%}
 .hlv{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700}
 .hld{font-size:14px;color:var(--muted)}
 .pblist{display:grid;gap:20px}
+.affnote{display:block;font-size:11px;color:var(--muted);text-align:center;margin-top:5px}
+.pbh .btn+.affnote{grid-column:-2/-1;margin-top:-14px}
 .rank{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--surface);font:600 20px var(--mono)}
 .badge.gold{color:#8a5a00;border-color:#d9a520;background:#fff6da}
 table.pts td,table.pts th{text-align:center!important}

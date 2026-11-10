@@ -283,7 +283,7 @@ def provstrip(note=""):
         rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
                  f'<span><em>Serwer w Polsce</em>{pl}</span><span><em>Zwrot pieniędzy</em>{refund}</span>'
                  f'<span data-prov-status="{pid}">{prov_status_html(pid)}</span>'
-                 f'<a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona dostawcy</a></div>')
+                 f'<a class="btn" {plink(pid, url)}>Strona dostawcy</a>{aff_note(pid)}</div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców. Ostatnia kolumna przed przyciskiem to wynik naszego testu, jeśli już testujemy danego dostawcę.'}</p></div>
   <div class="pstrip">{rows}</div>
@@ -342,6 +342,24 @@ def points_table():
     rows = "".join(f'<tr><td><b>{RANK[pid]}. {names[pid]}</b></td>' + "".join(f"<td>{x}</td>" for x in POINTS[pid]) + f'<td><b>{sum(POINTS[pid])}</b></td></tr>' for pid in RANK)
     return ('<div class="scrollx keep"><table class="mini3 pts"><thead><tr><th>Dostawca</th><th>Serwery w Polsce</th><th>Cena</th><th>Urządzenia</th><th>Zwrot</th><th>Aplikacje TV</th><th>Płatność w zł</th><th>Razem</th></tr></thead>'
             f'<tbody>{rows}</tbody></table></div>')
+
+
+# Partner (affiliate) links. A provider without an entry gets a plain link to its home page.
+AFF = {
+    "nord": "https://www.jdoqocy.com/click-101925411-15078184",  # CJ, property "Polski Streaming" (101925411), link "2y Pricing Page"
+}
+AFF_NAMES = {"nord": "NordVPN"}
+
+
+def plink(pid, url):
+    """href + rel for a button to a provider. Partner links are marked rel=sponsored."""
+    if pid in AFF:
+        return f'href="{AFF[pid]}" target="_blank" rel="sponsored nofollow noopener" data-aff="{pid}"'
+    return f'href="{url}" target="_blank" rel="nofollow noopener"'
+
+
+def aff_note(pid):
+    return '<span class="affnote">Link partnerski</span>' if pid in AFF else ""
 
 
 PROFILE = {
@@ -404,7 +422,7 @@ def provblocks(full=True):
     <img src="{LOGOS[pid]}" alt="" width="48" height="48">
     <div><h3>{name}{top}{badge}</h3><p>{pr["tag"]}</p></div>
     <div class="pbprice"><b>{pr["price"]}</b><span>{pr["unit"]}</span></div>
-    <a class="btn big" href="{url}" target="_blank" rel="nofollow noopener">Przejdź do {name}</a>
+    <a class="btn big" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}
   </header>
   <div class="pbfacts">
     <div><span>Serwer w Polsce</span><b>{pl}</b></div>
@@ -453,7 +471,7 @@ def facts_table():
     for pid, name, url, pl, refund, dev, tv, src, srcname, note in FACTS:
         rows += (f'<tr><td><a class="prov" href="#{pid}"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span>{name}</span></a></td>'
                  f'<td data-prov-status="{pid}">{prov_status_html(pid)}</td><td>{pl}</td><td>{refund}</td><td>{dev}</td><td>{tv}</td>'
-                 f'<td><a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona dostawcy</a></td></tr>')
+                 f'<td><a class="btn" {plink(pid, url)}>Strona dostawcy</a>{aff_note(pid)}</td></tr>')
     return ('<div class="scrollx"><table class="facts"><thead><tr><th>Dostawca VPN</th><th>Nasz test</th><th>Serwer w Polsce</th><th>Zwrot pieniędzy</th>'
             '<th>Urządzenia jednocześnie</th><th>Aplikacje</th><th>Oferta</th></tr></thead><tbody>' + rows + '</tbody></table></div>')
 
@@ -472,7 +490,7 @@ def facts_sections():
     <dt>Źródło danych</dt><dd><a href="{src}" target="_blank" rel="nofollow noopener">{srcname}</a>, sprawdzone {CHECKED}</dd>
   </dl>
   {f'<p class="muted">{note}</p>' if note else ''}
-  <p><a class="btn" href="{url}" target="_blank" rel="nofollow noopener">Strona {name}</a></p>
+  <p><a class="btn" {plink(pid, url)}>Strona {name}</a>{aff_note(pid)}</p>
 </div>"""
     return out
 
@@ -528,7 +546,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
-                     ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności.")]))
+                     ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerem jest NordVPN: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Takie przyciski mają podpis „Link partnerski”. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.")]))
 
 PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
     "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
@@ -876,8 +894,8 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy na razie Proton VPN w planie darmowym. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
 
 <h2 id="linki">Linki partnerskie</h2>
-<p>Strona będzie zarabiać na linkach partnerskich: gdy kupisz VPN przez nasz link, dostaniemy prowizję, a Ty zapłacisz tyle samo. <b>Dziś żaden link na stronie nie jest jeszcze partnerski.</b> Gdy to się zmieni, oznaczymy to przy każdym przycisku.</p>
-<p>Prowizja nie zmienia wyników testu ani kolejności w tabeli.</p>
+<p>Strona zarabia na linkach partnerskich: gdy kupisz VPN przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. <b>Dziś partnerem jest NordVPN.</b> Przyciski z linkiem partnerskim mają podpis „Link partnerski”. Pozostałe przyciski to zwykłe linki do stron dostawców.</p>
+<p>Prowizja nie daje punktów w rankingu i nie zmienia wyników testu. Zasady punktacji są jawne i takie same dla każdego dostawcy.</p>
 
 <h2>Skąd są dane w porównaniu</h2>
 <p>Fakty o dostawcach (serwery, zwrot pieniędzy, liczba urządzeń) pochodzą z ich własnych stron. Przy każdej pozycji jest źródło i data sprawdzenia. Gdy czegoś nie potwierdzimy w źródle, nie podajemy tego.</p>
@@ -916,7 +934,7 @@ PAGES["/o-nas"] = ("O nas | Polski Streaming",
 </ul>
 
 <h2>Z czego się utrzymujemy</h2>
-<p>Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie wpływa na wyniki testów. Szczegóły są w części <a href="/jak-testujemy#linki">Linki partnerskie</a>.</p>
+<p>Strona zarabia na linkach partnerskich do dostawców VPN. Dziś partnerem jest NordVPN. Prowizja nie wpływa na ranking ani na wyniki testów. Szczegóły są w części <a href="/jak-testujemy#linki">Linki partnerskie</a>.</p>
 
 <h2>Kontakt i poprawki</h2>
 <p>Napisz na adres <a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a>. Jeśli znajdziesz błąd, poprawimy go i opiszemy zmianę w dzienniku zmian na stronie <a href="/jak-testujemy">Jak testujemy</a>.</p>
@@ -937,7 +955,7 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
-<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Gdy linki staną się partnerskie, napiszemy o tym na tej stronie.</p>
+<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Część z nich to linki partnerskie, oznaczone podpisem „Link partnerski”. Link partnerski prowadzi przez serwer sieci afiliacyjnej (CJ), która zapisuje kliknięcie, żeby przypisać zakup. My nie widzimy, kto kliknął.</p>
 """, "prosec"),
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
@@ -1061,6 +1079,8 @@ table.mini3 td:first-child{font-weight:600;width:30%}
 .hlv{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700}
 .hld{font-size:14px;color:var(--muted)}
 .pblist{display:grid;gap:20px}
+.affnote{display:block;font-size:11px;color:var(--muted);text-align:center;margin-top:5px}
+.pbh .btn+.affnote{grid-column:-2/-1;margin-top:-14px}
 .rank{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--surface);font:600 20px var(--mono)}
 .badge.gold{color:#8a5a00;border-color:#d9a520;background:#fff6da}
 table.pts td,table.pts th{text-align:center!important}
@@ -1156,7 +1176,7 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK={proton:'https://protonvpn.com',nord:'https://nordvpn.com',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
+        "  var LINK={proton:'https://protonvpn.com',nord:'https://www.jdoqocy.com/click-101925411-15078184',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
     rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['darmowy','0 zł']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")

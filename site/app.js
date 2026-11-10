@@ -25,7 +25,7 @@
   function addDays(d,n){var x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
   function dm(d){return d.slice(8,10)+'.'+d.slice(5,7)}
   var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};
-  var LINK={proton:'https://protonvpn.com',nord:'https://nordvpn.com',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};
+  var LINK={proton:'https://protonvpn.com',nord:'https://www.jdoqocy.com/click-101925411-15078184',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
