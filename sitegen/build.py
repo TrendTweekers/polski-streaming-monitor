@@ -1003,6 +1003,8 @@ def main():
     llms += "".join(f"- [{t}]({DOMAIN}{'' if p == '/' else p}): {d}\n" for p, t, d in listed)
     llms += f"\n## Dane\n\n- [Wynik ostatniego testu (JSON)]({DOMAIN}/data/latest.json)\n- [Historia testów (JSON)]({DOMAIN}/data/history.json)\n"
     (SITE / "llms.txt").write_text(llms)
+    # Bing Webmaster Tools ownership file (the owner's account code, the same one as on his other sites)
+    (SITE / "BingSiteAuth.xml").write_text('<?xml version="1.0"?>\n<users>\n\t<user>51BF2F13EF0C496CF9E6659E6E3C6AD0</user>\n</users>\n')
     print("built", len(PAGES), "pages,", len(listed), "in sitemap")
 
 
