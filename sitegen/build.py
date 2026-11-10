@@ -226,7 +226,7 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 
 def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Wynik ostatniego testu: {name}</h2><p>{note}</p></div>
+  <div class="shead"><h2>Test darmowego serwera: {name}</h2><p>{note} Na razie testujemy tylko darmowy serwer Proton VPN. Darmowe serwery są obciążone i wynik zmienia się z dnia na dzień. Płatnych planów z rankingu jeszcze nie testowaliśmy.</p></div>
   <div class="svc" data-svc="{sid}">{svc_rows_html(sid)}</div>
   <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
@@ -280,12 +280,13 @@ FLOWS = {}
 def provstrip(note=""):
     rows = ""
     for pid, name, url, pl, refund, dev, tv, src, srcname, n in FACTS:
-        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
+        pr = PROFILE[pid]
+        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{RANK[pid]}. {name}</b>'
+                 f'<span><em>Cena</em>{pr["price"]} {pr["unit"]}</span>'
                  f'<span><em>Serwer w Polsce</em>{pl}</span><span><em>Zwrot pieniędzy</em>{refund}</span>'
-                 f'<span data-prov-status="{pid}">{prov_status_html(pid)}</span>'
-                 f'<a class="btn" {plink(pid, url)}>Strona dostawcy</a>{aff_note(pid)}</div>')
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców. Ostatnia kolumna przed przyciskiem to wynik naszego testu, jeśli już testujemy danego dostawcę.'}</p></div>
+  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
   <div class="pstrip">{rows}</div>
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
 </div></section>"""
@@ -430,7 +431,6 @@ def provblocks(full=True):
     <div><span>Zwrot pieniędzy</span><b>{refund}</b></div>
     <div><span>Urządzenia jednocześnie</span><b>{dev}</b></div>
     <div><span>Punkty w rankingu</span><b>{sum(POINTS[pid])} na 16</b></div>
-    <div><span>Nasz test</span><b data-prov-status="{pid}">{prov_status_html(pid)}</b></div>
   </div>
 {body}
 </article>"""
@@ -471,9 +471,9 @@ def facts_table():
     rows = ""
     for pid, name, url, pl, refund, dev, tv, src, srcname, note in FACTS:
         rows += (f'<tr><td><a class="prov" href="#{pid}"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span>{name}</span></a></td>'
-                 f'<td data-prov-status="{pid}">{prov_status_html(pid)}</td><td>{pl}</td><td>{refund}</td><td>{dev}</td><td>{tv}</td>'
+                 f'<td>{pl}</td><td>{refund}</td><td>{dev}</td><td>{tv}</td>'
                  f'<td><a class="btn" {plink(pid, url)}>Strona dostawcy</a>{aff_note(pid)}</td></tr>')
-    return ('<div class="scrollx"><table class="facts"><thead><tr><th>Dostawca VPN</th><th>Nasz test</th><th>Serwer w Polsce</th><th>Zwrot pieniędzy</th>'
+    return ('<div class="scrollx"><table class="facts"><thead><tr><th>Dostawca VPN</th><th>Serwer w Polsce</th><th>Zwrot pieniędzy</th>'
             '<th>Urządzenia jednocześnie</th><th>Aplikacje</th><th>Oferta</th></tr></thead><tbody>' + rows + '</tbody></table></div>')
 
 
@@ -539,11 +539,6 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie z tabelą</a> · Ceny sprawdzone {CHECKED}. To ceny promocyjne i mogą się zmienić.</p>
 </div></section>"""
               + DEVICES
-              + f"""<section class="history"><div class="wrap narrowpad">
-  <div class="shead"><h2>Ostatni test</h2><p>Bot łączy się przez VPN z serwerem w Polsce, włącza film i sprawdza, czy gra 60 sekund. Robi to każdego ranka i zapisuje zrzut ekranu.</p></div>
-  <div class="svc lastbox" data-last>{last_rows_html()}</div>
-  <p class="after"><a href="/wyniki-testow">Pełne wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
-</div></section>"""
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
@@ -643,7 +638,7 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Pol
 <p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. To jedyny sposób na darmowe odcinki poza krajem.</p>
 """, "prosec", brief([("Darmowe odcinki", "Tak, z etykietą „BEZ OPŁAT”"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, „Fakty”")],
                      [("/porownanie-vpn", "Ranking VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce. Przy dostawcy, którego testujemy, widać wynik dla Playera.")
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + svc_result("player", "Player", "Bot włącza najnowszy darmowy odcinek „Faktów” bez logowania i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć Player przez VPN", "Darmowe odcinki nie wymagają konta.", [
         ("Połącz VPN z serwerem w Polsce", "Player sprawdza adres IP przy starcie filmu, więc VPN musi działać, zanim klikniesz „Oglądaj”."),
@@ -698,7 +693,7 @@ PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: test VPN
 <p>Nie mamy jeszcze wyniku testu dla transmisji na żywo. Jeśli zależy Ci na konkretnym meczu, sprawdź połączenie wcześniej na innej transmisji i miej w zapasie drugi polski serwer.</p>
 """, "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed wideo", "Około 50 sekund"), ("Nasz test", "Codziennie, najnowsze wideo")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/wyniki-testow", "Wyniki testów"), ("/porownanie-vpn", "Porównanie VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce. Przy dostawcy, którego testujemy, widać wynik dla TVP Sport.")
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + svc_result("tvpsport", "TVP Sport", "Bot otwiera dział „Wideo”, wybiera najnowszy materiał dłuższy niż 80 sekund i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć wideo z TVP Sport przez VPN", "Odtwarzacz jest na stronie artykułu, pod tytułem.", [
         ("Połącz VPN z serwerem w Polsce", "Najlepiej przed otwarciem strony."),
@@ -818,7 +813,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
   <p class="after">Ceny odczytaliśmy ze stron dostawców {CHECKED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
 </div></section>"""
     + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców.</p></div>
+  <div class="shead"><h2>Tabela porównawcza</h2><p>Dane ze stron dostawców, sprawdzone {CHECKED}.</p></div>
   {facts_table()}
   <p class="monly muted">Na telefonie te same dane są wyżej, przy każdym dostawcy.</p>
 </div></section>"""
@@ -827,7 +822,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
 <h2>Jak wybrać VPN do polskiej telewizji</h2>
 <ul>
   <li><b>Serwer w Polsce.</b> Bez niego VPN nie da Ci polskiego adresu IP. To warunek konieczny i wszyscy z zestawienia go spełniają.</li>
-  <li><b>Wynik testu, nie reklama.</b> Każdy dostawca pisze, że „działa ze streamingiem”. Liczy się to, czy film naprawdę gra. Dlatego przy każdym dostawcy jest pole „Nasz test”.</li>
+  <li><b>Wynik testu, nie reklama.</b> Każdy dostawca pisze, że „działa ze streamingiem”. Liczy się to, czy film naprawdę gra. Nasze własne pomiary są na stronie <a href="/wyniki-testow">Wyniki testów</a>.</li>
   <li><b>Cena po promocji.</b> Niska cena dotyczy pierwszego okresu. Sprawdź, ile kosztuje odnowienie, zanim kupisz plan na dwa lata.</li>
   <li><b>Zwrot pieniędzy.</b> Kup, sprawdź ze swoim serwisem i poproś o zwrot, jeśli nie działa. Przeczytaj warunki zwrotu przed zakupem.</li>
   <li><b>Aplikacja na telewizor.</b> Jeśli oglądasz na TV, sprawdź, czy dostawca ma aplikację na Twoją platformę.</li>
@@ -844,7 +839,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
 </ul>
 """ + points_table() + """
 <p>Przy remisie wyżej jest dostawca z większą liczbą serwerów w Polsce, a potem tańszy.</p>
-<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny test mamy dziś dla jednego dostawcy. Wynik testu pokazujemy osobno przy każdym dostawcy i nie wliczamy go do punktów, dopóki nie przetestujemy wszystkich pięciu.</p>
+<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny test mamy dziś dla jednego dostawcy. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
 """, "prosec", brief([("Testujemy dziś", "Proton VPN, plan darmowy"), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
@@ -1034,9 +1029,10 @@ a.prov{text-decoration:none}
 .fline span{position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:11px;color:var(--muted);white-space:nowrap}
 .fline::after{content:"";position:absolute;right:-2px;top:-4px;border-left:8px solid var(--ok);border-top:5px solid transparent;border-bottom:5px solid transparent}
 .pstrip{border-top:2px solid var(--ink)}
-.prow{display:grid;grid-template-columns:34px 150px minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) auto;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;transition:background .2s}
+.prow{display:grid;grid-template-columns:34px 170px minmax(0,1fr) minmax(0,1.3fr) minmax(0,1fr) auto;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;transition:background .2s}
 .prow:hover{background:var(--zebra)}
 .prow b{font-size:16px}
+.pcta{text-align:center}
 .prow em{display:block;font-style:normal;font-size:12px;color:var(--muted)}
 .btn{transition:transform .15s ease,opacity .15s ease,box-shadow .15s ease}
 .btn:hover{transform:translateY(-1px);box-shadow:0 6px 14px -8px rgba(23,35,45,.6)}
@@ -1095,7 +1091,7 @@ table.pts td:first-child,table.pts th:first-child{text-align:left!important;widt
 .pbprice{text-align:right;padding-right:8px}
 .pbprice b{display:block;font:500 28px/1.1 var(--mono);letter-spacing:-.02em;white-space:nowrap}
 .pbprice span{font-size:12px;color:var(--muted)}
-.pbfacts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg)}
+.pbfacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg)}
 .pbfacts>div{padding:14px 24px;border-right:1px solid var(--line)}
 .pbfacts>div:last-child{border-right:0}
 .pbfacts span{display:block;font-size:12px;color:var(--muted)}
@@ -1147,7 +1143,7 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .kv dt,.kv dd{margin:0;padding:9px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--muted)}
 .provsec p{margin:0 0 12px;font-size:14px}
-@media (max-width:1180px){.hls{grid-template-columns:repeat(2,minmax(0,1fr))}.pbh{grid-template-columns:44px 48px minmax(0,1fr) auto}.pbh .btn{grid-column:1/-1;text-align:center}.pbfacts{grid-template-columns:repeat(2,minmax(0,1fr))}.pbfacts>div{border-bottom:1px solid var(--line)}.pbfacts>div:nth-child(2n){border-right:0}.pbfacts>div:last-child{grid-column:1/-1;border-bottom:0}.pbbody{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pbbody>div:last-child{grid-column:1/-1}.quiz{grid-template-columns:minmax(0,1fr)}.qhead{grid-row:auto}.devsec .wrap{grid-template-columns:minmax(0,1fr)}.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 130px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(2){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.hls{grid-template-columns:repeat(2,minmax(0,1fr))}.pbh{grid-template-columns:44px 48px minmax(0,1fr) auto}.pbh .btn{grid-column:1/-1;text-align:center}.pbfacts{grid-template-columns:repeat(2,minmax(0,1fr))}.pbfacts>div{border-bottom:1px solid var(--line)}.pbfacts>div:nth-child(2n){border-right:0}.pbbody{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pbbody>div:last-child{grid-column:1/-1}.quiz{grid-template-columns:minmax(0,1fr)}.qhead{grid-row:auto}.devsec .wrap{grid-template-columns:minmax(0,1fr)}.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 150px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(3){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
   .hls{grid-template-columns:minmax(0,1fr)}.pbh{grid-template-columns:36px 40px minmax(0,1fr);gap:12px 12px;padding:18px}.rank{width:36px;height:36px;font-size:16px}.pbh h3{font-size:20px}.pbprice{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:8px}.pbfacts>div{padding:12px 18px}.pbbody{grid-template-columns:minmax(0,1fr);gap:20px;padding:18px}.qres{grid-template-columns:44px minmax(0,1fr)}.qres .btn{grid-column:1/-1;text-align:center}.hero.art{-webkit-mask-image:none;mask-image:none}
   .open.hasfig .wrap{grid-template-columns:minmax(0,1fr);gap:8px;padding-bottom:24px}
