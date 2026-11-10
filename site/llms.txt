@@ -9,7 +9,7 @@
 - [Jak oglądać Player za granicą: codzienny test VPN](https://polskistreaming.pl/player-za-granica): Player za granicą: darmowe odcinki „BEZ OPŁAT”, pakiet Player International, wynik codziennego testu VPN i typowe błędy.
 - [Jak oglądać TVP Sport za granicą: codzienny test VPN](https://polskistreaming.pl/tvp-sport-za-granica): TVP Sport za granicą: czym różnią się materiały wideo od transmisji na żywo, wynik codziennego testu VPN i liczby z naszych pomiarów.
 - [Darmowy VPN do polskiej telewizji: test i instrukcja](https://polskistreaming.pl/darmowy-vpn-polska-telewizja): Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.
-- [Porównanie VPN z serwerem w Polsce: ceny i testy](https://polskistreaming.pl/porownanie-vpn): Pięciu dostawców VPN z serwerem w Polsce: ceny w złotówkach i euro, zwrot pieniędzy, liczba urządzeń, zalety, wady i wynik naszego testu.
+- [Ranking VPN do polskiej telewizji: ceny i porównanie](https://polskistreaming.pl/porownanie-vpn): Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.
 - [Jak testujemy VPN z polskimi serwisami](https://polskistreaming.pl/jak-testujemy): Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.
 - [O nas](https://polskistreaming.pl/o-nas): Kto prowadzi Polski Streaming, po co powstała strona, jak powstają treści i z czego się utrzymuje.
 
