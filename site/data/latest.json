@@ -1,8 +1,8 @@
 {
  "date": "2026-11-10",
- "started_at": "2026-11-10T11:26:39+01:00",
+ "started_at": "2026-11-10T11:36:17+01:00",
  "runner": {
-  "country": "PL"
+  "country": "US"
  },
  "watch_seconds": 60,
  "providers": [
@@ -16,17 +16,17 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-10T11:26:47+01:00",
-     "played_seconds": 61.6,
-     "wait_seconds": 156,
-     "resolution": "1920x1080",
+     "tested_at": "2026-11-10T11:36:31+01:00",
+     "played_seconds": 61.1,
+     "wait_seconds": 176,
+     "resolution": "640x360",
      "drm": false,
      "shot": "data/shots/2026-11-10/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-10T11:30:35+01:00",
+     "tested_at": "2026-11-10T11:40:41+01:00",
      "played_seconds": 61.0,
      "wait_seconds": 41,
      "resolution": "640x360",
@@ -40,7 +40,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 148.3
+   "speed_mbps": 77.7
   },
   {
    "id": "nord",
@@ -97,5 +97,5 @@
    "enabled": false
   }
  ],
- "finished_at": "2026-11-10T11:32:27+01:00"
+ "finished_at": "2026-11-10T11:42:37+01:00"
 }
