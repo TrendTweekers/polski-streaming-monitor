@@ -166,7 +166,37 @@
 })();
 
 (function(){
-  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .hsteps li, .tl > div, .provsec, .brief, .faq details');
+  var q=document.getElementById('quiz');if(!q)return;
+  var P={proton:['Proton VPN','/logos/proton.svg','https://protonvpn.com'],nord:['NordVPN','/logos/nord.svg','https://nordvpn.com'],surf:['Surfshark','/logos/surf.svg','https://surfshark.com'],expr:['ExpressVPN','/logos/expr.svg','https://www.expressvpn.com'],cybr:['CyberGhost','/logos/cyberghost-icon.png','https://www.cyberghostvpn.com']};
+  var a={},order=['pay','dev','prio'];
+  function step(n){return q.querySelector('[data-q="'+n+'"]')}
+  function pick(){
+    if(a.pay==='free')return ['proton','Jedyny w zestawieniu z darmowym serwerem w Polsce. Plan darmowy działa na jednym urządzeniu, a kraj trzeba ustawić ręcznie.','/darmowy-vpn-polska-telewizja','Jak ustawić darmowy serwer'];
+    if(a.dev==='many')return ['surf','Jedyny w zestawieniu bez limitu urządzeń. ExpressVPN pozwala na 14.'];
+    if(a.prio==='price')return ['surf','Najniższa cena w złotówkach w zestawieniu: 8,99 zł za miesiąc w planie na 27 miesięcy.'];
+    if(a.prio==='pl')return ['nord','Podaje 61 serwerów w Polsce, najwięcej w zestawieniu. Gdy jeden jest zablokowany, łatwiej zmienić na inny.'];
+    return ['cybr','Daje 45 dni na zwrot pieniędzy, najdłużej w zestawieniu. Masz czas, żeby sprawdzić go ze swoim serwisem.'];
+  }
+  function show(){
+    var r=pick(),p=P[r[0]],box=document.getElementById('qres');
+    box.innerHTML='<img src="'+p[1]+'" alt=""><div><b>'+p[0]+'</b><span>'+r[1]+(r[0]!=='proton'?' Tego dostawcy jeszcze nie testowaliśmy.':'')+'</span></div>'+
+      '<a class="btn" href="'+(r[2]||'/porownanie-vpn#'+r[0])+'">'+(r[3]||'Zobacz szczegóły')+'</a><button type="button" class="again">Zacznij od nowa</button>';
+    box.hidden=false;
+  }
+  q.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    if(b.classList.contains('again')){a={};order.forEach(function(n,i){var s=step(n);s.hidden=i>0;Array.prototype.forEach.call(s.querySelectorAll('button'),function(x){x.removeAttribute('aria-pressed')})});document.getElementById('qres').hidden=true;return}
+    var s=b.closest('.qstep');if(!s)return;
+    Array.prototype.forEach.call(s.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',x===b)});
+    a[s.dataset.q]=b.dataset.v;
+    var i=order.indexOf(s.dataset.q);
+    for(var j=i+1;j<order.length;j++){step(order[j]).hidden=true;delete a[order[j]];Array.prototype.forEach.call(step(order[j]).querySelectorAll('button'),function(x){x.removeAttribute('aria-pressed')})}
+    document.getElementById('qres').hidden=true;
+    if(a.pay==='free'||(a.dev==='many')||i===order.length-1){show()}else{step(order[i+1]).hidden=false}
+  });
+})();
+(function(){
+  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .pb, .hl, .quiz, .devtext, .hsteps li, .tl > div, .provsec, .brief, .faq details');
   if(!('IntersectionObserver' in window)||!els.length)return;
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
   Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});

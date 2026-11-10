@@ -136,8 +136,13 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 
 
 def band(crumb, h1, lead, extra="", image=False, figure=""):
-    img = ('<img class="hero" src="/hero-uk.webp" srcset="/hero-uk-sm.webp 887w, /hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 780px" '
-           'width="1774" height="887" alt="Ilustracja: połączenie z zagranicy do Polski">') if image else ""
+    if image is True:
+        img = ('<img class="hero" src="/hero-uk.webp" srcset="/hero-uk-sm.webp 887w, /hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 780px" '
+               'width="1774" height="887" alt="Ilustracja: połączenie z zagranicy do Polski">')
+    elif image:
+        img = f'<img class="hero art" src="/img/{image}.webp" alt="" width="1022" height="311">'
+    else:
+        img = ""
     credit = '<div class="credit">Ilustracja. To nie jest zrzut ekranu z testu.</div>' if image else ""
     if figure:
         img = figure
@@ -326,6 +331,104 @@ FACTS = [
      "https://www.cyberghostvpn.com/vpn-server", "cyberghostvpn.com/vpn-server", ""),
 ]
 
+PROFILE = {
+    "proton": dict(tag="Jedyny z darmowym serwerem w Polsce", badge="Testujemy codziennie", price="0 zł", unit="plan darmowy",
+                   terms="Plan płatny od 7,49 zł/mies.: 89,88 zł za pierwsze 12 miesięcy, potem 209,88 zł za rok.",
+                   pros=["Darmowy plan z serwerem w Polsce", "Jedyny dostawca z naszym codziennym testem", "10 urządzeń w planie płatnym"],
+                   cons=["W planie darmowym aplikacja sama wybiera kraj", "Darmowy serwer bywa przeciążony, co widać w naszych testach"]),
+    "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="10,99 zł", unit="za miesiąc",
+                 terms="296,73 zł za pierwsze 27 miesięcy.",
+                 pros=["61 serwerów w Polsce", "10 urządzeń jednocześnie", "Cena w złotówkach"],
+                 cons=["Najniższa cena tylko w planie na 27 miesięcy", "Jeszcze go nie testowaliśmy"]),
+    "surf": dict(tag="Najniższa cena w złotówkach", badge="", price="8,99 zł", unit="za miesiąc",
+                 terms="242,73 zł za pierwsze 27 miesięcy, plus VAT, jeśli dotyczy.",
+                 pros=["Bez limitu urządzeń", "Najniższa cena w złotówkach w tym zestawieniu", "Aplikacje na Android TV, Apple TV i Fire TV"],
+                 cons=["Do ceny może dojść VAT", "Jeszcze go nie testowaliśmy"]),
+    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="2,49 €", unit="za miesiąc",
+                 terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok.",
+                 pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
+                 cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów", "Jeszcze go nie testowaliśmy"]),
+    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="2,19 €", unit="za miesiąc",
+                 terms="61,32 € za pierwsze 28 miesięcy. Plan na 1 miesiąc: 11,99 €.",
+                 pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
+                 cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro", "Jeszcze go nie testowaliśmy"]),
+}
+PRICE_SRC = {"proton": ("https://protonvpn.com/pl/pricing", "protonvpn.com/pl/pricing"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
+             "surf": ("https://surfshark.com/pl/pricing", "surfshark.com/pl/pricing"), "expr": ("https://www.expressvpn.com/pl/pricing", "expressvpn.com/pl/pricing"),
+             "cybr": ("https://www.cyberghostvpn.com/pl/buy/cyberghost-vpn-3", "cyberghostvpn.com")}
+CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
+MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>'
+
+
+def highlights():
+    items = [("surf", "Najniższa cena w złotówkach", "8,99 zł za miesiąc"), ("nord", "Najwięcej serwerów w Polsce", "61 serwerów"),
+             ("cybr", "Najdłuższy zwrot pieniędzy", "45 dni"), ("expr", "Najwięcej urządzeń z limitem", "do 14 naraz"),
+             ("proton", "Darmowy plan z Polską", "0 zł, testujemy codziennie")]
+    names = {f[0]: f[1] for f in FACTS}
+    tiles = "".join(f'<a class="hl" href="/porownanie-vpn#{pid}"><span class="hlk">{k}</span><span class="hlv"><img src="{LOGOS[pid]}" alt="" width="26" height="26">{names[pid]}</span><span class="hld">{d}</span></a>'
+                    for pid, k, d in items)
+    return f'<div class="hls">{tiles}</div>'
+
+
+def provblocks(full=True):
+    out = ""
+    for pid, name, url, pl, refund, dev, apps, src, srcname, note in FACTS:
+        pr = PROFILE[pid]
+        badge = f'<span class="badge">{pr["badge"]}</span>' if pr["badge"] else ""
+        pros = "".join(f"<li>{CHECK}<span>{x}</span></li>" for x in pr["pros"])
+        cons = "".join(f"<li>{MINUS}<span>{x}</span></li>" for x in pr["cons"])
+        ps, pn = PRICE_SRC[pid]
+        body = f"""  <div class="pbbody">
+    <div><h4>Zalety</h4><ul class="pros">{pros}</ul></div>
+    <div><h4>Wady</h4><ul class="cons">{cons}</ul></div>
+    <div><h4>Cena i aplikacje</h4><p>{pr["terms"]}</p><p class="apps">{apps}</p>
+      <p class="src">Źródła: <a href="{src}" target="_blank" rel="nofollow noopener">{srcname}</a>, <a href="{ps}" target="_blank" rel="nofollow noopener">{pn}</a>. Sprawdzone {CHECKED}.</p></div>
+  </div>""" if full else ""
+        out += f"""<article class="pb" id="{pid}">
+  <header class="pbh">
+    <img src="{LOGOS[pid]}" alt="" width="48" height="48">
+    <div><h3>{name}{badge}</h3><p>{pr["tag"]}</p></div>
+    <div class="pbprice"><b>{pr["price"]}</b><span>{pr["unit"]}</span></div>
+    <a class="btn big" href="{url}" target="_blank" rel="nofollow noopener">Przejdź do {name}</a>
+  </header>
+  <div class="pbfacts">
+    <div><span>Serwer w Polsce</span><b>{pl}</b></div>
+    <div><span>Zwrot pieniędzy</span><b>{refund}</b></div>
+    <div><span>Urządzenia jednocześnie</span><b>{dev}</b></div>
+    <div><span>Nasz test</span><b data-prov-status="{pid}">{prov_status_html(pid)}</b></div>
+  </div>
+{body}
+</article>"""
+    return out
+
+
+QUIZ = """<section class="quizsec"><div class="wrap narrowpad">
+  <div class="quiz" id="quiz">
+    <div class="qhead"><h2>Który VPN pasuje do Ciebie?</h2><p>Trzy pytania. Odpowiedź opiera się na faktach z tabeli, nie na reklamie.</p></div>
+    <div class="qstep" data-q="pay"><h3>1. Chcesz płacić za VPN?</h3><div class="qopts">
+      <button type="button" data-v="free">Nie, szukam darmowego</button><button type="button" data-v="paid">Tak, jeśli działa pewniej</button></div></div>
+    <div class="qstep" data-q="dev" hidden><h3>2. Na ilu urządzeniach naraz?</h3><div class="qopts">
+      <button type="button" data-v="1">Na jednym</button><button type="button" data-v="few">Od 2 do 10</button><button type="button" data-v="many">Więcej niż 10</button></div></div>
+    <div class="qstep" data-q="prio" hidden><h3>3. Co jest dla Ciebie najważniejsze?</h3><div class="qopts">
+      <button type="button" data-v="price">Najniższa cena</button><button type="button" data-v="pl">Dużo serwerów w Polsce</button><button type="button" data-v="refund">Długi czas na zwrot</button></div></div>
+    <div class="qres" id="qres" hidden></div>
+  </div>
+</div></section>"""
+
+DEVICES = """<section class="devsec"><div class="wrap">
+  <div class="devtext">
+    <h2>Na komputerze, telefonie i telewizorze</h2>
+    <p>Wszyscy dostawcy z zestawienia mają aplikacje na Windows, macOS, Linux, Android i iOS. Różnice są przy telewizorach.</p>
+    <ul class="devlist">
+      <li><b>Android TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost</span></li>
+      <li><b>Apple TV</b><span>Proton VPN, Surfshark, ExpressVPN, CyberGhost</span></li>
+      <li><b>Fire TV</b><span>Proton VPN, Surfshark, ExpressVPN, CyberGhost</span></li>
+    </ul>
+    <p class="muted small">Według stron dostawców, sprawdzone """ + CHECKED + """. Brak na liście znaczy, że nie znaleźliśmy potwierdzenia na sprawdzonej stronie.</p>
+  </div>
+  <img class="devimg" src="/img/devices.webp" alt="" width="737" height="276" loading="lazy">
+</div></section>"""
+
 LOGOS = {"proton": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
 
 
@@ -365,17 +468,28 @@ FLOWS.update({"tvpsport": flow("TVP Sport", ""), "free": flow("Polski serwis", "
 PAGES = {}
 
 PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Streaming",
-              "Jak oglądać TVP VOD, Player i Polsat Box Go za granicą. Poradniki, porównanie VPN i codzienny test z prawdziwymi zrzutami ekranu.",
+              "Jak oglądać TVP VOD, Player i TVP Sport za granicą. Poradniki, porównanie VPN z cenami i codzienny test z prawdziwymi zrzutami ekranu.",
               band("Polska telewizja za granicą", "Polska telewizja za granicą: jak oglądać i który VPN wybrać",
                    "Poradniki dla Polaków w Wielkiej Brytanii, Niemczech, Holandii i USA. Do tego codzienny test: sprawdzamy, czy film naprawdę gra przez VPN.",
-                   '<div class="cta2"><a class="btn" href="/porownanie-vpn">Porównanie VPN</a><a class="btn ghost" href="/tvp-vod-za-granica">Jak oglądać TVP VOD</a></div>', image=True)
+                   '<div class="cta2"><a class="btn big" href="/porownanie-vpn">Porównaj VPN</a><a class="btn big ghost" href="/tvp-vod-za-granica">Jak oglądać TVP VOD</a></div>', image=True)
+              + """<section class="svcbar"><div class="wrap">
+  <span>Poradniki i testy dla serwisów:</span>
+  <a href="/tvp-vod-za-granica"><span class="slogo"><img src="/logos/tvpvod.png" alt="TVP VOD"></span></a>
+  <a href="/player-za-granica"><span class="slogo"><img src="/logos/player.svg" alt="Player"></span></a>
+  <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
+  <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
+</div></section>"""
+              + f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców. Stan na {CHECKED}.</p></div>
+  {highlights()}
+</div></section>"""
               + """<section class="guides"><div class="wrap">
   <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, który chcesz oglądać. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
   <ul class="glist">
     <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
-    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
-    <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik codziennego testu i liczby z pomiarów.</span></a></li>
-    <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test: raz działa, raz nie.</span></a></li>
+    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowe odcinki, pakiet Player International i test z VPN.</span></a></li>
+    <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów.</span></a></li>
+    <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test.</span></a></li>
     <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
   </ul>
 </div></section>"""
@@ -383,13 +497,14 @@ PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Stre
   <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
   {flow("Polski serwis", "")}
 </div></section>"""
+              + QUIZ
               + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Porównanie VPN z serwerem w Polsce</h2><p>Żeby oglądać polskie serwisy, VPN musi mieć serwer w Polsce. Fakty pochodzą ze stron dostawców, a kolumna „Nasz test” z naszego bota.</p></div>
-  {facts_table()}
-  <p class="monly muted">Na telefonie pełne dane są na stronie porównania.</p>
-  <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
+  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>Ceny, zwrot pieniędzy i wynik naszego testu. Kolejność: najpierw dostawca, którego testujemy, dalej alfabetycznie.</p></div>
+  <div class="pblist compact">{provblocks(False)}</div>
+  <p class="after"><a href="/porownanie-vpn">Pełne porównanie z tabelą</a> · Ceny sprawdzone {CHECKED}. To ceny promocyjne i mogą się zmienić.</p>
 </div></section>"""
-              + """<section class="history"><div class="wrap narrowpad">
+              + DEVICES
+              + f"""<section class="history"><div class="wrap narrowpad">
   <div class="shead"><h2>Ostatni test</h2><p>Bot łączy się przez VPN z serwerem w Polsce, włącza film i sprawdza, czy gra 60 sekund. Robi to każdego ranka i zapisuje zrzut ekranu.</p></div>
   <div class="svc lastbox" data-last>{last_rows_html()}</div>
   <p class="after"><a href="/wyniki-testow">Pełne wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
@@ -397,7 +512,7 @@ PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Stre
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
-                     ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności w tabeli.")]))
+                     ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności.")]))
 
 PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
     "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
@@ -574,7 +689,7 @@ PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: te
     "Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.",
     band('<a href="/">Polska telewizja za granicą</a> / Darmowy VPN', "Darmowy VPN do polskiej telewizji: czy to działa?",
          "Testujemy codziennie darmowy serwer w Polsce. Krótko: czasem działa, czasem nie, a ustawienie wymaga jednego obejścia.",
-         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="gift")
     + prose("""
 <p class="answer"><b>Krótka odpowiedź.</b> Tak, da się oglądać polskie serwisy przez darmowy VPN, ale nie codziennie. W naszych testach ten sam darmowy serwer rano odtwarzał TVP VOD i Playera, a w południe już nie. Jeśli oglądasz od czasu do czasu, wystarczy. Jeśli chcesz mieć pewność przed meczem, nie.</p>
 
@@ -630,7 +745,7 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
     band('<a href="/">Polska telewizja za granicą</a> / Polsat Box Go', "Jak oglądać Polsat Box Go za granicą",
          "Polsat Box Go wymaga konta, a większość treści jest płatna. Tego serwisu jeszcze nie testujemy, więc na tej stronie są tylko sprawdzone fakty i źródła.",
-         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span></div>')
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span></div>', image="livingroom")
     + prose(f"""
 <p class="note"><b>Nie testujemy jeszcze Polsat Box Go.</b> Do testu potrzebny jest płatny pakiet. Nie publikujemy wyników, których sami nie zmierzyliśmy. Gdy zaczniemy testy, wynik pojawi się na tej stronie.</p>
 
@@ -652,35 +767,47 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go")])
 
-PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Streaming",
-    "Pięciu dostawców VPN: serwery w Polsce, zwrot pieniędzy, liczba urządzeń i wyniki naszych testów z polskimi serwisami.",
+PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce: ceny i testy | Polski Streaming",
+    "Pięciu dostawców VPN z serwerem w Polsce: ceny w złotówkach i euro, zwrot pieniędzy, liczba urządzeń, zalety, wady i wynik naszego testu.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Porównanie VPN z serwerem w Polsce",
-         "Dwa rodzaje danych w jednej tabeli: nasze wyniki testów i fakty ze stron producentów. Zawsze widać, które jest które.",
-         f'<div class="when mono"><span>Dane producentów sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
+         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce, ile daje czasu na zwrot i czy sprawdziliśmy go w teście.",
+         f'<div class="when mono">{BYLINE}<span>Ceny i dane sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
     + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców. Przy każdym dostawcy niżej jest źródło i data sprawdzenia.</p></div>
-  {facts_table()}
-  <p class="monly muted">Na telefonie pełne dane każdego dostawcy są niżej, w części „Dostawcy po kolei”.</p>
-  <p class="after">Cen nie podajemy, bo zmieniają się co kilka dni i zależą od promocji. Aktualną cenę zobaczysz na stronie dostawcy.</p>
+  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców, nie na naszej opinii.</p></div>
+  {highlights()}
 </div></section>"""
+    + QUIZ
+    + f"""<section class="guides"><div class="wrap">
+  <div class="shead"><h2>Dostawcy po kolei</h2><p>Kolejność: najpierw dostawca, którego testujemy, dalej alfabetycznie. To nie jest ranking jakości, bo czterech z pięciu jeszcze nie testowaliśmy.</p></div>
+  <div class="pblist">{provblocks()}</div>
+  <p class="after">Ceny odczytaliśmy ze stron dostawców {CHECKED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
+</div></section>"""
+    + f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Tabela porównawcza</h2><p>Kolumna „Nasz test” pochodzi z bota. Pozostałe kolumny to dane ze stron dostawców.</p></div>
+  {facts_table()}
+  <p class="monly muted">Na telefonie te same dane są wyżej, przy każdym dostawcy.</p>
+</div></section>"""
+    + DEVICES
     + prose("""
 <h2>Jak wybrać VPN do polskiej telewizji</h2>
 <ul>
-  <li><b>Serwer w Polsce.</b> Bez niego VPN nie da Ci polskiego adresu IP. To warunek konieczny.</li>
-  <li><b>Wynik testu, nie reklama.</b> Każdy dostawca pisze, że „działa ze streamingiem”. Liczy się to, czy film naprawdę gra. Dlatego mamy kolumnę „Nasz test”.</li>
+  <li><b>Serwer w Polsce.</b> Bez niego VPN nie da Ci polskiego adresu IP. To warunek konieczny i wszyscy z zestawienia go spełniają.</li>
+  <li><b>Wynik testu, nie reklama.</b> Każdy dostawca pisze, że „działa ze streamingiem”. Liczy się to, czy film naprawdę gra. Dlatego przy każdym dostawcy jest pole „Nasz test”.</li>
+  <li><b>Cena po promocji.</b> Niska cena dotyczy pierwszego okresu. Sprawdź, ile kosztuje odnowienie, zanim kupisz plan na dwa lata.</li>
   <li><b>Zwrot pieniędzy.</b> Kup, sprawdź ze swoim serwisem i poproś o zwrot, jeśli nie działa. Przeczytaj warunki zwrotu przed zakupem.</li>
   <li><b>Aplikacja na telewizor.</b> Jeśli oglądasz na TV, sprawdź, czy dostawca ma aplikację na Twoją platformę.</li>
 </ul>
-""", "prosec", brief([("Testujemy dziś", "Proton VPN, plan darmowy"), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Dane producentów", "Ze źródłem i datą")],
-                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go za granicą")]))
-    + f'<section class="faqs"><div class="wrap"><div class="shead"><h2>Dostawcy po kolei</h2><p>Fakty i źródła. To nie są recenzje: recenzję napiszemy dopiero dla dostawcy, którego sami używaliśmy w testach.</p></div><div class="provgrid">{facts_sections()}</div></div></section>',
+<h2>Dlaczego nie ma tu ocen w gwiazdkach</h2>
+<p>Ocenę można wystawić uczciwie tylko produktowi, który się sprawdziło. Dziś testujemy jednego dostawcę z pięciu. Dla pozostałych pokazujemy fakty i ceny, a ocenę dodamy, gdy będziemy mieć własne wyniki.</p>
+""", "prosec", brief([("Testujemy dziś", "Proton VPN, plan darmowy"), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
+                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
 
 PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Streaming",
     "Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.",
     band('<a href="/">Polska telewizja za granicą</a> / Jak testujemy', "Jak testujemy",
          "Ten sam test każdego ranka. Wyniki publikujemy także wtedy, gdy są złe dla dostawcy.",
-         WHEN)
+         WHEN, image="europe")
     + """<section class="method"><div class="wrap">
   <div class="shead"><h2>Przebieg testu</h2><p>Test jest automatyczny. Nikt nie poprawia wyników ręcznie.</p></div>
   <div class="tl">
@@ -894,6 +1021,66 @@ table.mini3 td{height:auto;padding:12px 16px 12px 0;vertical-align:top;text-alig
 table.mini3 td:first-child{font-weight:600;width:30%}
 .small{font-size:13px}
 .tvico{color:var(--ink)}
+.hero.art{align-self:center;border-radius:0;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 92%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14%,#000 92%,transparent 100%)}
+.btn.big{font-size:16px;padding:14px 22px;border-radius:6px}
+.svcbar{background:var(--surface);border-bottom:1px solid var(--line)}
+.svcbar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px;padding-top:16px;padding-bottom:16px;font-size:14px;color:var(--muted)}
+.svcbar a{text-decoration:none;transition:transform .15s}
+.svcbar a:hover{transform:translateY(-2px)}
+.hls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--line);gap:1px}
+.hl{display:grid;gap:8px;align-content:start;padding:20px;background:var(--surface);text-decoration:none;color:var(--ink);transition:background .2s}
+.hl:hover{background:var(--zebra)}
+.hlk{font-size:12px;font-weight:600;color:var(--accent);text-transform:none}
+.hlv{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700}
+.hld{font-size:14px;color:var(--muted)}
+.pblist{display:grid;gap:20px}
+.pb{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.pb:hover{border-color:var(--none);box-shadow:0 14px 34px -24px rgba(23,35,45,.5)}
+.pbh{display:grid;grid-template-columns:48px minmax(0,1fr) auto auto;gap:20px;align-items:center;padding:22px 24px}
+.pbh h3{font-size:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pbh p{color:var(--muted);font-size:15px;margin-top:2px}
+.badge{font-size:12px;font-weight:600;color:var(--ok);border:1px solid var(--ok);border-radius:20px;padding:2px 10px;white-space:nowrap}
+.pbprice{text-align:right;padding-right:8px}
+.pbprice b{display:block;font:500 28px/1.1 var(--mono);letter-spacing:-.02em;white-space:nowrap}
+.pbprice span{font-size:12px;color:var(--muted)}
+.pbfacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg)}
+.pbfacts>div{padding:14px 24px;border-right:1px solid var(--line)}
+.pbfacts>div:last-child{border-right:0}
+.pbfacts span{display:block;font-size:12px;color:var(--muted)}
+.pbfacts b{font-size:15px;font-weight:600}
+.pbfacts .pst{display:inline-block;margin-right:14px;font-weight:400}
+.pbbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:32px;padding:20px 24px 24px}
+.pbbody h4{margin:0 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+.pbbody ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:15px}
+.pbbody li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:start}
+.pbbody li svg{margin-top:4px}
+.pros svg{color:var(--ok)}.cons svg{color:var(--none)}
+.pbbody p{font-size:14px;margin:0 0 8px}
+.pbbody .apps,.pbbody .src{color:var(--muted);font-size:13px}
+.pblist.compact .pbbody{display:none}
+.quizsec{background:var(--navy);color:var(--navy-ink)}
+.quiz{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px 56px;align-items:start}
+.qhead{grid-row:span 4}
+.qhead p{color:var(--navy-muted);margin-top:8px}
+.qstep h3{font-size:17px;margin-bottom:12px}
+.qopts{display:flex;flex-wrap:wrap;gap:10px}
+.qopts button{font-size:15px;font-weight:500;background:transparent;color:var(--navy-ink);border:1px solid var(--navy-line);border-radius:6px;padding:11px 16px;cursor:pointer;transition:background .15s,border-color .15s}
+.qopts button:hover{background:var(--navy-2);border-color:var(--navy-muted)}
+.qopts button[aria-pressed="true"]{background:var(--navy-ink);color:var(--navy);border-color:var(--navy-ink)}
+.qres{background:var(--navy-2);border:1px solid var(--navy-line);border-radius:8px;padding:20px 22px;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:16px;align-items:center}
+.qres img{width:44px;height:44px;background:#fff;border-radius:8px;padding:6px}
+.qres b{display:block;font-size:20px}
+.qres span{color:var(--navy-muted);font-size:14px}
+.qres .btn{background:var(--navy-ink);color:var(--navy)}
+.qres .again{grid-column:1/-1;font-size:13px;color:var(--navy-muted);background:none;border:0;padding:0;text-align:left;cursor:pointer;text-decoration:underline}
+.devsec{background:var(--cream);color:var(--cream-ink);border-bottom:1px solid var(--line)}
+.devsec .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,640px);gap:48px;align-items:center;padding-top:44px;padding-bottom:44px}
+.devtext p{color:var(--cream-muted);margin-top:8px;max-width:560px}
+.devlist{list-style:none;margin:18px 0 12px;padding:0;border-top:2px solid var(--cream-ink);max-width:620px}
+.devlist li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:10px 0;border-bottom:1px solid #e3d8c7;font-size:15px}
+.devlist span{color:var(--cream-muted)}
+.devimg{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 10%,#000 94%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 10%,#000 94%,transparent 100%)}
+.devsec .muted{color:var(--cream-muted)}
 .scrollx{overflow-x:auto}
 .monly{display:none}
 table.facts{min-width:980px}
@@ -908,8 +1095,9 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .kv dt,.kv dd{margin:0;padding:9px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--muted)}
 .provsec p{margin:0 0 12px;font-size:14px}
-@media (max-width:1180px){.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 130px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(2){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.hls{grid-template-columns:repeat(2,minmax(0,1fr))}.pbh{grid-template-columns:48px minmax(0,1fr) auto}.pbh .btn{grid-column:1/-1;text-align:center}.pbfacts{grid-template-columns:repeat(2,minmax(0,1fr))}.pbfacts>div:nth-child(2){border-right:0}.pbfacts>div:nth-child(-n+2){border-bottom:1px solid var(--line)}.pbbody{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pbbody>div:last-child{grid-column:1/-1}.quiz{grid-template-columns:minmax(0,1fr)}.qhead{grid-row:auto}.devsec .wrap{grid-template-columns:minmax(0,1fr)}.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 130px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(2){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
+  .hls{grid-template-columns:minmax(0,1fr)}.pbh{grid-template-columns:40px minmax(0,1fr);gap:12px 14px;padding:18px}.pbh h3{font-size:20px}.pbprice{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:8px}.pbfacts>div{padding:12px 18px}.pbbody{grid-template-columns:minmax(0,1fr);gap:20px;padding:18px}.qres{grid-template-columns:44px minmax(0,1fr)}.qres .btn{grid-column:1/-1;text-align:center}.hero.art{-webkit-mask-image:none;mask-image:none}
   .open.hasfig .wrap{grid-template-columns:minmax(0,1fr);gap:8px;padding-bottom:24px}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:center;padding:20px}.fline{width:2px;height:34px;margin:8px 0;background:repeating-linear-gradient(180deg,var(--ok) 0 8px,transparent 8px 16px);animation:none}.fline span{left:14px;top:8px;transform:none}.fline::after{right:-4px;top:auto;bottom:-2px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid var(--ok);border-bottom:0}
   .prow{grid-template-columns:34px minmax(0,1fr);gap:6px 12px}.prow>span,.prow>a{grid-column:2}.prow>a{justify-self:start}
@@ -970,7 +1158,37 @@ def build_js():
     rep("'<a href=\"'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"'+esc(r.shot)+'\"", "'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\"")
     s += """
 (function(){
-  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .hsteps li, .tl > div, .provsec, .brief, .faq details');
+  var q=document.getElementById('quiz');if(!q)return;
+  var P={proton:['Proton VPN','/logos/proton.svg','https://protonvpn.com'],nord:['NordVPN','/logos/nord.svg','https://nordvpn.com'],surf:['Surfshark','/logos/surf.svg','https://surfshark.com'],expr:['ExpressVPN','/logos/expr.svg','https://www.expressvpn.com'],cybr:['CyberGhost','/logos/cyberghost-icon.png','https://www.cyberghostvpn.com']};
+  var a={},order=['pay','dev','prio'];
+  function step(n){return q.querySelector('[data-q="'+n+'"]')}
+  function pick(){
+    if(a.pay==='free')return ['proton','Jedyny w zestawieniu z darmowym serwerem w Polsce. Plan darmowy działa na jednym urządzeniu, a kraj trzeba ustawić ręcznie.','/darmowy-vpn-polska-telewizja','Jak ustawić darmowy serwer'];
+    if(a.dev==='many')return ['surf','Jedyny w zestawieniu bez limitu urządzeń. ExpressVPN pozwala na 14.'];
+    if(a.prio==='price')return ['surf','Najniższa cena w złotówkach w zestawieniu: 8,99 zł za miesiąc w planie na 27 miesięcy.'];
+    if(a.prio==='pl')return ['nord','Podaje 61 serwerów w Polsce, najwięcej w zestawieniu. Gdy jeden jest zablokowany, łatwiej zmienić na inny.'];
+    return ['cybr','Daje 45 dni na zwrot pieniędzy, najdłużej w zestawieniu. Masz czas, żeby sprawdzić go ze swoim serwisem.'];
+  }
+  function show(){
+    var r=pick(),p=P[r[0]],box=document.getElementById('qres');
+    box.innerHTML='<img src="'+p[1]+'" alt=""><div><b>'+p[0]+'</b><span>'+r[1]+(r[0]!=='proton'?' Tego dostawcy jeszcze nie testowaliśmy.':'')+'</span></div>'+
+      '<a class="btn" href="'+(r[2]||'/porownanie-vpn#'+r[0])+'">'+(r[3]||'Zobacz szczegóły')+'</a><button type="button" class="again">Zacznij od nowa</button>';
+    box.hidden=false;
+  }
+  q.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    if(b.classList.contains('again')){a={};order.forEach(function(n,i){var s=step(n);s.hidden=i>0;Array.prototype.forEach.call(s.querySelectorAll('button'),function(x){x.removeAttribute('aria-pressed')})});document.getElementById('qres').hidden=true;return}
+    var s=b.closest('.qstep');if(!s)return;
+    Array.prototype.forEach.call(s.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed',x===b)});
+    a[s.dataset.q]=b.dataset.v;
+    var i=order.indexOf(s.dataset.q);
+    for(var j=i+1;j<order.length;j++){step(order[j]).hidden=true;delete a[order[j]];Array.prototype.forEach.call(step(order[j]).querySelectorAll('button'),function(x){x.removeAttribute('aria-pressed')})}
+    document.getElementById('qres').hidden=true;
+    if(a.pay==='free'||(a.dev==='many')||i===order.length-1){show()}else{step(order[i+1]).hidden=false}
+  });
+})();
+(function(){
+  var els=document.querySelectorAll('section .shead, section .prose > *, .glist li, .prow, .flow, .pb, .hl, .quiz, .devtext, .hsteps li, .tl > div, .provsec, .brief, .faq details');
   if(!('IntersectionObserver' in window)||!els.length)return;
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
   Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});
