@@ -1,0 +1,38 @@
+name: daily-test
+on:
+  schedule:
+    - cron: "0 5 * * *"   # 06:00 in Poland (winter time). GitHub can start it late.
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: daily-test
+  cancel-in-progress: false
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install bot
+        run: |
+          pip install -r bot/requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Run tests
+        env:
+          PROTON_PL_WG: ${{ secrets.PROTON_PL_WG }}
+          NORD_PL_WG: ${{ secrets.NORD_PL_WG }}
+          SURFSHARK_PL_WG: ${{ secrets.SURFSHARK_PL_WG }}
+          EXPRESS_PL_WG: ${{ secrets.EXPRESS_PL_WG }}
+          CYBERGHOST_PL_WG: ${{ secrets.CYBERGHOST_PL_WG }}
+        run: xvfb-run -a python bot/bot.py
+      - name: Publish results
+        run: |
+          git config user.name "streaming-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add site/data
+          git diff --cached --quiet || git commit -m "Test results $(date -u +%F)"
+          git push

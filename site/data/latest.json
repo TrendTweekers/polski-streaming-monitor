@@ -1,0 +1,101 @@
+{
+ "date": "2026-11-10",
+ "started_at": "2026-11-10T11:26:39+01:00",
+ "runner": {
+  "country": "PL"
+ },
+ "watch_seconds": 60,
+ "providers": [
+  {
+   "id": "proton",
+   "name": "Proton VPN",
+   "plan": "plan darmowy",
+   "server": "PL-FREE#1",
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-10T11:26:47+01:00",
+     "played_seconds": 61.6,
+     "wait_seconds": 156,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-10/proton-tvpvod.webp"
+    },
+    "player": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-10T11:30:35+01:00",
+     "played_seconds": 61.0,
+     "wait_seconds": 41,
+     "resolution": "640x360",
+     "drm": true,
+     "shot": "data/shots/2026-11-10/proton-player.webp"
+    }
+   },
+   "exit": {
+    "ip": "149.102.244.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS212238 Datacamp Limited"
+   },
+   "speed_mbps": 148.3
+  },
+  {
+   "id": "nord",
+   "name": "NordVPN",
+   "plan": null,
+   "server": null,
+   "tested": false,
+   "services": {}
+  },
+  {
+   "id": "surf",
+   "name": "Surfshark",
+   "plan": null,
+   "server": null,
+   "tested": false,
+   "services": {}
+  },
+  {
+   "id": "expr",
+   "name": "ExpressVPN",
+   "plan": null,
+   "server": null,
+   "tested": false,
+   "services": {}
+  },
+  {
+   "id": "cybr",
+   "name": "CyberGhost",
+   "plan": null,
+   "server": null,
+   "tested": false,
+   "services": {}
+  }
+ ],
+ "services": [
+  {
+   "id": "tvpvod",
+   "name": "TVP VOD",
+   "enabled": true
+  },
+  {
+   "id": "player",
+   "name": "Player",
+   "enabled": true
+  },
+  {
+   "id": "polsat",
+   "name": "Polsat Box Go",
+   "enabled": false
+  },
+  {
+   "id": "canal",
+   "name": "Canal+ Online",
+   "enabled": false
+  }
+ ],
+ "finished_at": "2026-11-10T11:32:27+01:00"
+}
