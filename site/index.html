@@ -311,7 +311,7 @@ footer a{color:var(--navy-muted)}
 </div></section>
 
 <section class="history" id="historia"><div class="wrap">
-  <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może dostać blokadę. Dni z blokadą zostają w historii. Szare pola to dni bez testu.</p></div>
+  <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może przestać działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
   <div class="hctl">
     <div class="seg" role="group" aria-label="VPN" id="hprov"></div>
     <div class="seg" role="group" aria-label="Serwis" id="hserv"></div>
@@ -320,7 +320,7 @@ footer a{color:var(--navy-muted)}
     <div class="chartbox"><div id="chart"></div></div>
     <div class="hsum">
       <div><b id="h1">0/30</b><span>udanych testów</span></div>
-      <div><b id="h2">0</b><span>dni z blokadą</span></div>
+      <div><b id="h2">0</b><span>dni, w których nie działał</span></div>
       <div><b id="h3">0</b><span>dni testów w ostatnich 30 dniach</span></div>
     </div>
   </div>
@@ -416,8 +416,8 @@ footer a{color:var(--navy-muted)}
     nl:{label:'Holandia',short:'Holandia',where:'w Holandii',flag:'nl'},
     us:{label:'USA',short:'USA',where:'w USA',flag:'us'}
   };
-  var LABEL={ok:'Działa',blocked:'Zablokowany',unstable:'Niestabilny',none:'Nie przetestowano'};
-  var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach albo serwis pokazał blokadę.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
+  var LABEL={ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
+  var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
   var ICON={
     ok:'<path d="M20 6 9 17l-5-5"/>',
     blocked:'<path d="M18 6 6 18M6 6l12 12"/>',

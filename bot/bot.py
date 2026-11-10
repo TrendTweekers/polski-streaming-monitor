@@ -37,6 +37,7 @@ BLOCK_TEXTS = [
     (r"wykryto wtyczkę adblock|wyłącz blokowanie reklam", "Serwis pokazał komunikat o blokowaniu reklam"),
     (r"niedostępn\w+ w twoim kraju|poza granicami polski|tylko na terytorium|nie jest dostępn\w+ w twoim regionie|geoblok", "Serwis pokazał komunikat o blokadzie regionalnej"),
     (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN"),
+    (r"wystąpił problem z materiałem|nie udało się odtworzyć", "Serwis pokazał błąd odtwarzania"),
 ]
 VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,d:(isFinite(v.duration)?v.duration:0),src:(v.currentSrc||'')}))"""
 
