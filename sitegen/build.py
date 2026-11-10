@@ -357,12 +357,12 @@ PROFILE = {
                  terms="242,73 zł za pierwsze 27 miesięcy, plus VAT, jeśli dotyczy.",
                  pros=["Bez limitu urządzeń", "Najniższa cena w złotówkach w tym zestawieniu", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Do ceny może dojść VAT", "Jeszcze go nie testowaliśmy"]),
-    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="2,49 €", unit="za miesiąc",
-                 terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok. To około 10,93 zł za miesiąc.",
+    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="2,49 €", unit="za miesiąc, ok. 10,93 zł",
+                 terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów", "Jeszcze go nie testowaliśmy"]),
-    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="2,19 €", unit="za miesiąc",
-                 terms="61,32 € za pierwsze 28 miesięcy. To około 9,61 zł za miesiąc. Plan na 1 miesiąc: 11,99 €.",
+    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="2,19 €", unit="za miesiąc, ok. 9,61 zł",
+                 terms="61,32 € za pierwsze 28 miesięcy. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
                  cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro", "Jeszcze go nie testowaliśmy"]),
 }
@@ -483,7 +483,7 @@ FLOWS.update({"tvpsport": flow("TVP Sport", ""), "free": flow("Polski serwis", "
 
 PAGES = {}
 
-PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Streaming",
+PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               "Jak oglądać TVP VOD, Player i TVP Sport za granicą. Poradniki, porównanie VPN z cenami i codzienny test z prawdziwymi zrzutami ekranu.",
               band("Polska telewizja za granicą", "Polska telewizja za granicą: jak oglądać i który VPN wybrać",
                    "Poradniki dla Polaków w Wielkiej Brytanii, Niemczech, Holandii i USA. Do tego codzienny test: sprawdzamy, czy film naprawdę gra przez VPN.",
@@ -536,7 +536,7 @@ PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Str
          "Każdego ranka bot sprawdza, czy film gra przez VPN. Tu są wyniki ostatniego testu, historia i zrzuty ekranu.", WHEN)
     + RESULTS + HISTORY + EVIDENCE)
 
-PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny test VPN | Polski Streaming",
+PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
     "TVP VOD za granicą: co działa bez VPN, co jest zablokowane, wynik codziennego testu i komunikaty błędów z rozwiązaniami.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
          "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Sprawdzamy to codziennie na programie „Jeden z dziesięciu”.",
@@ -596,7 +596,7 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny te
            ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin TVP VOD może jednak zabraniać omijania blokad regionalnych, więc przeczytaj go przed użyciem.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/tvp-vod-za-granica", "TVP VOD")])
 
-PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test VPN | Polski Streaming",
+PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Polski Streaming",
     "Player za granicą: darmowe odcinki „BEZ OPŁAT”, pakiet Player International, wynik codziennego testu VPN i typowe błędy.",
     band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
          "Player ma darmowe odcinki z reklamami i płatne pakiety. Sprawdzamy codziennie, czy darmowe „Fakty” grają przez VPN.",
@@ -651,7 +651,7 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test
            ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin Playera może zabraniać omijania blokad regionalnych. Oficjalną drogą jest Player International.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player")])
 
-PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: codzienny test VPN | Polski Streaming",
+PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: test VPN | Polski Streaming",
     "TVP Sport za granicą: czym różnią się materiały wideo od transmisji na żywo, wynik codziennego testu VPN i liczby z naszych pomiarów.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP Sport', "Jak oglądać TVP Sport za granicą",
          "TVP Sport jest darmowy i działa w przeglądarce. Za granicą część materiałów jest zablokowana. Sprawdzamy codziennie, czy wideo gra przez VPN.",
@@ -701,7 +701,7 @@ PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: codzienn
            ("Czy potrzebuję konta?", "W naszym teście materiały wideo grały bez logowania.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/tvp-sport-za-granica", "TVP Sport")])
 
-PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: test i instrukcja | Polski Streaming",
+PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: test | Polski Streaming",
     "Czy darmowy VPN wystarczy do TVP VOD i Playera? Wynik codziennego testu darmowego serwera w Polsce i instrukcja ustawienia krok po kroku.",
     band('<a href="/">Polska telewizja za granicą</a> / Darmowy VPN', "Darmowy VPN do polskiej telewizji: czy to działa?",
          "Testujemy codziennie darmowy serwer w Polsce. Krótko: czasem działa, czasem nie, a ustawienie wymaga jednego obejścia.",
@@ -783,7 +783,7 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go")])
 
-PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji: ceny i porównanie | Polski Streaming",
+PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
          "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce, ile daje czasu na zwrot i czy sprawdziliśmy go w teście.",

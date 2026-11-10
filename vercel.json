@@ -2,5 +2,22 @@
   "buildCommand": "",
   "outputDirectory": "site",
   "framework": null,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/ranking-vpn",
+      "destination": "/porownanie-vpn",
+      "permanent": true
+    },
+    {
+      "source": "/ranking",
+      "destination": "/porownanie-vpn",
+      "permanent": true
+    },
+    {
+      "source": "/vpn",
+      "destination": "/porownanie-vpn",
+      "permanent": true
+    }
+  ]
 }
