@@ -346,7 +346,7 @@ def points_table():
 
 # Partner (affiliate) links. A provider without an entry gets a plain link to its home page.
 AFF = {
-    "nord": "https://www.jdoqocy.com/click-101925411-15078184",  # CJ, property "Polski Streaming" (101925411), link "2y Pricing Page"
+    "nord": "https://www.dpbolvw.net/click-101925411-15078184",  # CJ, property "Polski Streaming" (101925411), link "2y Pricing Page"
 }
 AFF_NAMES = {"nord": "NordVPN"}
 
@@ -1176,7 +1176,7 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK={proton:'https://protonvpn.com',nord:'https://www.jdoqocy.com/click-101925411-15078184',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
+        "  var LINK={proton:'https://protonvpn.com',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://surfshark.com',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
     rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['darmowy','0 zł']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")
