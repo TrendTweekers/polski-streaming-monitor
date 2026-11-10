@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /
+Sitemap: https://polskistreaming.pl/sitemap.xml

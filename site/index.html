@@ -4,283 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Jak oglądać TVP VOD w UK? | Polski Streaming Monitor (wersja testowa)</title>
+<title>Polska telewizja za granicą: który VPN działa? | Polski Streaming Monitor</title>
+<meta name="description" content="Codzienne testy VPN z TVP VOD, Playerem i TVP Sport. Prawdziwe wyniki i zrzuty ekranu dla Polaków za granicą.">
+<link rel="canonical" href="https://polskistreaming.pl">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
-<style>
-:root{
-  --bg:#F6F7F5; --surface:#FFFFFF; --ink:#17232D; --muted:#65717C; --line:#E1E5E8; --accent:#2457A6; --zebra:#FAFBFA; --grey:#ECEEEB;
-  --ok:#16834A; --bad:#C23B3B; --warn:#B7791F; --none:#8A949E;
-  --navy:#17232D; --navy-2:#223340; --navy-ink:#EDF1F4; --navy-muted:#A0ADB8; --navy-line:#34444F;
-  --cream:#F8EFE3; --cream-ink:#17232D; --cream-muted:#5A6570;
-  --btn:#17232D; --btn-ink:#FFFFFF;
-  --sans:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){ :root{
-  --bg:#111820; --surface:#19232D; --ink:#EDF1F4; --muted:#A0ADB8; --line:#303D49; --accent:#82A9EF; --zebra:#1D2833; --grey:#0D131A;
-  --ok:#4CCB83; --bad:#F07878; --warn:#E7B65B; --none:#8A949E;
-  --navy:#0B1117; --navy-2:#19232D; --navy-line:#303D49;
-  --btn:#EDF1F4; --btn-ink:#111820; color-scheme:dark } }
-
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
-.wrap{max-width:1720px;margin:0 auto;padding:0 40px}
-a{color:var(--accent)}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-h1,h2,h3,p{margin:0}
-h1{font-size:42px;line-height:1.12;font-weight:700;letter-spacing:-.02em}
-h2{font-size:29px;line-height:1.2;font-weight:600;letter-spacing:-.015em}
-h3{font-size:20px;line-height:1.3;font-weight:600}
-.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.muted{color:var(--muted)}
-.demo{display:inline-block;font:600 12px/1.4 var(--sans);letter-spacing:0;color:var(--warn);border:1px solid var(--warn);border-radius:3px;padding:2px 8px;margin-left:14px;vertical-align:middle;white-space:nowrap}
-img{max-width:100%}
-[hidden]{display:none!important}
-button{font-family:inherit}
-
-.mock{background:var(--navy);color:var(--navy-ink);font-size:13px}
-.mock .wrap{padding-top:7px;padding-bottom:7px}
-
-/* masthead */
-header.top{background:var(--surface);border-bottom:1px solid var(--line)}
-header.top .wrap{height:72px;display:flex;align-items:center;gap:48px}
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:-.01em;white-space:nowrap}
-.logo i{width:26px;height:26px;border-radius:4px;background:var(--ink);display:grid;place-items:center}
-.logo i::before{content:"";border-left:9px solid var(--surface);border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:2px}
-.logo span{font-weight:400;color:var(--muted)}
-.cnav{display:flex;flex:1;align-self:stretch}
-.cnav button{font-size:15px;font-weight:500;background:none;border:0;color:var(--muted);padding:0 16px;border-bottom:3px solid transparent;border-top:3px solid transparent;cursor:pointer}
-.cnav button:hover{color:var(--ink)}
-.cnav button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
-.rnav{display:flex;gap:28px;font-size:15px}
-.rnav a{color:var(--muted);text-decoration:none}
-.rnav a:hover{color:var(--ink)}
-
-/* opening band: illustration blends into a band of its own background colour */
-.open{background:var(--cream);color:var(--cream-ink);border-bottom:1px solid var(--line);overflow:hidden}
-.open .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,780px);align-items:center;gap:24px;min-height:300px}
-.open.solo .wrap{grid-template-columns:minmax(0,1fr);min-height:0}
-.otext{padding:36px 0}
-.crumb{font-size:12px;font-weight:500;color:var(--cream-muted);margin-bottom:12px}
-.otext p{font-size:18px;color:var(--cream-muted);margin-top:12px;max-width:560px}
-.when{display:flex;flex-wrap:wrap;gap:6px 28px;margin-top:22px;font-size:13px;color:var(--cream-muted)}
-.when b{color:var(--cream-ink);font-weight:500}
-.when .done{display:inline-flex;align-items:center;gap:6px;color:#16834A;font-family:var(--sans);font-weight:600}
-.hero{display:block;width:100%;height:auto;align-self:end;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 94%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 9%,#000 94%,transparent 100%)}
-.credit{position:absolute;right:40px;bottom:8px;font-size:11px;color:var(--cream-muted)}
-.open{position:relative}
-
-/* results: white dense dashboard */
-.results{background:var(--surface);border-bottom:1px solid var(--line)}
-.rhead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;padding:28px 0 20px}
-.rhead p{color:var(--muted);font-size:14px;margin-top:4px}
-.nums{display:flex;gap:40px}
-.nums b{display:block;font:500 28px/1.1 var(--mono);letter-spacing:-.02em}
-.nums span{font-size:12px;color:var(--muted)}
-.sortbar{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted);padding:10px 0;border-top:1px solid var(--line)}
-.sortbar button{font-size:13px;font-weight:500;background:none;border:0;padding:2px 0;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
-.sortbar button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-thead th{position:sticky;top:0;z-index:1;background:var(--grey);height:74px;vertical-align:bottom;padding-bottom:10px!important;padding:0 16px;text-align:left;font-size:13px;font-weight:600;color:var(--ink);border-top:1px solid var(--line);border-bottom:1px solid var(--line);white-space:nowrap}
-thead th:last-child,tbody td:last-child{text-align:right}
-tbody td{height:66px;padding:0 16px;border-bottom:1px solid var(--line)}
-tbody tr.row:nth-child(4n+3) td{background:var(--zebra)}
-tbody tr.row:hover td{background:var(--bg)}
-.slogo{display:inline-flex;align-items:center;height:34px;padding:4px 8px;background:#fff;border:1px solid var(--line);border-radius:4px}
-.slogo.stext{font-size:13px;font-weight:700;color:#17232D}
-.slogo img{display:block;height:24px;width:auto}
-.sname{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-top:5px}
-.prov{display:flex;align-items:center;gap:14px;font-size:16px;font-weight:600;background:none;border:0;color:var(--ink);padding:0;cursor:pointer;text-align:left}
-.prov img,.mono-logo{width:30px;height:30px;flex:none}
-.mono-logo{display:grid;place-items:center;border-radius:5px;background:var(--ink);color:var(--surface);font-weight:700;font-size:15px}
-.prov small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
-.st{display:inline-flex;align-items:center;gap:6px;font-weight:500;white-space:nowrap}
-.st svg{width:16px;height:16px;flex:none}
-.st.ok{color:var(--ok)}.st.blocked{color:var(--bad)}.st.unstable{color:var(--warn)}.st.none{color:var(--none)}
-td .sub{display:block;font-family:var(--sans);font-size:12px;color:var(--muted)}
-.btn{display:inline-block;font-size:14px;font-weight:600;background:var(--btn);color:var(--btn-ink);border:0;border-radius:5px;padding:10px 16px;cursor:pointer;white-space:nowrap}
-.btn:hover{opacity:.88}
-tr.detail td{height:auto;padding:16px 16px 18px 60px;background:var(--bg);text-align:left}
-.dgrid{display:flex;gap:56px;flex-wrap:wrap}
-.dgrid span{display:block;font-size:12px;color:var(--muted)}
-.rfoot{display:flex;justify-content:space-between;gap:16px 40px;flex-wrap:wrap;padding:16px 0 28px;font-size:13px;color:var(--muted)}
-.legend{display:flex;gap:22px;flex-wrap:wrap}
-.mlist{display:none}
-.mlist details{border-top:1px solid var(--line);padding:14px 0}
-.mlist summary{list-style:none;display:flex;align-items:center;gap:12px;cursor:pointer}
-.mlist summary::-webkit-details-marker{display:none}
-.mlist summary img{width:28px;height:28px}
-.mlist summary b{flex:1;font-weight:600}
-.mlist summary small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
-.mlist .rows{margin-top:12px;display:grid;gap:8px;font-size:14px}
-.mlist .rows div{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.mlist .btn{margin-top:14px;width:100%;text-align:center}
-
-/* countries: dark navy band */
-.countries{background:var(--navy);color:var(--navy-ink)}
-.countries .wrap{display:grid;grid-template-columns:260px minmax(0,1fr);gap:40px;align-items:center;padding-top:36px;padding-bottom:36px}
-.countries p{color:var(--navy-muted);font-size:14px;margin-top:6px}
-.cgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--navy-line)}
-.cgrid button{display:flex;align-items:center;gap:18px;text-align:left;background:none;border:0;border-right:1px solid var(--navy-line);border-bottom:4px solid transparent;padding:22px 24px 18px;cursor:pointer;color:var(--navy-ink)}
-.cgrid button:last-child{border-right:0}
-.cgrid button:hover{background:var(--navy-2)}
-.cgrid button[aria-pressed="true"]{background:var(--navy-2);border-bottom-color:var(--navy-ink)}
-.cgrid img{width:66px;height:44px;object-fit:cover;flex:none}
-.cgrid b{display:block;font-size:19px;font-weight:600}
-.cgrid span span{font-size:13px;color:var(--navy-muted)}
-
-/* history: grey band, wide charts */
-.history{background:var(--grey);border-bottom:1px solid var(--line)}
-.history .wrap,.evidence .wrap,.howto .wrap,.method .wrap,.faqs .wrap{padding-top:52px;padding-bottom:56px}
-.shead{margin-bottom:24px}
-.shead p{color:var(--muted);margin-top:8px;max-width:640px}
-.hctl{display:flex;justify-content:space-between;gap:16px 32px;flex-wrap:wrap;margin-bottom:18px}
-.seg{display:flex;flex-wrap:wrap}
-.seg button{font-size:14px;font-weight:500;background:var(--surface);border:1px solid var(--line);margin-left:-1px;padding:8px 14px;color:var(--ink);cursor:pointer}
-.seg button:first-child{margin-left:0;border-radius:4px 0 0 4px}
-.seg button:last-child{border-radius:0 4px 4px 0}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink);position:relative}
-.hgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;background:var(--surface);border:1px solid var(--line)}
-.chartbox{padding:24px;overflow-x:auto;border-right:1px solid var(--line)}
-.chartbox svg{display:block;width:100%;min-width:640px;height:auto}
-.hsum{display:grid;align-content:stretch}
-.hsum div{padding:20px 24px;border-bottom:1px solid var(--line);display:grid;align-content:center}
-.hsum div:last-child{border-bottom:0}
-.hsum b{font:500 34px/1.1 var(--mono);letter-spacing:-.02em}
-.hsum span{font-size:13px;color:var(--muted)}
-.matrix{margin-top:20px;background:var(--surface);border:1px solid var(--line);padding:18px 24px;overflow-x:auto}
-.mrow{display:grid;grid-template-columns:150px minmax(600px,1fr) 60px;gap:20px;align-items:center;padding:5px 0}
-.mrow button{font-size:14px;font-weight:500;background:none;border:0;padding:0;text-align:left;color:var(--muted);cursor:pointer}
-.mrow.on button{color:var(--ink);font-weight:700}
-.cells{display:grid;grid-template-columns:repeat(30,1fr);gap:3px}
-.cells i{height:24px;background:var(--ok);opacity:.55}
-.mrow.on .cells i{opacity:1}
-.cells i.blocked{background:var(--bad)}.cells i.unstable{background:var(--warn)}.cells i.none{background:var(--none)}
-.mrow .pct{text-align:right;font:500 14px var(--mono)}
-.maxis{display:grid;grid-template-columns:150px minmax(600px,1fr) 60px;gap:20px;font:400 12px var(--mono);color:var(--muted);padding-top:6px}
-.maxis div{display:flex;justify-content:space-between}
-
-/* evidence: screenshot gallery */
-.evidence{background:var(--surface);border-bottom:1px solid var(--line)}
-.egrid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:40px;align-items:start}
-.slot{aspect-ratio:16/9;background:var(--bg) repeating-linear-gradient(135deg,transparent 0 16px,var(--line) 16px 17px);border:1px dashed var(--none);display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted)}
-.slot b{display:block;color:var(--ink);font-size:18px;font-weight:600;margin-bottom:6px}
-.slot span{max-width:440px;font-size:14px;background:var(--surface);border:1px solid var(--line);padding:18px 22px}
-.evidence dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:0;font-size:15px;border-top:2px solid var(--ink)}
-.evidence dt,.evidence dd{padding:11px 0;border-bottom:1px solid var(--line);margin:0}
-.evidence dt{color:var(--muted);padding-right:24px}
-.evidence dd{font-weight:500;text-align:right}
-.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
-.thumbs button{background:none;border:0;padding:0;text-align:left;cursor:pointer;color:var(--ink);font-size:14px}
-.thumbs .t{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--bg);border:1px solid var(--line);margin-bottom:8px}
-#shot img{display:block;width:100%;height:auto;border:1px solid var(--line)}
-.empty{display:grid;place-content:center;text-align:center;min-height:200px;color:var(--muted);font-size:14px;max-width:460px;margin:0 auto}
-.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:6px}
-.thumbs button[aria-pressed="true"] .t{border:2px solid var(--ink)}
-.thumbs .slogo{margin:0 10px 0 0;vertical-align:middle}
-
-/* how-to: editorial numbered list */
-.howto .wrap{display:grid;grid-template-columns:360px minmax(0,1fr);gap:64px}
-.howto .side p{color:var(--muted);margin-top:10px}
-.hsteps{border-top:2px solid var(--ink)}
-.hsteps li{display:grid;grid-template-columns:96px minmax(0,340px) minmax(0,1fr);gap:24px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line)}
-.hsteps{list-style:none;margin:0;padding:0}
-.hsteps .n{font-size:44px;font-weight:300;line-height:1;letter-spacing:-.03em;color:var(--none)}
-.hsteps p{color:var(--muted)}
-
-/* methodology: technical timeline */
-.method{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.tl{display:grid;grid-template-columns:repeat(7,1fr);margin:8px 0 36px;position:relative}
-.tl::before{content:"";position:absolute;left:0;right:0;top:7px;height:2px;background:var(--line)}
-.tl div{position:relative;padding:28px 20px 0 0}
-.tl div::before{content:"";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:var(--surface);border:3px solid var(--ink)}
-.tl time{font:500 13px var(--mono);color:var(--accent)}
-.tl h3{font-size:16px;margin:4px 0}
-.tl p{font-size:14px;color:var(--muted)}
-.mcols{display:grid;grid-template-columns:1fr 1fr;gap:64px;border-top:1px solid var(--line);padding-top:28px}
-.mcols ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px;font-size:15px}
-.mcols li{display:grid;grid-template-columns:170px 1fr;gap:16px;color:var(--muted)}
-.mcols .plain li{display:list-item;list-style:disc;margin-left:18px}
-
-.faq{display:grid;grid-template-columns:1fr 1fr;gap:0 64px}
-.faq details{border-top:1px solid var(--line);padding:16px 0}
-.faq summary{cursor:pointer;font-weight:600;font-size:17px}
-.faq p{color:var(--muted);margin-top:8px;max-width:640px}
-
-footer{background:var(--navy);color:var(--navy-muted)}
-footer .wrap{padding-top:36px;padding-bottom:44px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:14px}
-footer b{color:var(--navy-ink)}
-footer nav{display:flex;gap:26px;flex-wrap:wrap}
-footer a{color:var(--navy-muted)}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:5px;font-size:14px;max-width:calc(100% - 36px);z-index:5}
-
-@media (max-width:1180px){
-  .open .wrap{grid-template-columns:minmax(0,1fr) minmax(0,520px)}
-  .countries .wrap{grid-template-columns:minmax(0,1fr);gap:20px}
-  .hgrid{grid-template-columns:minmax(0,1fr)} .chartbox{border-right:0;border-bottom:1px solid var(--line)} .hsum{grid-template-columns:repeat(3,1fr)} .hsum div{border-bottom:0;border-right:1px solid var(--line)}
-  .egrid{grid-template-columns:minmax(0,1fr)}
-  .howto .wrap{grid-template-columns:minmax(0,1fr);gap:24px}
-  .tl{grid-template-columns:minmax(0,1fr)} .tl::before{left:7px;right:auto;top:0;bottom:0;width:2px;height:auto} .tl div{padding:0 0 22px 36px}
-  .nums{gap:28px}
-}
-@media (max-width:820px){
-  .wrap{padding:0 18px}
-  h1{font-size:30px} h2{font-size:23px}
-  header.top .wrap{height:auto;flex-wrap:wrap;gap:0 16px;padding-top:14px}
-  .rnav{margin-left:auto;gap:18px;font-size:14px}
-  .cnav{flex-basis:100%;overflow-x:auto;margin:6px -18px 0;padding:0 4px}
-  .cnav button{padding:10px 14px;white-space:nowrap}
-  .open .wrap{grid-template-columns:minmax(0,1fr);gap:0}
-  .otext{padding:26px 0 8px}.otext p{font-size:16px}
-  .hero{-webkit-mask-image:none;mask-image:none}
-  .credit{position:static;padding:0 18px 8px;text-align:right}
-  .desk,.sortbar{display:none} .mlist{display:block}
-  .nums b{font-size:22px}
-  .cgrid{grid-template-columns:1fr 1fr}
-  .cgrid button{padding:16px;gap:12px;border-top:1px solid var(--navy-line)}
-  .cgrid button:nth-child(2){border-right:0}
-  .cgrid img{width:42px;height:28px}.cgrid b{font-size:16px}
-  .history .wrap,.evidence .wrap,.howto .wrap,.method .wrap,.faqs .wrap{padding-top:36px;padding-bottom:40px}
-  .hsum b{font-size:24px}.hsum div{padding:14px}
-  .seg button{padding:7px 10px;font-size:13px}
-  .thumbs{grid-template-columns:1fr 1fr}
-  .hsteps li{grid-template-columns:56px minmax(0,1fr);gap:6px 12px}
-  .hsteps li p{grid-column:2}
-  .hsteps .n{font-size:32px}
-  .mcols,.faq{grid-template-columns:minmax(0,1fr);gap:28px 0}
-  .mcols li{grid-template-columns:minmax(0,1fr);gap:2px}
-}
-</style>
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
-
-<div class="mock"><div class="wrap">Wersja testowa strony. Wyniki i zrzuty ekranu pochodzą z prawdziwych testów bota. Linki partnerskie nie są jeszcze aktywne.</div></div>
-
+<div class="mock"><div class="wrap">Strona w budowie. Wyniki testów i zrzuty ekranu są prawdziwe. Linki do dostawców nie są jeszcze linkami partnerskimi.</div></div>
 <header class="top"><div class="wrap">
-  <div class="logo"><i aria-hidden="true"></i>Polski Streaming <span>Monitor</span></div>
-  <div class="cnav" role="group" aria-label="Kraj" id="cnav"></div>
-  <nav class="rnav"><a href="#metoda">Metodologia</a><a href="#faq">O projekcie</a></nav>
+  <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming <span>Monitor</span></a>
+  <nav class="cnav" aria-label="Główne"><a href="/tvp-vod-za-granica">TVP VOD</a><a href="/player-za-granica">Player</a><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy">Jak testujemy</a></nav>
 </div></header>
-
-<div class="open" id="open"><div class="wrap">
+<div class="open"><div class="wrap">
   <div class="otext">
-    <div class="crumb">Poradnik / <span id="crumb">Wielka Brytania</span> / TVP VOD</div>
-    <h1>Jak oglądać TVP VOD <span id="where">w UK</span>?</h1>
-    <p>Codziennie rano bot sprawdza, które VPN-y odblokowują polskie serwisy streamingowe. Poniżej są wyniki ostatniego testu.</p>
+    <div class="crumb">Polska telewizja za granicą</div>
+    <h1>Polska telewizja za granicą: który VPN działa?</h1>
+    <p>Poradniki dla Polaków za granicą i codzienny test: bot łączy się przez VPN z serwerem w Polsce i sprawdza, czy film naprawdę gra.</p>
     <div class="when mono">
-      <span class="done"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Test zakończony</span>
       <span>Ostatni test: <b id="last">—</b></span>
       <span>Kolejny: <b id="next">—</b></span>
     </div>
   </div>
-  <img class="hero" id="hero" src="hero-uk.webp" srcset="hero-uk-sm.webp 887w, hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 780px" width="1774" height="887" alt="Ilustracja: połączenie z Wielkiej Brytanii do Polski">
-</div><div class="credit" id="credit">Ilustracja. To nie jest zrzut ekranu z testu.</div></div>
-
-<section class="results" id="wyniki"><div class="wrap">
+  <img class="hero" src="/hero-uk.webp" srcset="/hero-uk-sm.webp 887w, /hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 780px" width="1774" height="887" alt="Ilustracja: połączenie z zagranicy do Polski">
+</div><div class="credit">Ilustracja. To nie jest zrzut ekranu z testu.</div></div><section class="results" id="wyniki"><div class="wrap">
   <div class="rhead">
-    <div><h2>Wyniki testu: <span id="tcountry">Wielka Brytania</span></h2><p id="scope">Kliknij nazwę VPN, aby zobaczyć szczegóły testu.</p></div>
+    <div><h2>Wyniki ostatniego testu</h2><p id="scope">Kliknij nazwę VPN, aby zobaczyć szczegóły testu.</p></div>
     <div class="nums">
       <div><b id="s1">—</b><span>testowanych VPN-ów działa z TVP VOD</span></div>
       <div><b id="s2">—</b><span>prób w ostatnim teście</span></div>
@@ -290,27 +41,22 @@ footer a{color:var(--navy-muted)}
   <div class="sortbar" role="group" aria-label="Sortowanie">Sortuj według:
     <button type="button" data-sort="works" aria-pressed="true">działających serwisów</button>
     <button type="button" data-sort="speed" aria-pressed="false">prędkości</button>
-    <button type="button" data-sort="price" aria-pressed="false">ceny</button>
   </div>
-  <div class="desk">
-    <table>
-      <thead><tr id="thead"></tr></thead>
-      <tbody id="rows"></tbody>
-    </table>
-  </div>
+  <div class="desk"><table><thead><tr id="thead"></tr></thead><tbody id="rows"></tbody></table></div>
   <div class="mlist" id="mlist"></div>
   <div class="rfoot">
     <div class="legend" id="legend"></div>
-    <div>Kolejność zależy tylko od wyniku testu. Za zakup przez nasz link dostajemy prowizję.</div>
+    <div>Kolejność zależy tylko od wyniku testu. <a href="/jak-testujemy">Jak testujemy</a></div>
   </div>
-</div></section>
-
-<section class="countries" id="kraje"><div class="wrap">
-  <div><h2>Wybierz kraj</h2><p>Wynik jest taki sam w każdym kraju: serwis widzi polski adres serwera VPN, a nie Twój.</p></div>
-  <div class="cgrid" id="countries"></div>
-</div></section>
-
-<section class="history" id="historia"><div class="wrap">
+</div></section><section class="guides"><div class="wrap">
+  <div class="shead"><h2>Poradniki</h2></div>
+  <ul class="glist">
+    <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
+    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
+    <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej, pakiet Polonia i czego jeszcze nie testujemy.</span></a></li>
+    <li><a href="/porownanie-vpn"><b>Porównanie VPN z serwerem w Polsce</b><span>Pięciu dostawców: fakty ze stron producentów i nasze wyniki testów.</span></a></li>
+  </ul>
+</div></section><section class="history" id="historia"><div class="wrap">
   <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może przestać działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
   <div class="hctl">
     <div class="seg" role="group" aria-label="VPN" id="hprov"></div>
@@ -319,24 +65,19 @@ footer a{color:var(--navy-muted)}
   <div class="hgrid">
     <div class="chartbox"><div id="chart"></div></div>
     <div class="hsum">
-      <div><b id="h1">0/30</b><span>udanych testów</span></div>
-      <div><b id="h2">0</b><span>dni, w których nie działał</span></div>
-      <div><b id="h3">0</b><span>dni testów w ostatnich 30 dniach</span></div>
+      <div><b id="h1">—</b><span>udanych testów</span></div>
+      <div><b id="h2">—</b><span>dni, w których nie działał</span></div>
+      <div><b id="h3">—</b><span>dni testów w ostatnich 30 dniach</span></div>
     </div>
   </div>
   <div class="matrix">
     <div id="matrix"></div>
     <div class="maxis" aria-hidden="true"><span></span><div><span id="ax0"></span><span id="ax1"></span><span id="ax2"></span></div><span></span></div>
   </div>
-</div></section>
-
-<section class="evidence" id="dowod"><div class="wrap">
+</div></section><section class="evidence" id="dowod"><div class="wrap">
   <div class="shead"><h2>Dowód z ostatniego testu</h2><p>Bot robi zrzut ekranu przy każdej próbie, także nieudanej. Kliknij zrzut, aby otworzyć go w pełnym rozmiarze.</p></div>
   <div class="egrid">
-    <div>
-      <div id="shot"></div>
-      <div class="thumbs" id="thumbs"></div>
-    </div>
+    <div><div id="shot"></div><div class="thumbs" id="thumbs"></div></div>
     <dl>
       <dt>Serwis</dt><dd id="e0">—</dd>
       <dt>VPN</dt><dd id="e1">—</dd>
@@ -349,224 +90,11 @@ footer a{color:var(--navy-muted)}
       <dt>Kryterium</dt><dd>60 s filmu bez przerwy</dd>
     </dl>
   </div>
-</div></section>
-
-<section class="howto" id="jak"><div class="wrap">
-  <div class="side"><h2>Jak włączyć TVP VOD za granicą</h2><p>Cztery kroki. Zajmuje to około 5 minut.</p></div>
-  <ol class="hsteps">
-    <li><span class="n">01</span><h3>Wybierz VPN z tabeli</h3><p>Weź ten, który dziś działa z serwisem, który chcesz oglądać.</p></li>
-    <li><span class="n">02</span><h3>Zainstaluj aplikację</h3><p>Na komputerze, telefonie albo telewizorze z Android TV lub Fire TV.</p></li>
-    <li><span class="n">03</span><h3>Połącz się z serwerem w Polsce</h3><p>Najlepiej w Warszawie. Urządzenie dostaje polski adres IP.</p></li>
-    <li><span class="n">04</span><h3>Otwórz TVP VOD</h3><p>Widzisz blokadę? Zmień serwer na inny polski i odśwież stronę.</p></li>
-  </ol>
-</div></section>
-
-<section class="method" id="metoda"><div class="wrap">
-  <div class="shead"><h2>Jak testujemy</h2><p>Ten sam test, o tej samej godzinie, każdego dnia. Wyniki pokazujemy także wtedy, gdy są złe dla partnera.</p></div>
-  <div class="tl">
-    <div><time>Krok 1</time><h3>Połączenie z VPN</h3><p>Polski serwer dostawcy, protokół WireGuard.</p></div>
-    <div><time>Krok 2</time><h3>Kontrola adresu IP</h3><p>Adres musi być polski. Inaczej test się nie odbywa.</p></div>
-    <div><time>Krok 3</time><h3>Pomiar prędkości</h3><p>Trzy pobrania po 20 MB, wynik to średnia.</p></div>
-    <div><time>Krok 4</time><h3>Otwarcie serwisu</h3><p>Ten sam program każdego dnia, bez logowania.</p></div>
-    <div><time>Krok 5</time><h3>Reklamy</h3><p>Bot czeka do 5,5 minuty na koniec reklam.</p></div>
-    <div><time>Krok 6</time><h3>Kontrola 60 sekund</h3><p>Film musi grać bez przerwy.</p></div>
-    <div><time>Krok 7</time><h3>Zrzut ekranu</h3><p>Zapis obrazu po 20 sekundach filmu.</p></div>
-  </div>
-  <div class="mcols">
-    <div><h3>Co oznaczają wyniki</h3><ul id="cats"></ul></div>
-    <div><h3>Ograniczenia</h3>
-      <ul class="plain">
-        <li>Wynik dotyczy serwera i przeglądarki użytych w teście.</li>
-        <li>Prędkość mierzymy z jednego miejsca (podanego w tabeli), nie z każdego kraju.</li>
-        <li>Test używa neutralnego serwera DNS (1.1.1.1).</li>
-        <li>Nie wszystkie materiały są dostępne poza Polską, także z VPN.</li>
-        <li>Prowizja nie zmienia wyników ani kolejności w tabeli.</li>
-      </ul>
-    </div>
-  </div>
-</div></section>
-
-<section class="faqs" id="faq"><div class="wrap">
-  <div class="shead"><h2>Częste pytania</h2></div>
-  <div class="faq">
-    <details><summary>Czy w Unii Europejskiej potrzebuję VPN?</summary><p>Nie zawsze. Jeśli masz płatne konto i jesteś w UE na wyjeździe, część serwisów działa bez VPN. Po Brexicie ta zasada nie obejmuje Wielkiej Brytanii.</p></details>
-    <details><summary>Czy darmowy VPN wystarczy?</summary><p>Zwykle nie. Darmowe VPN mają mało polskich serwerów, a serwisy VOD szybko je blokują.</p></details>
-    <details><summary>Czy to jest legalne?</summary><p>Używanie VPN jest legalne w Wielkiej Brytanii, UE i USA. Regulamin serwisu VOD może jednak zabraniać omijania blokad. Sprawdź regulamin swojego serwisu.</p></details>
-    <details><summary>VPN z tabeli nie działa u mnie. Co zrobić?</summary><p>Zmień serwer na inny polski, wyczyść pliki cookie i spróbuj w przeglądarce zamiast w aplikacji.</p></details>
-    <details><summary>Dlaczego wynik zmienia się z dnia na dzień?</summary><p>Serwisy VOD blokują adresy IP serwerów VPN, a dostawcy VPN dodają nowe. Dlatego testujemy codziennie.</p></details>
-    <details><summary>Jak zarabia ta strona?</summary><p>Na linkach partnerskich. Jeśli kupisz VPN przez nasz link, dostajemy prowizję. Ty płacisz tyle samo.</p></details>
-  </div>
-</div></section>
-
+</div></section><section class="faqs" id="faq"><div class="wrap"><div class="shead"><h2>Częste pytania</h2></div><div class="faq"><details><summary>Dlaczego polskie serwisy nie działają za granicą?</summary><p>Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju.</p></details><details><summary>Dlaczego wynik zmienia się z dnia na dzień?</summary><p>Serwisy blokują adresy serwerów VPN, a dostawcy VPN dodają nowe. Do tego dochodzi obciążenie serwera. Dlatego testujemy codziennie i pokazujemy historię.</p></details><details><summary>Czy wynik zależy od kraju, w którym mieszkam?</summary><p>Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia.</p></details><details><summary>Czy to jest legalne?</summary><p>Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych. Przeczytaj regulamin swojego serwisu.</p></details><details><summary>Czy darmowy VPN wystarczy?</summary><p>Czasem tak. Testujemy darmowy plan Proton VPN z serwerem w Polsce i wynik zmienia się z dnia na dzień. Aktualny wynik jest na górze tej strony. Darmowe serwery są obciążone, więc film może się zacinać.</p></details><details><summary>Jak zarabia ta strona?</summary><p>Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności w tabeli.</p></details></div></div></section>
 <footer><div class="wrap">
-  <div><b>Polski Streaming Monitor</b><br>Wersja testowa.</div>
-  <nav><a href="#metoda">Metodologia</a><a href="#">O projekcie</a><a href="#">Kontakt i poprawki</a><a href="#">Linki partnerskie</a><a href="#">Prywatność</a></nav>
+  <div><b>Polski Streaming Monitor</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
+  <nav><a href="/jak-testujemy">Jak testujemy</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy#linki">Linki partnerskie</a></nav>
 </div></footer>
-
-<div class="toast" id="toast" hidden role="status"></div>
-
-<script>
-(function(){
-  var LOGO={proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn',cybr:'logos/cyberghost-icon.png'};
-  var SLOGO={tvpvod:'logos/tvpvod.png',player:'logos/player.svg',polsat:'logos/polsat.svg',canal:'logos/canal.svg'};
-  var PRICE={proton:['0 zł','plan darmowy']};
-  var C={
-    uk:{label:'Wielka Brytania',short:'UK',where:'w UK',flag:'gb'},
-    de:{label:'Niemcy',short:'Niemcy',where:'w Niemczech',flag:'de'},
-    nl:{label:'Holandia',short:'Holandia',where:'w Holandii',flag:'nl'},
-    us:{label:'USA',short:'USA',where:'w USA',flag:'us'}
-  };
-  var LABEL={ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
-  var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
-  var ICON={
-    ok:'<path d="M20 6 9 17l-5-5"/>',
-    blocked:'<path d="M18 6 6 18M6 6l12 12"/>',
-    unstable:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
-    none:'<path d="M5 12h14"/>'
-  };
-  function st(s){return '<span class="st '+s+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
-  function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function slogo(x){return SLOGO[x.id]?'<span class="slogo"><img src="'+SLOGO[x.id]+'" alt="'+esc(x.name)+'"></span>':'<span class="slogo stext">'+esc(x.name)+'</span>'}
-  function logo(id){return '<img src="'+LOGO[id]+'" alt="" width="30" height="30">'}
-  function fmtDT(iso){if(!iso)return '—';return iso.slice(8,10)+'.'+iso.slice(5,7)+'.'+iso.slice(0,4)+', '+iso.slice(11,16)}
-  function fmtT(iso){return iso?iso.slice(11,19):'—'}
-  function addDays(d,n){var x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
-  function dm(d){return d.slice(8,10)+'.'+d.slice(5,7)}
-  var $=function(id){return document.getElementById(id)};
-  var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
-  var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
-
-  function stat(p,sid){var r=p.services&&p.services[sid];return r?r.status:'none'}
-  function works(p){return SVON.filter(function(s){return stat(p,s.id)==='ok'}).length}
-  function sorted(){
-    var d=RUN.providers.slice();
-    d.sort(function(a,b){
-      if(a.tested!==b.tested)return a.tested?-1:1;
-      if(sortBy==='speed')return (b.speed_mbps||0)-(a.speed_mbps||0);
-      if(sortBy==='price')return (PRICE[a.id]?0:1)-(PRICE[b.id]?0:1);
-      return works(b)-works(a)||(b.speed_mbps||0)-(a.speed_mbps||0);
-    });
-    return d;
-  }
-  function best(){return sorted()[0]}
-
-  function renderTable(){
-    var c=C[cur],data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});
-    $('hero').hidden=cur!=='uk';$('credit').hidden=cur!=='uk';$('open').classList.toggle('solo',cur!=='uk');
-    $('crumb').textContent=c.label;$('where').textContent=c.where;$('tcountry').textContent=c.label;
-    $('last').textContent=fmtDT(RUN.finished_at);$('next').textContent=dm(addDays(RUN.date,1))+'.'+addDays(RUN.date,1).slice(0,4)+', rano';
-    $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;
-    var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
-    $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.';
-    var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
-    var h='',m='';
-    data.forEach(function(p){
-      var w=works(p),sub=p.tested?(w+' z '+SVON.length+' testowanych serwisów działa'):'jeszcze nie testujemy';
-      var pr=PRICE[p.id];
-      h+='<tr class="row"><td><button class="prov" type="button" data-open="'+p.id+'" aria-expanded="'+(open===p.id)+'">'+logo(p.id)+'<span>'+esc(p.name)+'<small>'+sub+'</small></span></button></td>';
-      SVON.forEach(function(s){h+='<td>'+st(stat(p,s.id))+'</td>'});
-      h+='<td class="mono">'+(p.speed_mbps?p.speed_mbps+' Mb/s<span class="sub">pomiar z: '+esc(where)+'</span>':'<span class="muted">—</span>')+'</td>';
-      h+='<td class="mono">'+(pr?pr[0]+'<span class="sub">'+pr[1]+'</span>':'<span class="muted">—</span>')+'</td>';
-      h+='<td><button class="btn" type="button" data-cta aria-label="Sprawdź ofertę '+esc(p.name)+'">Sprawdź ofertę</button></td></tr>';
-      var det='';
-      if(p.tested){
-        det='<div><span>Serwer VPN</span><b class="mono">'+esc(p.server||'—')+'</b></div>'+
-            '<div><span>Adres IP serwera</span><b class="mono">'+esc(p.exit&&p.exit.ip||'—')+'</b></div>'+
-            '<div><span>Lokalizacja IP</span><b>'+esc(p.exit?p.exit.city+', '+p.exit.country:'—')+'</b></div>'+
-            '<div><span>Sieć</span><b>'+esc(p.exit&&p.exit.org||'—')+'</b></div>';
-        SVON.forEach(function(s){var r=p.services[s.id];if(!r)return;det+='<div><span>'+esc(s.name)+'</span><b class="mono">'+(r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+esc(r.resolution||''):'')+(r.reason?' '+esc(r.reason):'')+'</b></div>'});
-      }else det='<div><span>Status</span><b>'+esc(p.note||'Nie mamy jeszcze konta testowego u tego dostawcy.')+'</b></div>';
-      h+='<tr class="detail"'+(open===p.id?'':' hidden')+'><td colspan="'+(SVON.length+4)+'"><div class="dgrid">'+det+'</div></td></tr>';
-      var sum=!p.tested?'none':w===SVON.length?'ok':w===0?'blocked':'unstable';
-      m+='<details><summary>'+logo(p.id)+'<b>'+esc(p.name)+'<small>'+sub+'</small></b><span class="st '+sum+'">'+(sum==='unstable'?'Częściowo':LABEL[sum])+'</span></summary><div class="rows">';
-      SVON.forEach(function(s){m+='<div>'+slogo(s)+st(stat(p,s.id))+'</div>'});
-      m+='<div><span>Pobieranie</span><span class="mono">'+(p.speed_mbps?p.speed_mbps+' Mb/s':'—')+'</span></div><div><span>Cena za miesiąc</span><span class="mono">'+(pr?pr[0]:'—')+'</span></div></div>'+
-         '<button class="btn" type="button" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>';
-    });
-    $('rows').innerHTML=h;$('mlist').innerHTML=m;
-    all('[data-c]',function(b){b.setAttribute('aria-pressed',b.dataset.c===cur)});
-    all('[data-sort]',function(b){b.setAttribute('aria-pressed',b.dataset.sort===sortBy)});
-    renderEvidence();
-  }
-
-  function renderEvidence(){
-    var top=best(),r=top.services&&top.services[es],s=SVON.filter(function(x){return x.id===es})[0]||{},t='';
-    SVON.forEach(function(x){var rr=top.services[x.id]||{};t+='<button type="button" data-es="'+x.id+'" aria-pressed="'+(x.id===es)+'">'+(rr.shot?'<img class="t" src="'+esc(rr.shot)+'" alt="" loading="lazy">':'<div class="t"></div>')+slogo(x)+st(rr.status||'none')+'</button>'});
-    $('thumbs').innerHTML=t;
-    $('shot').innerHTML=r&&r.shot?'<a href="'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="'+esc(r.shot)+'" alt="Zrzut ekranu z testu: '+esc(s.name)+' przez '+esc(top.name)+'" width="1440" height="900"></a>':'<div class="slot"><span><b>Brak zrzutu ekranu</b>Dla tego testu nie ma jeszcze zrzutu.</span></div>';
-    $('e0').textContent=s.name||'—';$('e1').textContent=top.name+(top.plan?' ('+top.plan+')':'');
-    $('e2').textContent=top.exit?top.exit.city+', Polska ('+(top.exit.ip||'')+')':'—';$('e2b').textContent=top.server||'—';
-    $('e4').textContent=r?fmtDT(r.tested_at).slice(0,10):'—';$('e5').textContent=r?fmtT(r.tested_at):'—';
-    $('e3').innerHTML=st(r?r.status:'none');
-    $('e6').textContent=r?((r.played_seconds!=null?Math.round(r.played_seconds)+' s filmu, '+(r.resolution||'')+(r.drm?', z DRM':'')+'. ':'')+(r.reason||'')).trim()||'—':'—';
-  }
-
-  function renderHistory(){
-    var days=[];for(var i=29;i>=0;i--)days.push(addDays(RUN.date,-i));
-    function ds(pid,d){var x=HIST.days[d]&&HIST.days[d][pid];return x&&x[hs]?x[hs]:'none'}
-    var mine=days.map(function(d){return ds(hp,d)}),n=mine.filter(function(s){return s!=='none'}).length,ok=mine.filter(function(s){return s==='ok'}).length,bl=mine.filter(function(s){return s==='blocked'}).length;
-    $('h1').textContent=n?ok+'/'+n:'—';$('h2').textContent=n?bl:'—';$('h3').textContent=n;
-    if(n<7){
-      $('chart').innerHTML='<div class="empty"><b>Za mało danych na wykres</b>Mamy '+n+' '+(n===1?'dzień':'dni')+' testów dla tego VPN. Wykres pojawi się po 7 dniach. Każdy dzień widać w tabeli poniżej.</div>';
-    }else{
-      var W=1100,H=280,L=48,R=12,T=14,B=30,pw=W-L-R,ph=H-T-B,g='',path='';
-      var x=function(i){return L+pw*(i+.5)/30},y=function(v){return T+ph*(1-v)};
-      [0,.25,.5,.75,1].forEach(function(v){g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="var(--line)" stroke-width="1"/><text x="'+(L-10)+'" y="'+(y(v)+4)+'" text-anchor="end" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">'+(v*100)+'%</text>'});
-      [0,7,14,21,29].forEach(function(i){g+='<text x="'+x(i)+'" y="'+(H-8)+'" text-anchor="middle" font-size="12" fill="var(--muted)" font-family="IBM Plex Mono,monospace">'+dm(days[i])+'</text>'});
-      mine.forEach(function(s,i){
-        var a=0,c=0;for(var j=Math.max(0,i-6);j<=i;j++){if(mine[j]!=='none'){c++;a+=mine[j]==='ok'?1:mine[j]==='unstable'?.5:0}}
-        if(c)path+=(path?'L':'M')+x(i).toFixed(1)+' '+y(a/c).toFixed(1)+' ';
-        if(s==='blocked'||s==='unstable')g+='<rect x="'+(x(i)-pw/60+2)+'" y="'+T+'" width="'+(pw/30-4)+'" height="'+ph+'" fill="'+(s==='blocked'?'var(--bad)':'var(--warn)')+'" opacity=".12"/>';
-      });
-      g+='<path d="'+path+'" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>';
-      $('chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Średnia skuteczność z 7 dni">'+g+'</svg>';
-    }
-    var mx='';
-    RUN.providers.forEach(function(p){
-      var o=0,t=0,cells='';
-      days.forEach(function(d){var s=ds(p.id,d);cells+='<i class="'+(s==='ok'?'':s)+'" title="'+dm(d)+': '+LABEL[s]+'"></i>';if(s!=='none'){t++;if(s==='ok')o++}});
-      mx+='<div class="mrow'+(p.id===hp?' on':'')+'"><button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button><div class="cells" role="img" aria-label="'+esc(p.name)+': '+o+' z '+t+' dni testów">'+cells+'</div><div class="pct">'+(t?Math.round(o/t*100)+'%':'—')+'</div></div>';
-    });
-    $('matrix').innerHTML=mx;$('ax0').textContent=dm(days[0]);$('ax1').textContent=dm(days[15]);$('ax2').textContent=dm(days[29]);
-    all('#hprov [data-hp]',function(b){b.setAttribute('aria-pressed',b.dataset.hp===hp)});
-    all('[data-hs]',function(b){b.setAttribute('aria-pressed',b.dataset.hs===hs)});
-  }
-  function render(){renderTable();renderHistory()}
-
-  function boot(){
-    SV=RUN.services;SVON=SV.filter(function(s){return s.enabled});
-    hs=es=SVON[0].id;hp=(RUN.providers.filter(function(p){return p.tested})[0]||RUN.providers[0]).id;
-    var cn='',cs='';
-    Object.keys(C).forEach(function(k){
-      cn+='<button type="button" data-c="'+k+'">'+C[k].short+'</button>';
-      cs+='<button type="button" data-c="'+k+'"><img src="https://flagcdn.com/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
-    });
-    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Cena za miesiąc</th><th>Oferta partnera</th>';
-    $('cnav').innerHTML=cn;$('countries').innerHTML=cs;
-    $('hprov').innerHTML=RUN.providers.map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button>'}).join('');
-    $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');
-    $('legend').innerHTML=['ok','unstable','blocked','none'].map(st).join('');
-    $('cats').innerHTML=['ok','unstable','blocked','none'].map(function(s){return '<li>'+st(s)+'<span>'+DESC[s]+'</span></li>'}).join('');
-    render();
-  }
-
-  var tt;
-  document.addEventListener('click',function(e){
-    var t=e.target.closest('button');if(!t||!RUN)return;
-    if(t.dataset.c){cur=t.dataset.c;render()}
-    else if(t.dataset.sort){sortBy=t.dataset.sort;renderTable()}
-    else if(t.dataset.open){open=open===t.dataset.open?null:t.dataset.open;renderTable()}
-    else if(t.dataset.hp){hp=t.dataset.hp;renderHistory()}
-    else if(t.dataset.hs){hs=t.dataset.hs;renderHistory()}
-    else if(t.dataset.es){es=t.dataset.es;renderEvidence()}
-    else if(t.hasAttribute('data-cta')){var x=$('toast');x.textContent='Linki partnerskie nie są jeszcze aktywne. To wersja testowa strony.';x.hidden=false;clearTimeout(tt);tt=setTimeout(function(){x.hidden=true},3200)}
-  });
-  function get(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(u);return r.json()})}
-  Promise.all([get('data/latest.json'),get('data/history.json').catch(function(){return {days:{}}})]).then(function(a){RUN=a[0];HIST=a[1];boot()}).catch(function(){
-    $('rows').innerHTML='<tr><td colspan="8" style="height:120px;text-align:center" class="muted">Brak danych z testu. Bot nie opublikował jeszcze wyników.</td></tr>';
-  });
-})();
-</script>
+<script src="/app.js" defer></script>
 </body>
 </html>
