@@ -36,4 +36,6 @@ jobs:
           git config user.email "224116307+TrendTweekers@users.noreply.github.com"
           git add site/data
           git diff --cached --quiet || git commit -m "Test results $(date -u +%F)"
+          # If the repo changed during the test, put the bot results on top. The bot data wins.
+          git pull --rebase -X theirs origin main
           git push
