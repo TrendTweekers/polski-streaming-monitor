@@ -17,7 +17,7 @@ CHECKED = "10.11.2026"
 INDEXABLE = False  # set True when the owner opens the site to search engines
 
 NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/polsat-box-go-za-granica", "Polsat Box Go"),
-       ("/porownanie-vpn", "Porównanie VPN"), ("/jak-testujemy", "Jak testujemy")]
+       ("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]
 
 
 def layout(path, title, desc, body):
@@ -37,14 +37,13 @@ def layout(path, title, desc, body):
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="mock"><div class="wrap">Strona w budowie. Wyniki testów i zrzuty ekranu są prawdziwe. Linki do dostawców nie są jeszcze linkami partnerskimi.</div></div>
 <header class="top"><div class="wrap">
-  <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming <span>Monitor</span></a>
+  <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
   <nav class="cnav" aria-label="Główne">{nav}</nav>
 </div></header>
 {body}
 <footer><div class="wrap">
-  <div><b>Polski Streaming Monitor</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
+  <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
   <nav><a href="/jak-testujemy">Jak testujemy</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy#linki">Linki partnerskie</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
@@ -137,7 +136,7 @@ def svc_result(sid, name):
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Wynik ostatniego testu: {name}</h2><p>Bot sprawdza to każdego ranka. Wynik poniżej pochodzi z ostatniego testu, a nie z opisu producenta.</p></div>
   <div class="svc" data-svc="{sid}"><p class="muted">Ładowanie wyniku testu…</p></div>
-  <p class="after"><a href="/#historia">Historia 30 dni</a> · <a href="/#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
+  <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
 
 
@@ -176,119 +175,6 @@ def faq(items):
 LEGAL_Q = ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych. Przeczytaj regulamin swojego serwisu.")
 FREE_Q = ("Czy darmowy VPN wystarczy?", "Czasem tak. Testujemy darmowy plan Proton VPN z serwerem w Polsce i wynik zmienia się z dnia na dzień. Aktualny wynik jest na górze tej strony. Darmowe serwery są obciążone, więc film może się zacinać.")
 TV_Q = ("Czy to działa na telewizorze?", "Tak, jeśli Twój telewizor albo przystawka ma aplikację VPN. Większość dostawców ma aplikacje na Android TV, Fire TV i Apple TV. Szczegóły są w <a href=\"/porownanie-vpn\">porównaniu VPN</a>.")
-
-# ---------------------------------------------------------------- pages
-
-PAGES = {}
-
-PAGES["/"] = ("Polska telewizja za granicą: który VPN działa? | Polski Streaming Monitor",
-              "Codzienne testy VPN z TVP VOD, Playerem i TVP Sport. Prawdziwe wyniki i zrzuty ekranu dla Polaków za granicą.",
-              band("Polska telewizja za granicą", "Polska telewizja za granicą: który VPN działa?",
-                   "Poradniki dla Polaków za granicą i codzienny test: bot łączy się przez VPN z serwerem w Polsce i sprawdza, czy film naprawdę gra.",
-                   WHEN, image=True)
-              + RESULTS
-              + """<section class="guides"><div class="wrap">
-  <div class="shead"><h2>Poradniki</h2></div>
-  <ul class="glist">
-    <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
-    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
-    <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej, pakiet Polonia i czego jeszcze nie testujemy.</span></a></li>
-    <li><a href="/porownanie-vpn"><b>Porównanie VPN z serwerem w Polsce</b><span>Pięciu dostawców: fakty ze stron producentów i nasze wyniki testów.</span></a></li>
-  </ul>
-</div></section>"""
-              + HISTORY + EVIDENCE
-              + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
-                     ("Dlaczego wynik zmienia się z dnia na dzień?", "Serwisy blokują adresy serwerów VPN, a dostawcy VPN dodają nowe. Do tego dochodzi obciążenie serwera. Dlatego testujemy codziennie i pokazujemy historię."),
-                     ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
-                     LEGAL_Q, FREE_Q,
-                     ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności w tabeli.")]))
-
-PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny test VPN | Polski Streaming Monitor",
-    "TVP VOD za granicą: trzy sposoby, wynik codziennego testu VPN i zrzut ekranu jako dowód.",
-    band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
-         "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Poniżej są trzy sposoby i wynik naszego codziennego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
-    + svc_result("tvpvod", "TVP VOD")
-    + prose("""
-<h2>Dlaczego TVP VOD nie działa za granicą</h2>
-<p>TVP kupuje prawa do wielu filmów, seriali i transmisji tylko na terytorium Polski. Serwis sprawdza adres IP urządzenia. Gdy adres jest zagraniczny, część materiałów się nie włącza.</p>
-<p>Nie wszystko jest zablokowane. Własne produkcje TVP często działają także za granicą. TVP ma w menu serwisu stronę <a href="https://vod.tvp.pl/tvp-vod-za-granica" target="_blank" rel="noopener">TVP VOD za granicą</a>, na której można sprawdzić dostępność.</p>
-
-<h2>Trzy sposoby</h2>
-<h3>1. Sprawdź, czy materiał działa bez VPN</h3>
-<p>Otwórz program na vod.tvp.pl. Jeśli gra, nie potrzebujesz niczego więcej. To dotyczy głównie produkcji własnych TVP.</p>
-<h3>2. W Unii Europejskiej: przenośność płatnych usług</h3>
-<p>Unijne rozporządzenie o przenośności (2017/1128) daje dostęp do <b>płatnych</b> subskrypcji podczas czasowego pobytu w innym kraju UE. Dla darmowych serwisów to nie jest obowiązek. Po Brexicie ta zasada nie obejmuje Wielkiej Brytanii (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="noopener">źródło: gov.uk</a>).</p>
-<h3>3. VPN z serwerem w Polsce</h3>
-<p>VPN daje Twojemu urządzeniu polski adres IP. Serwis widzi wtedy użytkownika z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia. Dlatego sprawdzamy to codziennie.</p>
-""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "Nie zawsze potrzebne"), ("Blokada", "Po adresie IP, zależy od materiału"), ("Nasz test", "Codziennie, program „Jeden z dziesięciu”")],
-                     [("/porownanie-vpn", "Porównanie VPN"), ("/jak-testujemy", "Jak testujemy")]))
-    + steps("TVP VOD")
-    + prose(f"""
-<h2>Co zauważyliśmy w testach</h2>
-<ul>
-  <li><b>Reklamy przed programem.</b> W naszych testach TVP VOD pokazywał około 2,5 minuty reklam, zanim ruszył program. Poczekaj, zanim uznasz, że coś nie działa.</li>
-  <li><b>Komunikat o adblocku.</b> Gdy bot używał serwera DNS dostawcy VPN (Proton VPN, {CHECKED}), TVP VOD pokazał komunikat „Wykryto wtyczkę adblock”. Po zmianie DNS na neutralny (1.1.1.1) film ruszył. Jeśli widzisz ten komunikat, wyłącz w aplikacji VPN blokowanie reklam.</li>
-  <li><b>Błąd „Wystąpił problem z materiałem”.</b> Tego samego dnia ten sam serwer raz działał, a raz TVP VOD pokazał ten błąd dwa razy z rzędu. Zmiana serwera na inny polski albo ponowna próba po kilku minutach często pomaga.</li>
-</ul>
-<p class="note">To są obserwacje z naszych testów, nie obietnica. Aktualny wynik jest zawsze na górze tej strony.</p>
-""", "prosec alt", shot("tvpvod", "TVP VOD"))
-    + faq([LEGAL_Q, FREE_Q, TV_Q,
-           ("Czy potrzebuję konta w TVP VOD?", "W naszym teście program „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty.")]))
-
-PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test VPN | Polski Streaming Monitor",
-    "Player za granicą: darmowa część serwisu, pakiet Player International i wynik codziennego testu VPN.",
-    band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
-         "Player ma darmowe materiały z reklamami i płatne pakiety. Za granicą część z nich jest zablokowana. Poniżej są sposoby i wynik naszego testu.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
-    + svc_result("player", "Player")
-    + prose("""
-<h2>Co wybrać</h2>
-<h3>1. Player International: oficjalna opcja</h3>
-<p>Player ma własny pakiet dla widzów za granicą. Serwis opisuje go tak: „dostęp do twoich ulubionych kanałów TVN i VOD z zagranicy”. To legalna droga bez VPN. Zakres i cenę sprawdź na stronie <a href="https://player.pl/playerplus/player-international" target="_blank" rel="noopener">Player International</a>, bo nie obejmuje całej oferty.</p>
-<h3>2. W Unii Europejskiej: przenośność płatnych pakietów</h3>
-<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, unijne przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Nie dotyczy to Wielkiej Brytanii.</p>
-<h3>3. VPN z serwerem w Polsce</h3>
-<p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. Testujemy darmowy materiał: bot włącza „Fakty” bez logowania i sprawdza, czy film gra 60 sekund.</p>
-""", "prosec", brief([("Darmowa część", "Tak, z reklamami"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, program „Fakty”")],
-                     [("/porownanie-vpn", "Porównanie VPN"), ("/jak-testujemy", "Jak testujemy")]))
-    + steps("Player")
-    + prose(f"""
-<h2>Co zauważyliśmy w testach</h2>
-<ul>
-  <li><b>Materiały są zabezpieczone (DRM).</b> Player szyfruje wideo. W zwykłej przeglądarce Chrome działa to bez dodatków, także przez VPN.</li>
-  <li><b>Blokowanie reklam zatrzymuje film.</b> Gdy reklamy się nie ładują, Player pokazuje „Wyłącz blokowanie reklam, aby oglądać”. Zdarzyło się to z serwerem DNS dostawcy VPN (Proton VPN, {CHECKED}). Wyłącz w aplikacji VPN blokowanie reklam.</li>
-  <li><b>Czarny ekran.</b> W jednym z testów ekran odtwarzacza został czarny, a druga próba po chwili zadziałała. Taki wynik oznaczamy jako „Niestabilny”.</li>
-</ul>
-<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy.</p>
-""", "prosec alt", shot("player", "Player"))
-    + faq([LEGAL_Q, FREE_Q, TV_Q]))
-
-PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming Monitor",
-    "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
-    band('<a href="/">Polska telewizja za granicą</a> / Polsat Box Go', "Jak oglądać Polsat Box Go za granicą",
-         "Polsat Box Go wymaga konta, a większość treści jest płatna. Tego serwisu jeszcze nie testujemy, więc na tej stronie są tylko sprawdzone fakty i źródła.",
-         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span></div>')
-    + prose(f"""
-<p class="note"><b>Nie testujemy jeszcze Polsat Box Go.</b> Do testu potrzebny jest płatny pakiet. Nie publikujemy wyników, których sami nie zmierzyliśmy. Gdy zaczniemy testy, wynik pojawi się na tej stronie.</p>
-
-<h2>Co sprawdziliśmy sami ({CHECKED})</h2>
-<ul>
-  <li>Adres polsatgo.pl przekierowuje teraz do polsatboxgo.pl. Osobnego darmowego serwisu Polsat Go już tam nie ma.</li>
-  <li>Próba odtworzenia serialu bez konta kończy się przekierowaniem na stronę logowania.</li>
-</ul>
-
-<h2>Sposoby</h2>
-<h3>1. W Unii Europejskiej: przenośność</h3>
-<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Kluczowe jest słowo „czasowo”: dotyczy to wyjazdu, a nie stałego mieszkania za granicą. Zasada nie obejmuje Wielkiej Brytanii ani USA.</p>
-<h3>2. Pakiet dla widzów za granicą</h3>
-<p>Według serwisów <a href="https://bezprawnik.pl/jak-ogladac-tv-za-granica/" target="_blank" rel="noopener">Bezprawnik</a> i <a href="https://android.com.pl/sponsorowany/436490-polsat-box-go-co-wybrac-roznice-grupa-plus/" target="_blank" rel="noopener">Android.com.pl</a> Polsat Box Go ma pakiet „Polonia” dla osób przebywających poza Polską, z treściami, na które licencja pozwala za granicą. Nie potwierdziliśmy tego w oficjalnym cenniku. Aktualną ofertę sprawdź na <a href="https://polsatboxgo.pl/pakiety" target="_blank" rel="noopener">polsatboxgo.pl/pakiety</a>.</p>
-<h3>3. VPN z serwerem w Polsce</h3>
-<p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Zobacz <a href="/porownanie-vpn">porównanie VPN</a> i wyniki dla serwisów, które testujemy: <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Player</a>.</p>
-""", "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Przenośność płatnych pakietów"), ("Nasz test", "Jeszcze nie testujemy")],
-                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")]))
-    + faq([LEGAL_Q, TV_Q,
-           ("Kiedy zaczniecie testować Polsat Box Go?", "Gdy strona będzie miała budżet na płatny pakiet. Do tego czasu ta strona zawiera tylko fakty ze źródeł.")]))
 
 FACTS = [
     ("proton", "Proton VPN", "https://protonvpn.com", "Tak. Polska jest też w planie darmowym.", "30 dni", "Nie podano na sprawdzonej stronie", "Android TV, Apple TV, Fire TV",
@@ -339,7 +225,133 @@ def facts_sections():
     return out
 
 
-PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Streaming Monitor",
+# ---------------------------------------------------------------- pages
+
+PAGES = {}
+
+PAGES["/"] = ("Polska telewizja za granicą: poradniki i testy VPN | Polski Streaming",
+              "Jak oglądać TVP VOD, Player i Polsat Box Go za granicą. Poradniki, porównanie VPN i codzienny test z prawdziwymi zrzutami ekranu.",
+              band("Polska telewizja za granicą", "Polska telewizja za granicą: jak oglądać i który VPN wybrać",
+                   "Poradniki dla Polaków w Wielkiej Brytanii, Niemczech, Holandii i USA. Do tego codzienny test: sprawdzamy, czy film naprawdę gra przez VPN.",
+                   '<div class="cta2"><a class="btn" href="/porownanie-vpn">Porównanie VPN</a><a class="btn ghost" href="/tvp-vod-za-granica">Jak oglądać TVP VOD</a></div>', image=True)
+              + """<section class="guides"><div class="wrap">
+  <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, który chcesz oglądać. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
+  <ul class="glist">
+    <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
+    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowa część Playera, pakiet Player International i test z VPN.</span></a></li>
+    <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
+  </ul>
+</div></section>"""
+              + f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Porównanie VPN z serwerem w Polsce</h2><p>Żeby oglądać polskie serwisy, VPN musi mieć serwer w Polsce. Fakty pochodzą ze stron dostawców, a kolumna „Nasz test” z naszego bota.</p></div>
+  {facts_table()}
+  <p class="monly muted">Na telefonie pełne dane są na stronie porównania.</p>
+  <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
+</div></section>"""
+              + """<section class="history"><div class="wrap narrowpad">
+  <div class="shead"><h2>Ostatni test</h2><p>Bot łączy się przez VPN z serwerem w Polsce, włącza film i sprawdza, czy gra 60 sekund. Robi to każdego ranka i zapisuje zrzut ekranu.</p></div>
+  <div class="svc lastbox" data-last><p class="muted">Ładowanie wyniku testu…</p></div>
+  <p class="after"><a href="/wyniki-testow">Pełne wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
+</div></section>"""
+              + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
+                     ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
+                     LEGAL_Q, FREE_Q, TV_Q,
+                     ("Jak zarabia ta strona?", "Strona będzie zarabiać na linkach partnerskich do dostawców VPN. Dziś linki nie są jeszcze partnerskie. Prowizja nie zmienia wyników testu ani kolejności w tabeli.")]))
+
+PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
+    "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
+    band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
+         "Każdego ranka bot sprawdza, czy film gra przez VPN. Tu są wyniki ostatniego testu, historia i zrzuty ekranu.", WHEN)
+    + RESULTS + HISTORY + EVIDENCE)
+
+PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: codzienny test VPN | Polski Streaming",
+    "TVP VOD za granicą: trzy sposoby, wynik codziennego testu VPN i zrzut ekranu jako dowód.",
+    band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
+         "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Poniżej są trzy sposoby i wynik naszego codziennego testu.",
+         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
+    + svc_result("tvpvod", "TVP VOD")
+    + prose("""
+<h2>Dlaczego TVP VOD nie działa za granicą</h2>
+<p>TVP kupuje prawa do wielu filmów, seriali i transmisji tylko na terytorium Polski. Serwis sprawdza adres IP urządzenia. Gdy adres jest zagraniczny, część materiałów się nie włącza.</p>
+<p>Nie wszystko jest zablokowane. Własne produkcje TVP często działają także za granicą. TVP ma w menu serwisu stronę <a href="https://vod.tvp.pl/tvp-vod-za-granica" target="_blank" rel="noopener">TVP VOD za granicą</a>, na której można sprawdzić dostępność.</p>
+
+<h2>Trzy sposoby</h2>
+<h3>1. Sprawdź, czy materiał działa bez VPN</h3>
+<p>Otwórz program na vod.tvp.pl. Jeśli gra, nie potrzebujesz niczego więcej. To dotyczy głównie produkcji własnych TVP.</p>
+<h3>2. W Unii Europejskiej: przenośność płatnych usług</h3>
+<p>Unijne rozporządzenie o przenośności (2017/1128) daje dostęp do <b>płatnych</b> subskrypcji podczas czasowego pobytu w innym kraju UE. Dla darmowych serwisów to nie jest obowiązek. Po Brexicie ta zasada nie obejmuje Wielkiej Brytanii (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="noopener">źródło: gov.uk</a>).</p>
+<h3>3. VPN z serwerem w Polsce</h3>
+<p>VPN daje Twojemu urządzeniu polski adres IP. Serwis widzi wtedy użytkownika z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia. Dlatego sprawdzamy to codziennie.</p>
+""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "Nie zawsze potrzebne"), ("Blokada", "Po adresie IP, zależy od materiału"), ("Nasz test", "Codziennie, program „Jeden z dziesięciu”")],
+                     [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
+    + steps("TVP VOD")
+    + prose(f"""
+<h2>Co zauważyliśmy w testach</h2>
+<ul>
+  <li><b>Reklamy przed programem.</b> W naszych testach TVP VOD pokazywał około 2,5 minuty reklam, zanim ruszył program. Poczekaj, zanim uznasz, że coś nie działa.</li>
+  <li><b>Komunikat o adblocku.</b> Gdy bot używał serwera DNS dostawcy VPN (Proton VPN, {CHECKED}), TVP VOD pokazał komunikat „Wykryto wtyczkę adblock”. Po zmianie DNS na neutralny (1.1.1.1) film ruszył. Jeśli widzisz ten komunikat, wyłącz w aplikacji VPN blokowanie reklam.</li>
+  <li><b>Błąd „Wystąpił problem z materiałem”.</b> Tego samego dnia ten sam serwer raz działał, a raz TVP VOD pokazał ten błąd dwa razy z rzędu. Zmiana serwera na inny polski albo ponowna próba po kilku minutach często pomaga.</li>
+</ul>
+<p class="note">To są obserwacje z naszych testów, nie obietnica. Aktualny wynik jest zawsze na górze tej strony.</p>
+""", "prosec alt", shot("tvpvod", "TVP VOD"))
+    + faq([LEGAL_Q, FREE_Q, TV_Q,
+           ("Czy potrzebuję konta w TVP VOD?", "W naszym teście program „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty.")]))
+
+PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: codzienny test VPN | Polski Streaming",
+    "Player za granicą: darmowa część serwisu, pakiet Player International i wynik codziennego testu VPN.",
+    band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
+         "Player ma darmowe materiały z reklamami i płatne pakiety. Za granicą część z nich jest zablokowana. Poniżej są sposoby i wynik naszego testu.",
+         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">—</b></span></div>')
+    + svc_result("player", "Player")
+    + prose("""
+<h2>Co wybrać</h2>
+<h3>1. Player International: oficjalna opcja</h3>
+<p>Player ma własny pakiet dla widzów za granicą. Serwis opisuje go tak: „dostęp do twoich ulubionych kanałów TVN i VOD z zagranicy”. To legalna droga bez VPN. Zakres i cenę sprawdź na stronie <a href="https://player.pl/playerplus/player-international" target="_blank" rel="noopener">Player International</a>, bo nie obejmuje całej oferty.</p>
+<h3>2. W Unii Europejskiej: przenośność płatnych pakietów</h3>
+<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, unijne przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Nie dotyczy to Wielkiej Brytanii.</p>
+<h3>3. VPN z serwerem w Polsce</h3>
+<p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. Testujemy darmowy materiał: bot włącza „Fakty” bez logowania i sprawdza, czy film gra 60 sekund.</p>
+""", "prosec", brief([("Darmowa część", "Tak, z reklamami"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, program „Fakty”")],
+                     [("/porownanie-vpn", "Porównanie VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
+    + steps("Player")
+    + prose(f"""
+<h2>Co zauważyliśmy w testach</h2>
+<ul>
+  <li><b>Materiały są zabezpieczone (DRM).</b> Player szyfruje wideo. W zwykłej przeglądarce Chrome działa to bez dodatków, także przez VPN.</li>
+  <li><b>Blokowanie reklam zatrzymuje film.</b> Gdy reklamy się nie ładują, Player pokazuje „Wyłącz blokowanie reklam, aby oglądać”. Zdarzyło się to z serwerem DNS dostawcy VPN (Proton VPN, {CHECKED}). Wyłącz w aplikacji VPN blokowanie reklam.</li>
+  <li><b>Czarny ekran.</b> W jednym z testów ekran odtwarzacza został czarny, a druga próba po chwili zadziałała. Taki wynik oznaczamy jako „Niestabilny”.</li>
+</ul>
+<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy.</p>
+""", "prosec alt", shot("player", "Player"))
+    + faq([LEGAL_Q, FREE_Q, TV_Q]))
+
+PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
+    "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
+    band('<a href="/">Polska telewizja za granicą</a> / Polsat Box Go', "Jak oglądać Polsat Box Go za granicą",
+         "Polsat Box Go wymaga konta, a większość treści jest płatna. Tego serwisu jeszcze nie testujemy, więc na tej stronie są tylko sprawdzone fakty i źródła.",
+         f'<div class="when mono"><span>Aktualizacja poradnika: <b>{UPDATED}</b></span></div>')
+    + prose(f"""
+<p class="note"><b>Nie testujemy jeszcze Polsat Box Go.</b> Do testu potrzebny jest płatny pakiet. Nie publikujemy wyników, których sami nie zmierzyliśmy. Gdy zaczniemy testy, wynik pojawi się na tej stronie.</p>
+
+<h2>Co sprawdziliśmy sami ({CHECKED})</h2>
+<ul>
+  <li>Adres polsatgo.pl przekierowuje teraz do polsatboxgo.pl. Osobnego darmowego serwisu Polsat Go już tam nie ma.</li>
+  <li>Próba odtworzenia serialu bez konta kończy się przekierowaniem na stronę logowania.</li>
+</ul>
+
+<h2>Sposoby</h2>
+<h3>1. W Unii Europejskiej: przenośność</h3>
+<p>Jeśli masz płatny pakiet i jesteś czasowo w innym kraju UE, przepisy o przenośności (2017/1128) dają Ci dostęp do Twojej subskrypcji. Kluczowe jest słowo „czasowo”: dotyczy to wyjazdu, a nie stałego mieszkania za granicą. Zasada nie obejmuje Wielkiej Brytanii ani USA.</p>
+<h3>2. Pakiet dla widzów za granicą</h3>
+<p>Według serwisów <a href="https://bezprawnik.pl/jak-ogladac-tv-za-granica/" target="_blank" rel="noopener">Bezprawnik</a> i <a href="https://android.com.pl/sponsorowany/436490-polsat-box-go-co-wybrac-roznice-grupa-plus/" target="_blank" rel="noopener">Android.com.pl</a> Polsat Box Go ma pakiet „Polonia” dla osób przebywających poza Polską, z treściami, na które licencja pozwala za granicą. Nie potwierdziliśmy tego w oficjalnym cenniku. Aktualną ofertę sprawdź na <a href="https://polsatboxgo.pl/pakiety" target="_blank" rel="noopener">polsatboxgo.pl/pakiety</a>.</p>
+<h3>3. VPN z serwerem w Polsce</h3>
+<p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Zobacz <a href="/porownanie-vpn">porównanie VPN</a> i wyniki dla serwisów, które testujemy: <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Player</a>.</p>
+""", "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Przenośność płatnych pakietów"), ("Nasz test", "Jeszcze nie testujemy")],
+                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")]))
+    + faq([LEGAL_Q, TV_Q,
+           ("Kiedy zaczniecie testować Polsat Box Go?", "Gdy strona będzie miała budżet na płatny pakiet. Do tego czasu ta strona zawiera tylko fakty ze źródeł.")]))
+
+PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Streaming",
     "Pięciu dostawców VPN: serwery w Polsce, zwrot pieniędzy, liczba urządzeń i wyniki naszych testów z polskimi serwisami.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Porównanie VPN z serwerem w Polsce",
          "Dwa rodzaje danych w jednej tabeli: nasze wyniki testów i fakty ze stron producentów. Zawsze widać, które jest które.",
@@ -362,7 +374,7 @@ PAGES["/porownanie-vpn"] = ("Porównanie VPN z serwerem w Polsce | Polski Stream
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go za granicą")]))
     + f'<section class="faqs"><div class="wrap"><div class="shead"><h2>Dostawcy po kolei</h2><p>Fakty i źródła. To nie są recenzje: recenzję napiszemy dopiero dla dostawcy, którego sami używaliśmy w testach.</p></div><div class="provgrid">{facts_sections()}</div></div></section>')
 
-PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Streaming Monitor",
+PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Streaming",
     "Metodologia: bot łączy się z polskim serwerem VPN, sprawdza adres IP, włącza film na 60 sekund i zapisuje zrzut ekranu.",
     band('<a href="/">Polska telewizja za granicą</a> / Jak testujemy', "Jak testujemy",
          "Ten sam test każdego ranka. Wyniki publikujemy także wtedy, gdy są złe dla dostawcy.",
@@ -404,7 +416,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
   <li>Nie usuwamy złych dni z historii.</li>
 </ul>
 """, "prosec", brief([("Częstotliwość", "Raz dziennie, rano"), ("Kryterium", "60 s filmu bez przerwy"), ("Dowód", "Zrzut ekranu z każdej próby"), ("Historia", "30 dni, także złe dni")],
-                     [("/#wyniki", "Wyniki ostatniego testu"), ("/#dowod", "Zrzuty ekranu")])))
+                     [("/wyniki-testow", "Wyniki ostatniego testu"), ("/wyniki-testow#dowod", "Zrzuty ekranu")])))
 
 EXTRA_CSS = """
 /* multi-page additions */
@@ -454,6 +466,12 @@ a.prov{text-decoration:none}
 .sidefig{margin:0}
 .sidefig img{display:block;width:100%;height:auto;border:1px solid var(--line)}
 .figcap{font-size:13px;color:var(--muted);margin-top:8px}
+.cta2{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn.ghost{background:transparent;color:var(--cream-ink);border:1px solid var(--cream-ink)}
+.lastrow{display:grid;grid-template-columns:30px minmax(160px,260px) minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.lastrow img{width:30px;height:30px}
+.lastrow .pst{display:inline-block;margin-right:22px;font-size:14px}
+.egrid{grid-template-columns:minmax(0,760px) minmax(0,420px);justify-content:space-between}
 .scrollx{overflow-x:auto}
 .monly{display:none}
 table.facts{min-width:980px}
@@ -468,8 +486,9 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .kv dt,.kv dd{margin:0;padding:9px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--muted)}
 .provsec p{margin:0 0 12px;font-size:14px}
-@media (max-width:1180px){.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
+  .lastrow{grid-template-columns:30px minmax(0,1fr);gap:6px 12px}.lastrow>span{grid-column:2}
   .scrollx{display:none}.monly{display:block}
   .cnav a{padding:10px 12px}
   .svcrow{grid-template-columns:30px minmax(0,1fr) auto;gap:6px 12px}
@@ -501,7 +520,10 @@ def build_js():
         "'<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona '+esc(p.name)+'</a></details>'")
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
-    rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy.'")
+    rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy. Na test czekają: '+RUN.providers.filter(function(p){return !p.tested}).map(function(p){return p.name}).join(', ')+'.'")
+    rep("data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});", "tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});")
+    rep("    RUN.providers.forEach(function(p){\n      var o=0,t=0,cells='';", "    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){\n      var o=0,t=0,cells='';")
+    rep("$('hprov').innerHTML=RUN.providers.map(", "$('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(")
     rep("    render();\n  }",
         "    all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;"
         "h+='<div class=\"svcrow\">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(r.status)+'<span class=\"muted\">Test: '+fmtDT(r.tested_at)+(r.reason?'. '+esc(r.reason):'')+'</span>'"
@@ -509,6 +531,8 @@ def build_js():
         "el.innerHTML=h||'<p class=\"muted\" style=\"padding:14px 0\">Tego serwisu jeszcze nie testujemy.</p>'});\n"
         "    all('[data-prov-status]',function(el){var p=RUN.providers.filter(function(x){return x.id===el.dataset.provStatus})[0];"
         "el.innerHTML=p&&p.tested?SVON.map(function(s){return '<span class=\"pst\">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join(''):st('none')});\n"
+        "    all('[data-last]',function(el){var h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){"
+        "h+='<div class=\"lastrow\">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b><span>'+SVON.map(function(s){return '<span class=\"pst\">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join('')+'</span><span class=\"muted\">Test: '+fmtDT(RUN.finished_at)+'</span></div>'});el.innerHTML=h});\n"
         "    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\" alt=\"Zrzut ekranu z testu\" loading=\"lazy\" width=\"1440\" height=\"900\"></a>':''});\n"
         "    render();\n  }")
     rep("get('data/latest.json'),get('data/history.json')", "get('/data/latest.json'),get('/data/history.json')")

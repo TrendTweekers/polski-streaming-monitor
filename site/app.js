@@ -44,14 +44,14 @@
   function best(){return sorted()[0]}
 
   function renderTable(){
-    var c=C[cur],data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});
+    var c=C[cur],tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});
     $('hero').hidden=cur!=='uk';$('credit').hidden=cur!=='uk';$('open').classList.toggle('solo',cur!=='uk');
     $('crumb').textContent=c.label;$('where').textContent=c.where;$('tcountry').textContent=c.label;
     $('last').textContent=fmtDT(RUN.finished_at);$('next').textContent=dm(addDays(RUN.date,1))+'.'+addDays(RUN.date,1).slice(0,4)+', rano';
     $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy.';
+    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy. Na test czekają: '+RUN.providers.filter(function(p){return !p.tested}).map(function(p){return p.name}).join(', ')+'.';
     var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
     var h='',m='';
     data.forEach(function(p){
@@ -116,7 +116,7 @@
       $('chart').innerHTML='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Średnia skuteczność z 7 dni">'+g+'</svg>';
     }
     var mx='';
-    RUN.providers.forEach(function(p){
+    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){
       var o=0,t=0,cells='';
       days.forEach(function(d){var s=ds(p.id,d);cells+='<i class="'+(s==='ok'?'':s)+'" title="'+dm(d)+': '+LABEL[s]+'"></i>';if(s!=='none'){t++;if(s==='ok')o++}});
       mx+='<div class="mrow'+(p.id===hp?' on':'')+'"><button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button><div class="cells" role="img" aria-label="'+esc(p.name)+': '+o+' z '+t+' dni testów">'+cells+'</div><div class="pct">'+(t?Math.round(o/t*100)+'%':'—')+'</div></div>';
@@ -137,12 +137,13 @@
     });
     $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Plan w teście</th><th>Oferta</th>';
     $('cnav').innerHTML=cn;$('countries').innerHTML=cs;
-    $('hprov').innerHTML=RUN.providers.map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button>'}).join('');
+    $('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button>'}).join('');
     $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');
     $('legend').innerHTML=['ok','unstable','blocked','none'].map(st).join('');
     $('cats').innerHTML=['ok','unstable','blocked','none'].map(function(s){return '<li>'+st(s)+'<span>'+DESC[s]+'</span></li>'}).join('');
     all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;h+='<div class="svcrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(r.status)+'<span class="muted">Test: '+fmtDT(r.tested_at)+(r.reason?'. '+esc(r.reason):'')+'</span>'+(r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener">zrzut ekranu</a>':'<span></span>')+'</div>'});el.innerHTML=h||'<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'});
     all('[data-prov-status]',function(el){var p=RUN.providers.filter(function(x){return x.id===el.dataset.provStatus})[0];el.innerHTML=p&&p.tested?SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join(''):st('none')});
+    all('[data-last]',function(el){var h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){h+='<div class="lastrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b><span>'+SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join('')+'</span><span class="muted">Test: '+fmtDT(RUN.finished_at)+'</span></div>'});el.innerHTML=h});
     all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu" loading="lazy" width="1440" height="900"></a>':''});
     render();
   }

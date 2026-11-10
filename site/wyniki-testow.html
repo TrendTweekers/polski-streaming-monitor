@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Wyniki testów VPN z polskimi serwisami | Polski Streaming</title>
+<meta name="description" content="Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.">
+<link rel="canonical" href="https://polskistreaming.pl/wyniki-testow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
+  <nav class="cnav" aria-label="Główne"><a href="/tvp-vod-za-granica">TVP VOD</a><a href="/player-za-granica">Player</a><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/wyniki-testow" aria-current="page">Wyniki testów</a><a href="/jak-testujemy">Jak testujemy</a></nav>
+</div></header>
+<div class="open solo"><div class="wrap">
+  <div class="otext">
+    <div class="crumb"><a href="/">Polska telewizja za granicą</a> / Wyniki testów</div>
+    <h1>Wyniki testów</h1>
+    <p>Każdego ranka bot sprawdza, czy film gra przez VPN. Tu są wyniki ostatniego testu, historia i zrzuty ekranu.</p>
+    <div class="when mono">
+      <span>Ostatni test: <b id="last">—</b></span>
+      <span>Kolejny: <b id="next">—</b></span>
+    </div>
+  </div>
+  
+</div></div><section class="results" id="wyniki"><div class="wrap">
+  <div class="rhead">
+    <div><h2>Wyniki ostatniego testu</h2><p id="scope">Kliknij nazwę VPN, aby zobaczyć szczegóły testu.</p></div>
+    <div class="nums">
+      <div><b id="s1">—</b><span>testowanych VPN-ów działa z TVP VOD</span></div>
+      <div><b id="s2">—</b><span>prób w ostatnim teście</span></div>
+      <div><b id="s3">—</b><span>dni testów w historii</span></div>
+    </div>
+  </div>
+  <div class="sortbar" role="group" aria-label="Sortowanie">Sortuj według:
+    <button type="button" data-sort="works" aria-pressed="true">działających serwisów</button>
+    <button type="button" data-sort="speed" aria-pressed="false">prędkości</button>
+  </div>
+  <div class="desk"><table><thead><tr id="thead"></tr></thead><tbody id="rows"></tbody></table></div>
+  <div class="mlist" id="mlist"></div>
+  <div class="rfoot">
+    <div class="legend" id="legend"></div>
+    <div>Kolejność zależy tylko od wyniku testu. <a href="/jak-testujemy">Jak testujemy</a></div>
+  </div>
+</div></section><section class="history" id="historia"><div class="wrap">
+  <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może przestać działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
+  <div class="hctl">
+    <div class="seg" role="group" aria-label="VPN" id="hprov"></div>
+    <div class="seg" role="group" aria-label="Serwis" id="hserv"></div>
+  </div>
+  <div class="hgrid">
+    <div class="chartbox"><div id="chart"></div></div>
+    <div class="hsum">
+      <div><b id="h1">—</b><span>udanych testów</span></div>
+      <div><b id="h2">—</b><span>dni, w których nie działał</span></div>
+      <div><b id="h3">—</b><span>dni testów w ostatnich 30 dniach</span></div>
+    </div>
+  </div>
+  <div class="matrix">
+    <div id="matrix"></div>
+    <div class="maxis" aria-hidden="true"><span></span><div><span id="ax0"></span><span id="ax1"></span><span id="ax2"></span></div><span></span></div>
+  </div>
+</div></section><section class="evidence" id="dowod"><div class="wrap">
+  <div class="shead"><h2>Dowód z ostatniego testu</h2><p>Bot robi zrzut ekranu przy każdej próbie, także nieudanej. Kliknij zrzut, aby otworzyć go w pełnym rozmiarze.</p></div>
+  <div class="egrid">
+    <div><div id="shot"></div><div class="thumbs" id="thumbs"></div></div>
+    <dl>
+      <dt>Serwis</dt><dd id="e0">—</dd>
+      <dt>VPN</dt><dd id="e1">—</dd>
+      <dt>Serwer VPN</dt><dd id="e2b" class="mono">—</dd>
+      <dt>Adres IP serwera</dt><dd id="e2">—</dd>
+      <dt>Data</dt><dd id="e4" class="mono">—</dd>
+      <dt>Godzina</dt><dd id="e5" class="mono">—</dd>
+      <dt>Wynik</dt><dd id="e3"></dd>
+      <dt>Pomiar</dt><dd id="e6">—</dd>
+      <dt>Kryterium</dt><dd>60 s filmu bez przerwy</dd>
+    </dl>
+  </div>
+</div></section>
+<footer><div class="wrap">
+  <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
+  <nav><a href="/jak-testujemy">Jak testujemy</a><a href="/porownanie-vpn">Porównanie VPN</a><a href="/jak-testujemy#linki">Linki partnerskie</a></nav>
+</div></footer>
+<script src="/app.js" defer></script>
+</body>
+</html>
