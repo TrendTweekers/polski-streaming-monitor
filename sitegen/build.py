@@ -573,6 +573,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
     <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów.</span></a></li>
     <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test.</span></a></li>
     <li><a href="/polska-telewizja-w-niemczech"><b>Polska telewizja w Niemczech</b><span>Satelita, pakiety Vodafone i Telekom z cenami, polskie serwisy i VPN.</span></a></li>
+    <li><a href="/polska-telewizja-w-uk"><b>Polska telewizja w UK</b><span>Co działa po brexicie: satelita, Player International, TV Licence i VPN.</span></a></li>
     <li><a href="/tvp-vod-material-niedostepny-w-twoim-kraju"><b>TVP VOD: „materiał jest niedostępny w Twoim kraju”</b><span>Jak wygląda komunikat, skąd się bierze i trzy wyjścia.</span></a></li>
     <li><a href="/player-niedostepny-w-twojej-lokalizacji"><b>„Player jest niedostępny w Twojej lokalizacji”</b><span>Blokada całego serwisu poza Unią i co da się zrobić.</span></a></li>
     <li><a href="/tvp-sport-material-niedostepny"><b>TVP Sport: „materiał jest niedostępny”</b><span>Trzy wersje komunikatu i próba przed meczem.</span></a></li>
@@ -906,7 +907,7 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
 """.replace("__DESTATIS__", SRC_DESTATIS).replace("__KINGOFSAT__", SRC_KOS).replace("__TELEKOM__", SRC_TELEKOM).replace("__VODAFONE__", SRC_VODAFONE)
    .replace("__PLAYERINT__", SRC_PLAYERINT).replace("__POLONIA__", SRC_POLONIA).replace("__TVPFAQ__", SRC_TVPFAQ),
     "prosec", brief([("Za darmo", "Satelita Hot Bird 13°E"), ("Najtańszy pakiet", "4,94 € (Telekom)"), ("TVP1, TVP2, Polsat, TVN", "Tylko przez polskie serwisy"), ("Ceny sprawdzone", "11.11.2026")],
-                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
+                     [("/polska-telewizja-w-uk", "Polska telewizja w UK"), ("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
     + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy w Niemczech da się oglądać TVP1 i TVP2 na żywo?", "Nie ma ich w ofertach niemieckich operatorów ani wśród niekodowanych kanałów na satelicie Hot Bird. Programy TVP są w serwisie TVP VOD, a za granicą część z nich jest zablokowana."),
            ("Ile kosztuje polska telewizja w Niemczech?", "Kanały niekodowane z satelity są bezpłatne. Pakiet polski w Telekom MagentaTV kosztuje 4,94 € za miesiąc, a w Vodafone 8,99 € za miesiąc. Player International kosztuje 50 zł za 30 dni."),
@@ -1054,6 +1055,80 @@ PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedos
            ("Czy aplikacja TVP Sport zachowuje się inaczej niż strona?", "Testujemy stronę w przeglądarce. Aplikacja korzysta z tego samego adresu IP, więc blokada regionalna działa w niej tak samo."),
            ("Czy transmisja zadziała, jeśli wideo działa?", "Nie mamy na to wyniku testu. Transmisje mają osobne licencje, dlatego zrób próbę przed meczem i miej drugi polski serwer w zapasie.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/tvp-sport-za-granica", "TVP Sport"), ("/tvp-sport-material-niedostepny", "Materiał niedostępny")])
+
+PAGES["/polska-telewizja-w-uk"] = ("Polska telewizja w UK: co działa po brexicie | Polski Streaming",
+    "Polska telewizja w Wielkiej Brytanii: brak polskich kanałów w Sky i Virgin, druga antena na Hot Bird, Player International, TV Licence i VPN.",
+    band('<a href="/">Polska telewizja za granicą</a> / Wielka Brytania', "Polska telewizja w UK",
+         "Po brexicie polskie serwisy działają w Wielkiej Brytanii inaczej niż w Unii. Sprawdziliśmy operatorów, satelitę, oficjalne pakiety i zasady TV Licence.",
+         f'<div class="when mono">{BYLINE}<span>Dane sprawdzone: <b>11.11.2026</b></span></div>', image="livingroom")
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> W Wielkiej Brytanii jest trudniej niż w krajach Unii. Na listach kanałów Sky i Virgin Media nie znaleźliśmy żadnego polskiego kanału. Po brexicie nie działa też unijna zasada, która pozwala zabrać polski abonament za granicę. Zostają trzy drogi: druga antena satelitarna na darmowe kanały, pakiet Player International albo VPN z serwerem w Polsce.</p>
+
+<p>W Anglii i Walii mieszka 743 000 osób urodzonych w Polsce (spis powszechny 2021, <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/internationalmigration/bulletins/internationalmigrationenglandandwales/census2021" target="_blank" rel="nofollow noopener">ONS</a>). W Szkocji jest to 75 400 osób (spis 2022, <a href="https://www.scotlandscensus.gov.uk/2022-reports/scotland-s-census-2022-demography-and-migration/" target="_blank" rel="nofollow noopener">Scotland's Census</a>).</p>
+
+<h2>Co zmienił brexit</h2>
+<p>W Unii Europejskiej działa rozporządzenie 2017/1128. Dzięki niemu płatny pakiet kupiony w Polsce działa podczas pobytu w innym kraju Unii. Wielka Brytania tę zasadę uchyliła. Rząd pisze wprost: „The EU Portability Regulation no longer applies to UK-EEA travel” (<a href="https://www.gov.uk/guidance/cross-border-portability-of-online-content-services-after-the-transition-period" target="_blank" rel="nofollow noopener">gov.uk</a>).</p>
+<p>W praktyce: polski pakiet Polsat Box Go, Canal+ Online albo TVP VOD nie musi działać w UK, nawet jeśli działa w Niemczech czy w Irlandii. O dostępie decyduje sam serwis.</p>
+
+<h2>Porównanie sposobów</h2>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Sposób</th><th>Co dostajesz</th><th>Koszt</th></tr></thead><tbody>
+<tr><td>Sky, Virgin Media</td><td>Brak polskich kanałów na listach z czerwca 2026</td><td>Nie dotyczy</td></tr>
+<tr><td>Satelita Hot Bird 13°E</td><td>TVP Polonia, Polonia 1, Tele 5 i inne kanały niekodowane</td><td>Jednorazowo antena i montaż</td></tr>
+<tr><td>Player International</td><td>Biblioteka Playera bez reklam, ITVN, ITVN Extra, TVN24</td><td>50 zł za 30 dni</td></tr>
+<tr><td>VPN z serwerem w Polsce</td><td>Polska wersja serwisów: TVP VOD, Player, TVP Sport</td><td>od 6,29 zł za miesiąc</td></tr>
+</tbody></table></div>
+
+<h2>1. Sky i Virgin Media: polskich kanałów brak</h2>
+<p>Sprawdziliśmy listy kanałów prowadzone przez serwis RXTV: <a href="https://rxtvinfo.com/sky-satellite-channel-list-uk/" target="_blank" rel="nofollow noopener">Sky z satelity</a> (stan na 26.06.2026), Sky Glass i Sky Stream (08.06.2026) oraz <a href="https://rxtvinfo.com/virgin-media-channel-list-uk/" target="_blank" rel="nofollow noopener">Virgin Media</a> (28.05.2026). Na żadnej nie ma TVP Polonia, ITVN ani innego polskiego kanału.</p>
+<p>Virgin Media miał kiedyś pakiet „Polish Impreza” z TVP Polonia i ITVN za 8 funtów miesięcznie. Ruszył w 2017 roku. Nie znaleźliśmy potwierdzenia, że jest dziś w sprzedaży, więc zapytaj operatora, zanim podpiszesz umowę.</p>
+
+<h2>2. Satelita: potrzebna druga antena</h2>
+<p>Polskie kanały niekodowane nadają z satelity Hot Bird (13°E). Antena Sky albo Freesat patrzy na inną pozycję, 28,2°E, więc ich nie złapie. Potrzebujesz osobnej czaszy skierowanej na 13°E.</p>
+<ul>
+  <li><b>Rozmiar czaszy:</b> instalatorzy podają co najmniej 70 cm, a najlepiej około 80 cm. W Szkocji i na północy Anglii potrzeba większej (<a href="https://smartaerials.co.uk/blog/how-to-get-polish-satellite-tv-polsat-in-uk" target="_blank" rel="nofollow noopener">Smart Aerials, 2022</a>).</li>
+  <li><b>Dla porównania:</b> do Sky wystarcza 45 cm na południu i 60 cm na północy.</li>
+  <li><b>Co odbierzesz za darmo:</b> TVP Polonia, TVP World, Polonia 1, Tele 5, TVS, Kanał Zero TV i kanały muzyczne. TVP1, TVP2, Polsat i TVN są zakodowane.</li>
+</ul>
+<p>W wynajmowanym mieszkaniu zapytaj właściciela o zgodę na montaż anteny.</p>
+
+<h2>3. Polskie serwisy w UK</h2>
+<h3>Player</h3>
+<p>W tekstach Playera jest komunikat: „materiały w player można odtwarzać tylko na terenie Unii Europejskiej”. Wielka Brytania do Unii nie należy. Z adresu w USA zobaczyliśmy w teście ekran <a href="/player-niedostepny-w-twojej-lokalizacji">„Player jest niedostępny w Twojej lokalizacji”</a>. Z adresu w UK jeszcze nie sprawdzaliśmy.</p>
+<p>Oficjalną drogą jest Player International: 50 zł za 30 dni, z siedmiodniowym okresem próbnym. Zawiera bibliotekę Playera bez reklam oraz kanały ITVN, ITVN Extra i TVN24. Player sprzedaje go w wybranych krajach. Pakiet TVN dla zagranicy był najpierw sprzedawany właśnie w Wielkiej Brytanii (Telepolis, 2019). Źródło: """ + SRC_PLAYERINT + """.</p>
+<h3>TVP VOD i TVP Sport</h3>
+<p>Oba serwisy blokują pojedyncze materiały według adresu IP. W teście z USA TVP VOD pokazał <a href="/tvp-vod-material-niedostepny-w-twoim-kraju">„materiał jest niedostępny w Twoim kraju”</a>, a TVP Sport zablokował nawet krótkie wideo. Z adresu w UK jeszcze nie sprawdzaliśmy, więc otwórz najpierw swój program bez VPN.</p>
+<h3>Polsat Box Go</h3>
+<p>Polsat pisze w pomocy, że serwis „jest dostępny za granicą w wybranych krajach” i że ma osobne pakiety dla widzów z zagranicy. Listy krajów ani ceny tam nie ma. Więcej w poradniku <a href="/polsat-box-go-za-granica">Polsat Box Go za granicą</a>.</p>
+
+<h2>4. VPN z serwerem w Polsce</h2>
+<p>VPN daje polski adres IP, więc serwis pokazuje Ci krajową wersję. W UK to jedyna droga do darmowych odcinków Playera i do pełnej oferty TVP VOD. Używanie VPN jest w Wielkiej Brytanii legalne. Regulamin serwisu może jednak zabraniać omijania blokad regionalnych, a serwisy blokują część adresów VPN.</p>
+<p>Codziennie sprawdzamy darmowy serwer w Polsce z trzema serwisami. Wyniki są w poradniku <a href="/darmowy-vpn-polska-telewizja">Darmowy VPN do polskiej telewizji</a>.</p>
+
+<h2>TV Licence obowiązuje także przy polskiej telewizji na żywo</h2>
+<p>To często pomijana sprawa. TV Licensing pisze, że licencja jest potrzebna do oglądania telewizji na żywo w każdej usłudze, „no matter where it is broadcast or distributed from”, także przy programach z satelity i transmisjach internetowych spoza UK (<a href="https://www.tvlicensing.co.uk/faqs/FAQ16" target="_blank" rel="nofollow noopener">TV Licensing, wersja z sierpnia 2025</a>).</p>
+<ul>
+  <li><b>Licencja jest potrzebna:</b> gdy oglądasz kanał na żywo, na przykład TVP Polonia z satelity albo transmisję meczu w internecie.</li>
+  <li><b>Opłata:</b> 180 funtów za rok (<a href="https://www.gov.uk/find-licences/tv-licence" target="_blank" rel="nofollow noopener">gov.uk</a>).</li>
+  <li><b>Odcinki na żądanie</b> z polskich serwisów to inna sytuacja. Sprawdź zasady na stronie TV Licensing.</li>
+</ul>
+
+<h2>Sport: inna godzina i inni nadawcy</h2>
+<p>W UK jest godzina wcześniej niż w Polsce. Mecz o 20:45 czasu polskiego zaczyna się o 19:45 czasu brytyjskiego.</p>
+<ul>
+  <li><b>Skoki narciarskie:</b> sporty zimowe przeszły w UK z Eurosportu do TNT Sports w lutym 2025 roku. TNT Sports jest płatny, a komentarz jest po angielsku.</li>
+  <li><b>Liga Narodów 2026/27:</b> mecze Anglii pokazuje ITV, a Szkocji, Walii i Irlandii Północnej BBC. Wybrane pozostałe mecze są w Prime Video w systemie płatności za mecz.</li>
+  <li><b>Polski komentarz:</b> jest w TVP Sport. Jak wygląda blokada i jak zrobić próbę przed meczem, opisujemy na stronie <a href="/tvp-sport-material-niedostepny">TVP Sport: materiał niedostępny</a>.</li>
+</ul>
+""",
+    "prosec", brief([("Polskie kanały w Sky i Virgin", "Nie znaleźliśmy"), ("Za darmo", "Hot Bird 13°E, druga antena"), ("Zasada z Unii o abonamencie", "Nie działa w UK"), ("TV Licence", "180 funtów za rok")],
+                     [("/polska-telewizja-w-niemczech", "Polska telewizja w Niemczech"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + faq([("Czy Sky ma polskie kanały?", "Na listach kanałów Sky z czerwca 2026, prowadzonych przez serwis RXTV, nie znaleźliśmy żadnego polskiego kanału."),
+           ("Czy antena Sky odbierze TVP Polonia?", "Nie. Antena Sky patrzy na pozycję 28,2°E, a polskie kanały niekodowane są na Hot Bird 13°E. Potrzebna jest osobna czasza, najlepiej około 80 cm."),
+           ("Czy mój polski abonament Polsat Box Go albo Canal+ zadziała w Anglii?", "Nie ma takiej gwarancji. Unijna zasada o przenoszeniu abonamentu nie obowiązuje w Wielkiej Brytanii od 2021 roku. Zapytaj swój serwis przed wyjazdem."),
+           ("Czy muszę płacić TV Licence, jeśli oglądam tylko polską telewizję?", "Tak, jeśli oglądasz kanały na żywo. TV Licensing pisze, że licencja dotyczy telewizji na żywo niezależnie od kraju nadawania."),
+           ("Czy VPN jest legalny w UK?", "Tak. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/polska-telewizja-w-uk", "Polska telewizja w UK")])
 
 PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
