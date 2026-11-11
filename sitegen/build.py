@@ -131,6 +131,8 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
   <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Test darmowego serwera</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
+<script>window.va=window.va||function(){{(window.vaq=window.vaq||[]).push(arguments)}};</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
 """
@@ -1299,16 +1301,18 @@ PAGES["/o-nas"] = ("O nas | Polski Streaming",
     "page", [("/", "Polska telewizja za granicą"), ("/o-nas", "O nas")])
 
 PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
-    "Polski Streaming nie używa plików cookie, analityki ani reklam śledzących.",
+    "Polski Streaming nie używa plików cookie ani reklam śledzących. Liczymy tylko anonimowe odsłony stron.",
     band('<a href="/">Polska telewizja za granicą</a> / Prywatność', "Prywatność",
-         "Krótko: nie śledzimy Cię.")
+         "Krótko: nie ustawiamy plików cookie i nie śledzimy Cię między stronami.")
     + prose("""
 <h2>Czego nie robimy</h2>
 <ul>
   <li>Nie ustawiamy plików cookie.</li>
-  <li>Nie używamy analityki ani pikseli reklamowych.</li>
+  <li>Nie używamy pikseli reklamowych ani narzędzi, które śledzą Cię na innych stronach.</li>
   <li>Nie ładujemy czcionek, ikon ani skryptów z cudzych serwerów. Wszystko jest na naszej domenie.</li>
 </ul>
+<h2>Statystyki odwiedzin</h2>
+<p>Liczymy odsłony stron narzędziem Vercel Web Analytics. Działa ono bez plików cookie i z naszej domeny. Widzimy tylko liczby zbiorcze: którą stronę otwarto, z jakiego kraju, z jakiej strony ktoś przyszedł i na jakim typie urządzenia. Nie widzimy, kim jesteś, i nie rozpoznajemy Cię przy kolejnej wizycie następnego dnia.</p>
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
