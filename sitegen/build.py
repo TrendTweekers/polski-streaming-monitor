@@ -413,7 +413,7 @@ PROFILE = {
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
                  cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
 }
-PRICE_SRC = {"proton": ("https://protonvpn.com/pl/pricing", "protonvpn.com/pl/pricing"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
+PRICE_SRC = {"proton": ("https://protonvpn.com/pl/l/bf-vpn-offers-2026", "protonvpn.com, oferta Black Friday"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
              "surf": ("https://surfshark.com/pl/pricing", "surfshark.com/pl/pricing"), "expr": ("https://www.expressvpn.com/pl/pricing", "expressvpn.com/pl/pricing"),
              "cybr": ("https://www.cyberghostvpn.com/pl/buy/cyberghost-vpn-3", "cyberghostvpn.com")}
 CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
