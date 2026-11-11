@@ -8,10 +8,15 @@
    }
   },
   "2026-11-11": {
-   "proton": {
-    "tvpvod": "unstable",
+   "nord": {
+    "tvpvod": "ok",
     "player": "ok",
-    "tvpsport": "blocked"
+    "tvpsport": "ok"
+   },
+   "proton": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
    }
   }
  }

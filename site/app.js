@@ -1,7 +1,7 @@
 (function(){
   var LOGO={proton:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',cybr:'/logos/cyberghost-icon.png'};
   var SLOGO={tvpvod:'/logos/tvpvod.png',player:'/logos/player.svg',polsat:'/logos/polsat.svg',canal:'/logos/canal.svg'};
-  var PRICE={proton:['darmowy','0 zł']};
+  var PRICE={proton:['darmowy','0 zł'],nord:['płatny','konto testowe']};
   var C={
     uk:{label:'Wielka Brytania',short:'UK',where:'w UK',flag:'gb'},
     de:{label:'Niemcy',short:'Niemcy',where:'w Niemczech',flag:'de'},
@@ -48,10 +48,10 @@
     $('hero').hidden=cur!=='uk';$('credit').hidden=cur!=='uk';$('open').classList.toggle('solo',cur!=='uk');
     $('crumb').textContent=c.label;$('where').textContent=c.where;$('tcountry').textContent=c.label;
     $('last').textContent=fmtDT(RUN.finished_at);$('next').textContent=dm(addDays(RUN.date,1))+'.'+addDays(RUN.date,1).slice(0,4)+', rano';
-    $('s1').textContent=(tested[0]?works(tested[0]):0)+'/'+SVON.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
+    $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie. Testujemy '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy.';
+    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy.';
     var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
     var h='',m='';
     data.forEach(function(p){

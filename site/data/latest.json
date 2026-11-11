@@ -1,11 +1,60 @@
 {
  "date": "2026-11-11",
- "started_at": "2026-11-11T13:17:48+01:00",
+ "started_at": "2026-11-11T14:43:21+01:00",
  "runner": {
   "country": "US"
  },
  "watch_seconds": 60,
  "providers": [
+  {
+   "id": "nord",
+   "name": "NordVPN",
+   "plan": "plan płatny",
+   "server": "Warszawa",
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-11T14:43:41+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3644,S01E3644,3516431",
+     "played_seconds": 61.1,
+     "wait_seconds": 181,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-11/nord-tvpvod.webp"
+    },
+    "player": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-11T14:47:57+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "played_seconds": 61.3,
+     "wait_seconds": 41,
+     "resolution": "640x360",
+     "drm": true,
+     "shot": "data/shots/2026-11-11/nord-player.webp"
+    },
+    "tvpsport": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-11T14:49:53+01:00",
+     "url": "https://sport.tvp.pl/96413629/polska-wciaz-czeka-na-medal-w-ms-w-strzelectwie-wideo",
+     "played_seconds": 61.1,
+     "wait_seconds": 55,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-11/nord-tvpsport.webp"
+    }
+   },
+   "exit": {
+    "ip": "187.15.161.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS212238 Datacamp Limited"
+   },
+   "speed_mbps": 56.7
+  },
   {
    "id": "proton",
    "name": "Proton VPN",
@@ -14,35 +63,37 @@
    "tested": true,
    "services": {
     "tvpvod": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-11T13:24:07+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-11T14:57:18+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3644,S01E3644,3516431",
-     "played_seconds": 60.7,
-     "wait_seconds": 151,
+     "played_seconds": 60.9,
+     "wait_seconds": 133,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-11/proton-tvpvod.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-11/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-11T13:28:05+01:00",
+     "tested_at": "2026-11-11T15:00:46+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
-     "wait_seconds": 36,
+     "played_seconds": 61.2,
+     "wait_seconds": 41,
      "resolution": "640x360",
      "drm": true,
      "shot": "data/shots/2026-11-11/proton-player.webp"
     },
     "tvpsport": {
-     "status": "blocked",
-     "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-11T13:40:51+01:00",
-     "url": "https://sport.tvp.pl/96413629/polska-wciaz-czeka-na-medal-w-ms-w-strzelectwie-wideo",
-     "shot": "data/shots/2026-11-11/proton-tvpsport.webp",
-     "attempts": 2
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-11T15:02:42+01:00",
+     "url": "https://sport.tvp.pl/96413690/reprezentacja-polski-koszykarek-walczy-o-powrot-na-eurobasket-karol-kowalewski-to-jest-kluczem-wideo",
+     "played_seconds": 61.2,
+     "wait_seconds": 51,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-11/proton-tvpsport.webp"
     }
    },
    "exit": {
@@ -51,15 +102,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 68.8
-  },
-  {
-   "id": "nord",
-   "name": "NordVPN",
-   "plan": null,
-   "server": null,
-   "tested": false,
-   "services": {}
+   "speed_mbps": 62.6
   },
   {
    "id": "surf",
@@ -113,5 +156,5 @@
    "enabled": false
   }
  ],
- "finished_at": "2026-11-11T13:52:04+01:00"
+ "finished_at": "2026-11-11T15:12:28+01:00"
 }
