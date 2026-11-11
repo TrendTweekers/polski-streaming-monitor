@@ -173,7 +173,7 @@
   function pick(){
     if(a.pay==='free')return ['proton','Jedyny w zestawieniu z darmowym serwerem w Polsce. Plan darmowy działa na jednym urządzeniu, a kraj trzeba ustawić ręcznie.','/darmowy-vpn-polska-telewizja','Jak ustawić darmowy serwer'];
     if(a.dev==='many')return ['surf','Jedyny w zestawieniu bez limitu urządzeń. ExpressVPN pozwala na 14.'];
-    if(a.prio==='price')return ['proton','Najniższa cena w zestawieniu: 7,49 zł za miesiąc przez pierwsze 12 miesięcy.'];
+    if(a.prio==='price')return ['proton','Najniższa cena w zestawieniu: 6,29 zł za miesiąc w planie na 2 lata.'];
     if(a.prio==='pl')return ['nord','Podaje 61 serwerów w Polsce, najwięcej w zestawieniu. Gdy jeden jest zablokowany, łatwiej zmienić na inny.'];
     return ['cybr','Daje 45 dni na zwrot pieniędzy, najdłużej w zestawieniu. Masz czas, żeby sprawdzić go ze swoim serwisem.'];
   }

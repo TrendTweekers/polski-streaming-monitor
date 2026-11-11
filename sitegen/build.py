@@ -392,10 +392,10 @@ def aff_note(pid):
 
 
 PROFILE = {
-    "proton": dict(tag="Najniższa cena w zestawieniu", badge="", price="7,49 zł", unit="za miesiąc",
-                   terms="89,88 zł za pierwsze 12 miesięcy, potem 209,88 zł za rok.",
+    "proton": dict(tag="Najniższa cena w zestawieniu", badge="", price="6,29 zł", unit="za miesiąc",
+                   terms="Plan na 2 lata w ofercie Black Friday (−75%), płatny z góry: 6,29 zł × 24 miesiące. Cena z oferty dla partnerów, sprawdzona 11.11.2026. Bez promocji 24,99 zł za miesiąc.",
                    pros=["Najniższa cena w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
-                   cons=["Niska cena dotyczy pierwszych 12 miesięcy, odnowienie jest droższe"]),
+                   cons=["Najniższa cena tylko w planie na 2 lata, odnowienie jest droższe"]),
     "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="10,99 zł", unit="za miesiąc",
                  terms="296,73 zł za pierwsze 27 miesięcy.",
                  pros=["61 serwerów w Polsce, najwięcej w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
@@ -442,7 +442,7 @@ def featured():
 def highlights():
     items = [("nord", "Najwięcej serwerów w Polsce", "61 serwerów"), ("surf", "Bez limitu urządzeń", "8,99 zł za miesiąc"),
              ("cybr", "Najdłuższy zwrot pieniędzy", "45 dni"), ("expr", "Najwięcej urządzeń z limitem", "do 14 naraz"),
-             ("proton", "Najniższa cena", "7,49 zł za miesiąc")]
+             ("proton", "Najniższa cena", "6,29 zł za miesiąc")]
     names = {f[0]: f[1] for f in FACTS}
     tiles = "".join(f'<a class="hl" href="/porownanie-vpn#{pid}"><span class="hlk">{k}</span><span class="hlv"><img src="{LOGOS[pid]}" alt="" width="26" height="26">{names[pid]}</span><span class="hld">{d}</span></a>'
                     for pid, k, d in items)
@@ -846,7 +846,7 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
 <tr><td>Telekom MagentaTV, pakiet „Polski”</td><td>ITVN, TVP Polonia</td><td>4,94 € za miesiąc</td></tr>
 <tr><td>Vodafone, „TV International Polnisch”</td><td>TVP Polonia, ITVN, ITVN Extra HD, TVN24 HD, iTVS</td><td>8,99 € za miesiąc</td></tr>
 <tr><td>Player International</td><td>Biblioteka Playera bez reklam, ITVN, ITVN Extra, TVN24</td><td>50 zł za 30 dni</td></tr>
-<tr><td>VPN z serwerem w Polsce</td><td>Polska wersja serwisów: TVP VOD, Player, TVP Sport</td><td>od 7,49 zł za miesiąc</td></tr>
+<tr><td>VPN z serwerem w Polsce</td><td>Polska wersja serwisów: TVP VOD, Player, TVP Sport</td><td>od 6,29 zł za miesiąc</td></tr>
 </tbody></table></div>
 
 <h2>1. Satelita: polskie kanały za darmo</h2>
@@ -1524,7 +1524,7 @@ def build_js():
   function pick(){
     if(a.pay==='free')return ['proton','Jedyny w zestawieniu z darmowym serwerem w Polsce. Plan darmowy działa na jednym urządzeniu, a kraj trzeba ustawić ręcznie.','/darmowy-vpn-polska-telewizja','Jak ustawić darmowy serwer'];
     if(a.dev==='many')return ['surf','Jedyny w zestawieniu bez limitu urządzeń. ExpressVPN pozwala na 14.'];
-    if(a.prio==='price')return ['proton','Najniższa cena w zestawieniu: 7,49 zł za miesiąc przez pierwsze 12 miesięcy.'];
+    if(a.prio==='price')return ['proton','Najniższa cena w zestawieniu: 6,29 zł za miesiąc w planie na 2 lata.'];
     if(a.prio==='pl')return ['nord','Podaje 61 serwerów w Polsce, najwięcej w zestawieniu. Gdy jeden jest zablokowany, łatwiej zmienić na inny.'];
     return ['cybr','Daje 45 dni na zwrot pieniędzy, najdłużej w zestawieniu. Masz czas, żeby sprawdzić go ze swoim serwisem.'];
   }
