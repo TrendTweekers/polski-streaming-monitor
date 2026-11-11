@@ -23,5 +23,5 @@ jobs:
           echo "last test: $last, today: $today"
           if [ "$last" != "$today" ]; then
             gh workflow run daily.yml
-            python bot/notify.py "Polski Streaming: test nie ruszył dziś sam (ostatni: $last). Uruchomiłem go teraz."
+            python bot/notify.py "⏰ <b>Polski Streaming</b>: the daily test did not start today (last: $last). I started it now."
           fi
