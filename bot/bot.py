@@ -264,6 +264,35 @@ def test_service(browser, svc, shot_path):
     return res
 
 
+VPN_DOWN = "Serwer VPN nie odpowiadał"
+
+
+def tunnel_alive():
+    """Is the tunnel up and is the exit address still Polish?"""
+    for _ in range(2):
+        try:
+            if fetch_json("https://ipinfo.io/json", proxy=True, timeout=15).get("country") == "PL":
+                return True
+        except Exception:
+            pass
+        time.sleep(3)
+    return False
+
+
+def ensure_tunnel(holder, conf):
+    """Reconnect a dead tunnel (the browser keeps the same local proxy port). True when it is up."""
+    if tunnel_alive():
+        return True
+    for n in range(2):
+        log("   tunnel is down - reconnect", n + 1)
+        holder[0].close()
+        time.sleep(5)
+        holder[0] = Tunnel(conf)
+        if tunnel_alive():
+            return True
+    return False
+
+
 def main():
     day = now().strftime("%Y-%m-%d")
     started = now()
@@ -286,7 +315,7 @@ def main():
                 log(prov["name"], "- no secret, skipped")
                 continue
             log(prov["name"], "- connecting")
-            tun = Tunnel(conf)
+            tun = [Tunnel(conf)]
             try:
                 ip = fetch_json("https://ipinfo.io/json", proxy=True)
                 if ip.get("country") != "PL":
@@ -307,22 +336,31 @@ def main():
                     for svc in services:
                         log("  testing", svc["name"])
                         shot = DATA / "shots" / day / f'{prov["id"]}-{svc["id"]}.webp'
-                        r = test_service(browser, svc, shot)
-                        if r["status"] == "blocked":
-                            # One failed try is not proof of a block. Try one more time.
-                            log("   first try failed:", r.get("reason"), "- second try")
-                            first_reason = r.get("reason")
+                        if not ensure_tunnel(tun, conf):
+                            r = {"status": "none", "reason": VPN_DOWN, "tested_at": now().isoformat(timespec="seconds")}
+                        else:
                             r = test_service(browser, svc, shot)
-                            r["attempts"] = 2
-                            if r["status"] == "ok":
-                                r.update(status="unstable", reason="Pierwsza próba nieudana (%s), druga udana" % first_reason)
+                            if r["status"] != "ok":
+                                # One failed try is not proof of a block. Check the VPN and try one more time.
+                                log("   first try failed:", r.get("reason"), "- second try")
+                                first, first_reason = r["status"], r.get("reason")
+                                if ensure_tunnel(tun, conf):
+                                    r = test_service(browser, svc, shot)
+                                    r["attempts"] = 2
+                                    if r["status"] == "ok" and first == "blocked":
+                                        r.update(status="unstable", reason="Pierwsza próba nieudana (%s), druga udana" % first_reason)
+                                    elif r["status"] == "blocked" and not tunnel_alive():
+                                        # The film did not start because the VPN server dropped. That is not a block by the service.
+                                        r.update(status="none", reason=VPN_DOWN)
+                                else:
+                                    r = {"status": "none", "reason": VPN_DOWN, "tested_at": now().isoformat(timespec="seconds"), "attempts": 1}
                         entry["services"][svc["id"]] = r
                         log("   ->", r["status"], r.get("reason") or "", r.get("played_seconds"))
                 finally:
                     browser.close()
                 entry["tested"] = any(r["status"] != "none" for r in entry["services"].values())
             finally:
-                tun.close()
+                tun[0].close()
     run["finished_at"] = now().isoformat(timespec="seconds")
 
     tested = [e for e in run["providers"] if e["tested"]]
