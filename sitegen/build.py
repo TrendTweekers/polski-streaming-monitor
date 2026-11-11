@@ -320,11 +320,11 @@ FREE_Q = ("Czy darmowy VPN wystarczy?", "Czasem tak. Testujemy darmowy plan Prot
 TV_Q = ("Czy to działa na telewizorze?", "Tak, jeśli Twój telewizor albo przystawka ma aplikację VPN. Większość dostawców ma aplikacje na Android TV, Fire TV i Apple TV. Szczegóły są w <a href=\"/porownanie-vpn\">porównaniu VPN</a>.")
 
 FACTS = [
-    ("surf", "Surfshark", "https://surfshark.com", "Tak, Warszawa", "30 dni", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
-     "https://surfshark.com/pricing", "surfshark.com/pricing", ""),
     ("nord", "NordVPN", "https://nordvpn.com", "Tak, 61 serwerów (Warszawa)", "30 dni", "10", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://nordvpn.com/servers/poland/", "nordvpn.com/servers/poland", ""),
-    ("proton", "Proton VPN", "https://protonvpn.com", "Tak. W planie darmowym aplikacja sama wybiera kraj.", "30 dni", "10 (plan płatny), 1 (darmowy)", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
+    ("surf", "Surfshark", "https://surfshark.com", "Tak, Warszawa", "30 dni", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
+     "https://surfshark.com/pricing", "surfshark.com/pricing", ""),
+    ("proton", "Proton VPN", "https://protonvpn.com", "Tak", "30 dni", "10", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://protonvpn.com/pricing", "protonvpn.com/pricing", ""),
     ("cybr", "CyberGhost", "https://www.cyberghostvpn.com", "Tak, 1 lokalizacja", "45 dni (14 dni w planie miesięcznym)", "7", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.cyberghostvpn.com/vpn-server", "cyberghostvpn.com/vpn-server", ""),
@@ -335,14 +335,23 @@ FACTS = [
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
 POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 1, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 2, 1, 3, 3, 0), "expr": (1, 1, 3, 2, 3, 0)}
-RANK = {pid: i + 1 for i, pid in enumerate(["surf", "nord", "proton", "cybr", "expr"])}
+WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
+MAXPTS = 19
+
+
+def wpts(pid):
+    return [x * w for x, w in zip(POINTS[pid], WEIGHTS)]
+
+
+RANK = {pid: i + 1 for i, pid in enumerate(["nord", "surf", "proton", "cybr", "expr"])}
+assert sorted(RANK, key=lambda p: -sum(wpts(p)))[:3] == ["nord", "surf", "proton"]
 EUR = "4,3895 zł (kurs średni NBP z 10.11.2026)"
 
 
 def points_table():
     names = {f[0]: f[1] for f in FACTS}
-    rows = "".join(f'<tr><td><b>{RANK[pid]}. {names[pid]}</b></td>' + "".join(f"<td>{x}</td>" for x in POINTS[pid]) + f'<td><b>{sum(POINTS[pid])}</b></td></tr>' for pid in RANK)
-    return ('<div class="scrollx keep"><table class="mini3 pts"><thead><tr><th>Dostawca</th><th>Serwery w Polsce</th><th>Cena</th><th>Urządzenia</th><th>Zwrot</th><th>Aplikacje TV</th><th>Płatność w zł</th><th>Razem</th></tr></thead>'
+    rows = "".join(f'<tr><td><b>{RANK[pid]}. {names[pid]}</b></td>' + "".join(f"<td>{x}</td>" for x in wpts(pid)) + f'<td><b>{sum(wpts(pid))}</b></td></tr>' for pid in RANK)
+    return ('<div class="scrollx keep"><table class="mini3 pts"><thead><tr><th>Dostawca</th><th>Serwery w Polsce (×2)</th><th>Cena</th><th>Urządzenia</th><th>Zwrot</th><th>Aplikacje TV</th><th>Płatność w zł</th><th>Razem</th></tr></thead>'
             f'<tbody>{rows}</tbody></table></div>')
 
 
@@ -376,23 +385,23 @@ def aff_note(pid):
 
 
 PROFILE = {
-    "proton": dict(tag="Najtańszy plan płatny i jedyny z darmowym serwerem w Polsce", badge="Testujemy codziennie", price="7,49 zł", unit="za miesiąc",
-                   terms="89,88 zł za pierwsze 12 miesięcy, potem 209,88 zł za rok. Jest też plan darmowy (0 zł) na jedno urządzenie.",
-                   pros=["Najniższa cena planu płatnego w zestawieniu", "Jedyny dostawca z naszym codziennym testem", "Jest plan darmowy z serwerem w Polsce"],
-                   cons=["Niska cena dotyczy pierwszych 12 miesięcy, odnowienie jest droższe", "Darmowy serwer bywa przeciążony, co widać w naszych testach"]),
+    "proton": dict(tag="Najniższa cena w zestawieniu", badge="", price="7,49 zł", unit="za miesiąc",
+                   terms="89,88 zł za pierwsze 12 miesięcy, potem 209,88 zł za rok.",
+                   pros=["Najniższa cena w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
+                   cons=["Niska cena dotyczy pierwszych 12 miesięcy, odnowienie jest droższe"]),
     "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="10,99 zł", unit="za miesiąc",
                  terms="296,73 zł za pierwsze 27 miesięcy.",
                  pros=["61 serwerów w Polsce, najwięcej w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Najniższa cena tylko w planie na 27 miesięcy"]),
-    "surf": dict(tag="Najniższa cena w złotówkach", badge="", price="8,99 zł", unit="za miesiąc",
+    "surf": dict(tag="Bez limitu urządzeń", badge="", price="8,99 zł", unit="za miesiąc",
                  terms="242,73 zł za pierwsze 27 miesięcy, plus VAT, jeśli dotyczy.",
-                 pros=["Bez limitu urządzeń", "Najniższa cena w złotówkach w tym zestawieniu", "Aplikacje na Android TV, Apple TV i Fire TV"],
+                 pros=["Bez limitu urządzeń", "8,99 zł za miesiąc w planie na 27 miesięcy", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Do ceny może dojść VAT"]),
-    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="2,49 €", unit="za miesiąc, ok. 10,93 zł",
+    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="ok. 10,93 zł", unit="za miesiąc (2,49 €)",
                  terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów"]),
-    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="2,19 €", unit="za miesiąc, ok. 9,61 zł",
+    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="ok. 9,61 zł", unit="za miesiąc (2,19 €)",
                  terms="61,32 € za pierwsze 28 miesięcy. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
                  cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
@@ -424,9 +433,9 @@ def featured():
 
 
 def highlights():
-    items = [("surf", "Najniższa cena w złotówkach", "8,99 zł za miesiąc"), ("nord", "Najwięcej serwerów w Polsce", "61 serwerów"),
+    items = [("nord", "Najwięcej serwerów w Polsce", "61 serwerów"), ("surf", "Bez limitu urządzeń", "8,99 zł za miesiąc"),
              ("cybr", "Najdłuższy zwrot pieniędzy", "45 dni"), ("expr", "Najwięcej urządzeń z limitem", "do 14 naraz"),
-             ("proton", "Jest plan darmowy z Polską", "płatny od 7,49 zł")]
+             ("proton", "Najniższa cena", "7,49 zł za miesiąc")]
     names = {f[0]: f[1] for f in FACTS}
     tiles = "".join(f'<a class="hl" href="/porownanie-vpn#{pid}"><span class="hlk">{k}</span><span class="hlv"><img src="{LOGOS[pid]}" alt="" width="26" height="26">{names[pid]}</span><span class="hld">{d}</span></a>'
                     for pid, k, d in items)
@@ -460,7 +469,7 @@ def provblocks(full=True):
     <div><span>Serwer w Polsce</span><b>{pl}</b></div>
     <div><span>Zwrot pieniędzy</span><b>{refund}</b></div>
     <div><span>Urządzenia jednocześnie</span><b>{dev}</b></div>
-    <div><span>Punkty w rankingu</span><b>{sum(POINTS[pid])} na 16</b></div>
+    <div><span>Punkty w rankingu</span><b>{sum(wpts(pid))} na {MAXPTS}</b></div>
   </div>
 {body}
 </article>"""
@@ -862,7 +871,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
 <h2 id="ranking">Jak liczymy ranking</h2>
 <p>Każdy dostawca dostaje punkty w sześciu kategoriach. Liczymy tylko fakty, które każdy może sprawdzić na stronie dostawcy. Prowizja partnerska nie daje punktów.</p>
 <ul>
-  <li><b>Serwery w Polsce:</b> 3 punkty za podaną liczbę co najmniej 50 serwerów, 1 punkt za jedną lokalizację.</li>
+  <li><b>Serwery w Polsce:</b> 6 punktów za podaną liczbę co najmniej 50 serwerów, 2 punkty za jedną lokalizację. Ta kategoria liczy się podwójnie. Serwisy blokują pojedyncze adresy VPN, więc przy większej liczbie serwerów łatwiej przełączyć się na inny.</li>
   <li><b>Cena za miesiąc w najtańszym planie:</b> 3 punkty poniżej 9 zł, 2 punkty do 10,50 zł, 1 punkt powyżej. Euro przeliczamy po kursie """ + EUR + """.</li>
   <li><b>Urządzenia jednocześnie:</b> 3 punkty od 14 w górę, 2 punkty za 10, 1 punkt poniżej 10.</li>
   <li><b>Zwrot pieniędzy:</b> 3 punkty od 45 dni, 2 punkty za 30 dni.</li>
@@ -939,6 +948,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <ul>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
   <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
+  <li><b>11.11.2026:</b> w rankingu VPN liczba serwerów w Polsce liczy się podwójnie. Zasady są na stronie <a href="/porownanie-vpn#ranking">rankingu</a>.</li>
   <li><b>10.11.2026:</b> dodana druga próba po nieudanym teście i wynik „Niestabilny”.</li>
 </ul>
 """, "prosec", brief([("Częstotliwość", "Raz dziennie, rano"), ("Kryterium", "60 s filmu bez przerwy"), ("Dowód", "Zrzut ekranu z każdej próby"), ("Historia", "30 dni, także złe dni")],
@@ -1263,13 +1273,13 @@ def build_js():
   function pick(){
     if(a.pay==='free')return ['proton','Jedyny w zestawieniu z darmowym serwerem w Polsce. Plan darmowy działa na jednym urządzeniu, a kraj trzeba ustawić ręcznie.','/darmowy-vpn-polska-telewizja','Jak ustawić darmowy serwer'];
     if(a.dev==='many')return ['surf','Jedyny w zestawieniu bez limitu urządzeń. ExpressVPN pozwala na 14.'];
-    if(a.prio==='price')return ['surf','Najniższa cena w złotówkach w zestawieniu: 8,99 zł za miesiąc w planie na 27 miesięcy.'];
+    if(a.prio==='price')return ['proton','Najniższa cena w zestawieniu: 7,49 zł za miesiąc przez pierwsze 12 miesięcy.'];
     if(a.prio==='pl')return ['nord','Podaje 61 serwerów w Polsce, najwięcej w zestawieniu. Gdy jeden jest zablokowany, łatwiej zmienić na inny.'];
     return ['cybr','Daje 45 dni na zwrot pieniędzy, najdłużej w zestawieniu. Masz czas, żeby sprawdzić go ze swoim serwisem.'];
   }
   function show(){
     var r=pick(),p=P[r[0]],box=document.getElementById('qres');
-    box.innerHTML='<img src="'+p[1]+'" alt=""><div><b>'+p[0]+'</b><span>'+r[1]+(r[0]!=='proton'?' Tego dostawcy jeszcze nie testowaliśmy.':'')+'</span></div>'+
+    box.innerHTML='<img src="'+p[1]+'" alt=""><div><b>'+p[0]+'</b><span>'+r[1]+'</span></div>'+
       '<a class="btn" href="'+(r[2]||'/porownanie-vpn#'+r[0])+'">'+(r[3]||'Zobacz szczegóły')+'</a><button type="button" class="again">Zacznij od nowa</button>';
     box.hidden=false;
   }
