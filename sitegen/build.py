@@ -572,6 +572,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
     <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowe odcinki, pakiet Player International i test z VPN.</span></a></li>
     <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów.</span></a></li>
     <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test.</span></a></li>
+    <li><a href="/polska-telewizja-w-niemczech"><b>Polska telewizja w Niemczech</b><span>Satelita, pakiety Vodafone i Telekom z cenami, polskie serwisy i VPN.</span></a></li>
     <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
   </ul>
 </div></section>"""
@@ -817,6 +818,99 @@ PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: te
            ("Dlaczego w aplikacji Proton nie widzę Polski?", "W planie darmowym aplikacja sama wybiera kraj. Polski serwer ustawisz tylko przez plik konfiguracji WireGuard z panelu konta."),
            ("Czy to działa na telewizorze?", "Trudno. Plan darmowy to jedno urządzenie, a plik WireGuard trzeba zaimportować ręcznie. Najprościej oglądać na komputerze albo telefonie.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])
+
+SRC_DESTATIS = '<a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Tabellen/auslaendische-bevoelkerung-staatsangehoerigkeit-jahre.html" target="_blank" rel="nofollow noopener">Destatis</a>'
+SRC_KOS = '<a href="https://en.kingofsat.net/find2.php?cl=pol&amp;num_pos=13.0E&amp;ordre=freq&amp;standard=All&amp;filtre=Clear" target="_blank" rel="nofollow noopener">lista KingOfSat</a>'
+SRC_TELEKOM = '<a href="https://www.telekom.de/shop/option/tv-paket-polski/tv-option" target="_blank" rel="nofollow noopener">telekom.de</a>'
+SRC_VODAFONE = '<a href="https://www.vodafone.de/privat/fernsehen/tv-optionen/tv-international/polnisch.html" target="_blank" rel="nofollow noopener">vodafone.de</a>'
+SRC_PLAYERINT = '<a href="https://promocja.player.pl/zobacz-wiecej-player-international" target="_blank" rel="nofollow noopener">strona Player International</a>'
+SRC_POLONIA = '<a href="https://polsatboxgo.pl/pakiety/world" target="_blank" rel="nofollow noopener">stronie pakietu</a>'
+SRC_TVPFAQ = '<a href="https://vod.tvp.pl/faq" target="_blank" rel="nofollow noopener">vod.tvp.pl/faq</a>'
+
+PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposobów i ceny | Polski Streaming",
+    "Polska telewizja w Niemczech: darmowe kanały z satelity, pakiety Vodafone i Telekom z cenami, Player International, Polsat Box Go i VPN.",
+    band('<a href="/">Polska telewizja za granicą</a> / Niemcy', "Polska telewizja w Niemczech",
+         "Pięć sposobów na polskie kanały w Niemczech: od darmowej satelity po VPN. Z cenami w euro i źródłami.",
+         f'<div class="when mono">{BYLINE}<span>Ceny i dane sprawdzone: <b>11.11.2026</b></span></div>', image="europe")
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Za darmo masz TVP Polonia i kilkanaście innych polskich kanałów z satelity Hot Bird. Pakiet polski u operatora kosztuje od 4,94 € za miesiąc. TVP1, TVP2, Polsatu i TVN w wersji krajowej nie ma w żadnej niemieckiej ofercie. Do nich prowadzą polskie serwisy internetowe, a za granicą część ich treści jest zablokowana.</p>
+
+<p>W Niemczech mieszka 839 660 obywateli Polski (stan na 31.12.2025, __DESTATIS__). To największa grupa Polaków w Unii Europejskiej poza Polską.</p>
+
+<h2>Porównanie pięciu sposobów</h2>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Sposób</th><th>Co dostajesz</th><th>Cena</th></tr></thead><tbody>
+<tr><td>Satelita Hot Bird 13°E</td><td>TVP Polonia, TVP World, Polonia 1, Tele 5 i inne kanały niekodowane</td><td>0 € za miesiąc, potrzebna antena</td></tr>
+<tr><td>Telekom MagentaTV, pakiet „Polski”</td><td>ITVN, TVP Polonia</td><td>4,94 € za miesiąc</td></tr>
+<tr><td>Vodafone, „TV International Polnisch”</td><td>TVP Polonia, ITVN, ITVN Extra HD, TVN24 HD, iTVS</td><td>8,99 € za miesiąc</td></tr>
+<tr><td>Player International</td><td>Biblioteka Playera bez reklam, ITVN, ITVN Extra, TVN24</td><td>50 zł za 30 dni</td></tr>
+<tr><td>VPN z serwerem w Polsce</td><td>Polska wersja serwisów: TVP VOD, Player, TVP Sport</td><td>od 7,49 zł za miesiąc</td></tr>
+</tbody></table></div>
+
+<h2>1. Satelita: polskie kanały za darmo</h2>
+<p>Z satelity Hot Bird (13°E) odbierzesz w Niemczech polskie kanały bez abonamentu i bez karty. Na liście kanałów niekodowanych są dziś między innymi:</p>
+<ul>
+  <li><b>TVP Polonia</b> i <b>TVP World</b> (ten drugi po angielsku),</li>
+  <li><b>Polonia 1</b>, <b>Tele 5</b>, <b>TVS</b> i <b>Kanał Zero TV</b>,</li>
+  <li>kanały muzyczne: Nuta TV, Nuta Gold, Power TV, Szlagier TV, 4Fun.</li>
+</ul>
+<p>Źródło: __KINGOFSAT__, sprawdzone 11.11.2026. TVP1, TVP2, Polsatu i TVN nie ma na tej liście. Te kanały są na satelicie zakodowane.</p>
+<p>Potrzebujesz czaszy skierowanej na 13°E i dekodera albo telewizora z tunerem DVB-S2. W mieszkaniu na wynajem zapytaj najpierw właściciela o zgodę na antenę.</p>
+
+<h2>2. Pakiet polski u niemieckiego operatora</h2>
+<p>To najprostsza droga, jeśli masz już telewizję od Telekomu albo Vodafone. Kanały włączasz jako dodatek do umowy.</p>
+<ul>
+  <li><b>Telekom MagentaTV, „TV-Paket Polski”:</b> ITVN i TVP Polonia. 4,94 € za miesiąc, bez minimalnego okresu umowy, wypowiedzenie z miesięcznym terminem. Źródło: __TELEKOM__.</li>
+  <li><b>Vodafone, „TV International Polnisch”:</b> TVP Polonia, ITVN, ITVN Extra HD, TVN24 HD, iTVS i Radio Zet. 8,99 € za miesiąc, umowa na 12 miesięcy i 19,99 € opłaty jednorazowej. Potrzebna jest usługa GigaTV. Źródło: __VODAFONE__.</li>
+</ul>
+<p>ITVN i TVP Polonia to kanały przygotowane dla widzów za granicą. Mają inny program niż TVN i TVP1 w Polsce. Nie znajdziesz w nich wszystkich seriali i transmisji sportowych.</p>
+
+<h2>3. Polskie serwisy z ofertą dla zagranicy</h2>
+<h3>Player International</h3>
+<p>Pakiet kosztuje 50 zł za 30 dni i ma 7 dni okresu próbnego. Obejmuje bibliotekę Playera bez reklam oraz trzy kanały na żywo: ITVN, ITVN Extra i TVN24. Zapłacisz kartą polską albo zagraniczną. Oferta różni się od pakietów sprzedawanych w Polsce. Źródło: __PLAYERINT__. Więcej w poradniku <a href="/player-za-granica">Player za granicą</a>.</p>
+<h3>Polsat Box Go, pakiet Polonia</h3>
+<p>Polsat ma pakiet dla osób mieszkających za granicą. Według strony pakietu jest w nim 18 kanałów, między innymi Polsat 1 i Polsat News, a zawartość może zależeć od kraju. Aktualną cenę sprawdź na __POLONIA__, bo nie udało nam się jej potwierdzić. Więcej w poradniku <a href="/polsat-box-go-za-granica">Polsat Box Go za granicą</a>.</p>
+<h3>TVP VOD</h3>
+<p>Część materiałów TVP VOD działa w Niemczech bez żadnych dodatków. W dziale pytań i odpowiedzi serwis pisze: „Ze względów licencyjnych niektóre treści są dostępne tylko dla użytkowników na terytorium Polski” (__TVPFAQ__). Więcej w poradniku <a href="/tvp-vod-za-granica">TVP VOD za granicą</a>.</p>
+
+<h2>4. Masz polski abonament i jesteś w Niemczech czasowo</h2>
+<p>Unijne rozporządzenie 2017/1128 pozwala korzystać z <b>płatnych</b> usług kupionych w kraju zamieszkania podczas czasowego pobytu w innym państwie Unii. Dotyczy to osób, które mieszkają w Polsce i wyjechały na jakiś czas, na przykład do pracy sezonowej.</p>
+<ul>
+  <li><b>Polsat Box Go</b> włącza dostęp w całej Unii po podaniu numeru telefonu zarejestrowanego u polskiego operatora.</li>
+  <li><b>TVP VOD</b> udostępnia płatne treści użytkownikowi zalogowanemu, który mieszka na stałe w Polsce i przebywa czasowo w innym państwie.</li>
+</ul>
+<p>Jeśli mieszkasz w Niemczech na stałe, ta zasada Cię nie obejmuje. Nie obejmuje też treści darmowych.</p>
+
+<h2>5. VPN z serwerem w Polsce</h2>
+<p>VPN daje Ci polski adres IP. Serwis traktuje Cię wtedy jak widza w Polsce i pokazuje krajową wersję, także darmowe odcinki z reklamami. To jedyny z pięciu sposobów, który prowadzi do polskiej wersji TVP VOD, Playera i TVP Sport.</p>
+<p>Są dwa zastrzeżenia. Serwisy blokują część adresów VPN, więc żaden dostawca nie da gwarancji. Regulamin serwisu może też zabraniać omijania blokad regionalnych. Samo używanie VPN jest w Niemczech legalne.</p>
+<p>Każdego ranka sprawdzamy darmowy serwer w Polsce z trzema serwisami. Wynik jest w poradniku <a href="/darmowy-vpn-polska-telewizja">Darmowy VPN do polskiej telewizji</a>.</p>
+
+<h2>Sport: skoki narciarskie i mecze</h2>
+<p>Niemcy i Polska mają ten sam czas, więc transmisje na żywo są o tej samej godzinie.</p>
+<ul>
+  <li><b>Skoki narciarskie 2026/27:</b> w Niemczech pokazują je ARD, ZDF i Eurosport, z niemieckim komentarzem. ARD i ZDF są bezpłatne. Sezon zaczyna się w Lillehammer 20 listopada 2026.</li>
+  <li><b>Polski komentarz:</b> jest w TVP Sport. Transmisje na żywo mają osobne licencje i za granicą bywają zablokowane. Materiały wideo z TVP Sport grały w naszym teście przez VPN. Szczegóły w poradniku <a href="/tvp-sport-za-granica">TVP Sport za granicą</a>.</li>
+</ul>
+
+<h2>Co zobaczysz, gdy serwis Cię zablokuje</h2>
+<p>To są komunikaty z polskich serwisów dla widza z zagranicznym adresem IP:</p>
+<ul>
+  <li><b>TVP VOD:</b> „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju.”</li>
+  <li><b>TVP Sport:</b> „Przepraszamy, z uwagi na ograniczenia licencyjne materiał jest niedostępny w kraju, z którego się łączysz.”</li>
+  <li><b>Player:</b> „Materiał niedostępny w Twojej lokalizacji”.</li>
+</ul>
+<p>Komunikat nie oznacza awarii. Oznacza, że serwis rozpoznał adres spoza Polski.</p>
+""".replace("__DESTATIS__", SRC_DESTATIS).replace("__KINGOFSAT__", SRC_KOS).replace("__TELEKOM__", SRC_TELEKOM).replace("__VODAFONE__", SRC_VODAFONE)
+   .replace("__PLAYERINT__", SRC_PLAYERINT).replace("__POLONIA__", SRC_POLONIA).replace("__TVPFAQ__", SRC_TVPFAQ),
+    "prosec", brief([("Za darmo", "Satelita Hot Bird 13°E"), ("Najtańszy pakiet", "4,94 € (Telekom)"), ("TVP1, TVP2, Polsat, TVN", "Tylko przez polskie serwisy"), ("Ceny sprawdzone", "11.11.2026")],
+                     [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + faq([("Czy w Niemczech da się oglądać TVP1 i TVP2 na żywo?", "Nie ma ich w ofertach niemieckich operatorów ani wśród niekodowanych kanałów na satelicie Hot Bird. Programy TVP są w serwisie TVP VOD, a za granicą część z nich jest zablokowana."),
+           ("Ile kosztuje polska telewizja w Niemczech?", "Kanały niekodowane z satelity są bezpłatne. Pakiet polski w Telekom MagentaTV kosztuje 4,94 € za miesiąc, a w Vodafone 8,99 € za miesiąc. Player International kosztuje 50 zł za 30 dni."),
+           ("Czy Rundfunkbeitrag obejmuje polskie kanały?", "Nie. Rundfunkbeitrag finansuje niemieckie media publiczne: ARD, ZDF i Deutschlandradio. Za polskie pakiety płacisz osobno."),
+           ("Czy VPN jest w Niemczech legalny?", "Tak, używanie VPN jest legalne. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych. Przeczytaj regulamin swojego serwisu."),
+           ("Co jest lepsze: pakiet operatora czy VPN?", "Pakiet operatora działa na telewizorze bez ustawień, ale daje kanały w wersji dla zagranicy. VPN prowadzi do krajowej wersji serwisów, ale wymaga aplikacji i nie daje gwarancji działania.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/polska-telewizja-w-niemczech", "Polska telewizja w Niemczech")])
 
 PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
