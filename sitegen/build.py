@@ -573,6 +573,9 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
     <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów.</span></a></li>
     <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test.</span></a></li>
     <li><a href="/polska-telewizja-w-niemczech"><b>Polska telewizja w Niemczech</b><span>Satelita, pakiety Vodafone i Telekom z cenami, polskie serwisy i VPN.</span></a></li>
+    <li><a href="/tvp-vod-material-niedostepny-w-twoim-kraju"><b>TVP VOD: „materiał jest niedostępny w Twoim kraju”</b><span>Jak wygląda komunikat, skąd się bierze i trzy wyjścia.</span></a></li>
+    <li><a href="/player-niedostepny-w-twojej-lokalizacji"><b>„Player jest niedostępny w Twojej lokalizacji”</b><span>Blokada całego serwisu poza Unią i co da się zrobić.</span></a></li>
+    <li><a href="/tvp-sport-material-niedostepny"><b>TVP Sport: „materiał jest niedostępny”</b><span>Trzy wersje komunikatu i próba przed meczem.</span></a></li>
     <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
   </ul>
 </div></section>"""
@@ -650,7 +653,7 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
         ("Wykryto wtyczkę adblock", "Reklamy się nie załadowały. Zdarza się, gdy VPN blokuje reklamy na poziomie DNS.", "Wyłącz w aplikacji VPN blokowanie reklam i odśwież stronę."),
         ("Wystąpił problem z materiałem. Spróbuj ponownie za chwilę", "Serwis nie podał filmu. W naszym teście ten sam serwer VPN godzinę wcześniej działał.", "Zmień serwer na inny polski albo spróbuj po kilku minutach."),
         ("Materiał niedostępny w Twoim kraju", "Serwis widzi zagraniczny adres IP.", "Sprawdź, czy VPN jest połączony z Polską, i odśwież stronę.")])
-    + '<p class="note">Dwa pierwsze komunikaty widzieliśmy w naszych testach 10.11.2026. Trzeci to zwykła blokada regionalna.</p>',
+    + '<p class="note">Dwa pierwsze komunikaty widzieliśmy w naszych testach 10.11.2026. Trzeci to blokada regionalna. Opisujemy ją ze zrzutem ekranu na stronie <a href="/tvp-vod-material-niedostepny-w-twoim-kraju">TVP VOD: materiał niedostępny w Twoim kraju</a>.</p>',
     "prosec alt", shot("tvpvod", "TVP VOD"))
     + faq([("Czy potrzebuję konta w TVP VOD?", "W naszym teście „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty."),
            ("Czy TVP Sport działa tak samo?", "TVP Sport to osobny serwis (sport.tvp.pl) i testujemy go osobno. Wynik jest na stronie <a href=\"/wyniki-testow\">Wyniki testów</a>."),
@@ -705,7 +708,7 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Pol
         ("Wyłącz blokowanie reklam, aby oglądać", "Reklamy się nie załadowały. W naszym teście powodem był serwer DNS dostawcy VPN.", "Wyłącz w aplikacji VPN blokowanie reklam albo zmień DNS i odśwież stronę."),
         ("Czarny ekran po kliknięciu „Oglądaj”", "Film się nie załadował. U nas druga próba po chwili zadziałała.", "Odśwież stronę. Jeśli to nie pomoże, zmień serwer VPN na inny polski."),
         ("Przekierowanie na stronę logowania", "Wybrany materiał jest w płatnym pakiecie.", "Wybierz odcinek „BEZ OPŁAT” albo zaloguj się na konto z pakietem.")])
-    + '<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy.</p>',
+    + '<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy. Ekran „Player jest niedostępny w Twojej lokalizacji” opisujemy <a href="/player-niedostepny-w-twojej-lokalizacji">na osobnej stronie</a>.</p>',
     "prosec alt", shot("player", "Player"))
     + faq([("Czym różni się Player International od VPN?", "Player International to płatny pakiet od Playera, legalny i bez VPN, ale z ograniczoną ofertą. Z VPN widzisz polską wersję serwisu, w tym darmowe odcinki."),
            ("Dlaczego darmowy odcinek zniknął?", "Darmowe odcinki są dostępne przez kilka dni. Przy „Faktach” serwis pokazuje etykietę z dniem, w którym odcinek zniknie."),
@@ -733,7 +736,7 @@ PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: test VPN
 
 <h2>Jak oglądać</h2>
 <h3>1. Najpierw spróbuj bez VPN</h3>
-<p>Krótkie materiały wideo często działają także za granicą. Otwórz materiał i sprawdź, czy rusza.</p>
+<p>Otwórz materiał i sprawdź, czy rusza. W naszym teście z USA (11.11.2026) wideo było zablokowane, a z krajów Unii jeszcze nie sprawdzaliśmy. Jak wygląda blokada, pokazujemy na stronie <a href="/tvp-sport-material-niedostepny">TVP Sport: materiał niedostępny</a>.</p>
 <h3>2. VPN z serwerem w Polsce</h3>
 <!--flow:tvpsport-->
 <p>Gdy materiał jest zablokowany, polski adres IP z VPN zwykle wystarcza. W naszym teście wideo ruszyło za pierwszym razem także wtedy, gdy TVP VOD przez ten sam serwer nie działał.</p>
@@ -895,9 +898,9 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
 <h2>Co zobaczysz, gdy serwis Cię zablokuje</h2>
 <p>To są komunikaty z polskich serwisów dla widza z zagranicznym adresem IP:</p>
 <ul>
-  <li><b>TVP VOD:</b> „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju.”</li>
-  <li><b>TVP Sport:</b> „Przepraszamy, z uwagi na ograniczenia licencyjne materiał jest niedostępny w kraju, z którego się łączysz.”</li>
-  <li><b>Player:</b> „Materiał niedostępny w Twojej lokalizacji”.</li>
+  <li><b>TVP VOD:</b> „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju.” <a href="/tvp-vod-material-niedostepny-w-twoim-kraju">Co zrobić</a></li>
+  <li><b>TVP Sport:</b> „Przepraszamy. Z uwagi na ograniczenia licencyjne materiał jest niedostępny w kraju z którego się łączysz.” <a href="/tvp-sport-material-niedostepny">Co zrobić</a></li>
+  <li><b>Player:</b> „Ups... Player jest niedostępny w Twojej lokalizacji”. <a href="/player-niedostepny-w-twojej-lokalizacji">Co zrobić</a></li>
 </ul>
 <p>Komunikat nie oznacza awarii. Oznacza, że serwis rozpoznał adres spoza Polski.</p>
 """.replace("__DESTATIS__", SRC_DESTATIS).replace("__KINGOFSAT__", SRC_KOS).replace("__TELEKOM__", SRC_TELEKOM).replace("__VODAFONE__", SRC_VODAFONE)
@@ -911,6 +914,146 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
            ("Czy VPN jest w Niemczech legalny?", "Tak, używanie VPN jest legalne. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych. Przeczytaj regulamin swojego serwisu."),
            ("Co jest lepsze: pakiet operatora czy VPN?", "Pakiet operatora działa na telewizorze bez ustawień, ale daje kanały w wersji dla zagranicy. VPN prowadzi do krajowej wersji serwisów, ale wymaga aplikacji i nie daje gwarancji działania.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/polska-telewizja-w-niemczech", "Polska telewizja w Niemczech")])
+
+def errwhen():
+    return f'<div class="when mono">{BYLINE}<span>Test bez VPN: <b>11.11.2026, z USA</b></span></div>'
+
+
+PAGES["/tvp-vod-material-niedostepny-w-twoim-kraju"] = ("TVP VOD: „materiał jest niedostępny w Twoim kraju”. Co zrobić | Polski Streaming",
+    "Co oznacza komunikat TVP VOD „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”, kiedy się pojawia i jakie masz wyjścia. Ze zrzutem ekranu z naszego testu.",
+    band('<a href="/">Polska telewizja za granicą</a> / <a href="/tvp-vod-za-granica">TVP VOD</a> / Komunikat', "TVP VOD: „materiał jest niedostępny w Twoim kraju”",
+         "Ten komunikat to blokada regionalna, a nie awaria. Pokazujemy, jak wygląda, skąd się bierze i co możesz zrobić.",
+         errwhen(), figure=frame("/img/blok-tvpvod.webp", "vod.tvp.pl", "Zrzut ekranu z naszego testu bez VPN, 11.11.2026, adres IP z USA."))
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> TVP VOD rozpoznał, że łączysz się spoza Polski, a ten materiał ma licencję tylko na Polskę. Z przeglądarką, kontem ani telewizorem wszystko jest w porządku. Wyjścia są trzy: inny materiał, zalogowanie na konto z pakietem TVP+ podczas pobytu w Unii albo polski adres IP z VPN.</p>
+
+<h2>Jak wygląda komunikat</h2>
+<p>11 listopada 2026 otworzyliśmy TVP VOD z komputera w USA, bez VPN. Strona programu „Jeden z dziesięciu” załadowała się normalnie, razem z listą odcinków. Dopiero po kliknięciu odcinka 3644 odtwarzacz pokazał na czarnym tle:</p>
+<blockquote>Z powodów licencyjnych materiał jest niedostępny w Twoim kraju.<br><br>Przepisy UE pozwalają abonentom, którzy w kraju zamieszkania (w tym przypadku w PL) zakupili pakiet TVP + utrzymać dostęp do materiałów wchodzących w skład pakietu, w czasie wizyty w innym kraju UE.</blockquote>
+<p>Pod spodem jest jeden przycisk: „Zamknij”. Film nie rusza, nie ma też reklam przed filmem.</p>
+
+<h2>Dlaczego TVP VOD blokuje za granicą</h2>
+<p>Telewizja kupuje prawa do filmów, seriali i teleturniejów na określony kraj. Serwis sprawdza Twój adres IP przy starcie odtwarzania. Gdy adres jest spoza Polski, a licencja obejmuje tylko Polskę, odtwarzacz pokazuje ten komunikat zamiast filmu.</p>
+<p>Blokada dotyczy pojedynczego materiału, a nie całego serwisu. Dlatego strona, opisy i listy odcinków działają, a inny program może się odtworzyć bez problemu.</p>
+
+<h2>Inne komunikaty TVP VOD o lokalizacji</h2>
+<p>W tekstach serwisu są jeszcze trzy komunikaty z tej samej grupy. Tych nie widzieliśmy w naszym teście:</p>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Co oznacza</th></tr></thead><tbody>
+<tr><td>„Łączysz się spoza Polski”</td><td>Ogólne ostrzeżenie: część materiałów może być niedostępna w Twojej lokalizacji. Serwis odsyła do strony VOD International.</td></tr>
+<tr><td>„Ze względu na ograniczenia licencyjne wybrany materiał możesz oglądać tylko na terenie Polski i innych krajów UE”</td><td>Materiał działa w Unii, ale nie poza nią.</td></tr>
+<tr><td>„Transgraniczność aktywna” albo „Transgraniczność nieaktywna”</td><td>Etykieta przy koncie. Pokazuje, czy masz włączony dostęp do płatnych treści w innych krajach Unii.</td></tr>
+</tbody></table></div>
+
+<h2>Co możesz zrobić</h2>
+<h3>1. Sprawdź inny materiał</h3>
+<p>Licencje są różne dla różnych programów. Własne produkcje TVP częściej działają za granicą niż filmy i formaty kupione od innych firm.</p>
+<h3>2. Mieszkasz w Polsce i masz pakiet TVP+</h3>
+<p>Zaloguj się. Według komunikatu i unijnego rozporządzenia 2017/1128 pakiet ma działać podczas wizyty w innym kraju Unii. Ta zasada nie obejmuje krajów spoza Unii, na przykład USA i Wielkiej Brytanii. Nie obejmuje też treści darmowych.</p>
+<h3>3. Połącz się przez VPN z serwerem w Polsce</h3>
+<p>Z polskim adresem IP serwis traktuje Cię jak widza w kraju. Ten sam program, „Jeden z dziesięciu”, sprawdzamy codziennie przez darmowy serwer VPN w Polsce. Wynik zmienia się z dnia na dzień i jest w poradniku <a href="/tvp-vod-za-granica">TVP VOD za granicą</a>.</p>
+
+<h2>Komunikat jest, mimo że VPN jest włączony</h2>
+<ul>
+  <li><b>VPN połączył się z innym krajem.</b> Aplikacje często wybierają najszybszy serwer, a nie polski. W darmowym planie Proton VPN aplikacja w ogóle nie pozwala wskazać Polski.</li>
+  <li><b>Strona była otwarta przed połączeniem.</b> Odśwież ją po włączeniu VPN.</li>
+  <li><b>Przeglądarka zdradza lokalizację.</b> Odmów stronie dostępu do lokalizacji, jeśli o nią pyta.</li>
+</ul>
+<p>Gdy TVP VOD przez VPN pokazuje inny tekst, na przykład „Wystąpił problem z materiałem”, to nie jest blokada regionalna. Ten przypadek opisujemy w poradniku TVP VOD.</p>
+""", "prosec", brief([("Rodzaj błędu", "Blokada regionalna"), ("Kiedy się pojawia", "Po kliknięciu odcinka"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Program w teście", "Jeden z dziesięciu")],
+                     [("/tvp-vod-za-granica", "Poradnik: TVP VOD za granicą"), ("/tvp-sport-material-niedostepny", "Ten sam problem w TVP Sport"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + faq([("Czy komunikat oznacza, że moje konto jest zablokowane?", "Nie. Komunikat dotyczy adresu IP i jednego materiału. Konto działa normalnie."),
+           ("Czy zmiana przeglądarki albo wyczyszczenie ciasteczek pomoże?", "Nie. Serwis sprawdza adres IP, a ten jest taki sam w każdej przeglądarce."),
+           ("Czy w Niemczech albo Holandii jest tak samo?", "Nasz test był z USA. W krajach Unii działa dodatkowo zasada dla abonentów pakietu TVP+, ale treści darmowe mogą być zablokowane tak samo."),
+           ("Czy TVP VOD ma ofertę dla widzów za granicą?", "Serwis odsyła w jednym z komunikatów do strony VOD International. Nie sprawdzaliśmy jeszcze, co ona zawiera.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/tvp-vod-za-granica", "TVP VOD"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Materiał niedostępny w Twoim kraju")])
+
+PAGES["/player-niedostepny-w-twojej-lokalizacji"] = ("„Player jest niedostępny w Twojej lokalizacji”: co zrobić | Polski Streaming",
+    "Komunikat „Ups... Player jest niedostępny w Twojej lokalizacji”: kiedy się pojawia, czym różni się od blokady jednego odcinka i jakie masz wyjścia.",
+    band('<a href="/">Polska telewizja za granicą</a> / <a href="/player-za-granica">Player</a> / Komunikat', "„Player jest niedostępny w Twojej lokalizacji”",
+         "Poza Unią Europejską Player zamyka cały serwis, a nie jeden odcinek. Pokazujemy, jak to wygląda i co da się z tym zrobić.",
+         errwhen(), figure=frame("/img/blok-player.webp", "player.pl/international", "Zrzut ekranu z naszego testu bez VPN, 11.11.2026, adres IP z USA. Adres IP na dole ekranu zakryliśmy."))
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Player sprawdził Twój adres IP i uznał, że jesteś w kraju, w którym serwis nie działa. W naszym teście z USA nie otworzyła się żadna podstrona. Zostają dwie drogi: pakiet Player International, jeśli jest sprzedawany w Twoim kraju, albo polski adres IP z VPN.</p>
+
+<h2>Jak wygląda komunikat</h2>
+<p>11 listopada 2026 otworzyliśmy z komputera w USA, bez VPN, stronę „Faktów” w Playerze. Przez chwilę było widać opis programu i listę wydań. Potem serwis sam przeniósł nas pod adres player.pl/international. Na ciemnym ekranie zostało logo i jedno zdanie:</p>
+<blockquote>Ups... Player jest niedostępny w Twojej lokalizacji</blockquote>
+<p>W prawym dolnym rogu Player wypisuje adres IP i skrót kraju, który rozpoznał. U nas było to „US”. Nie ma przycisku, logowania ani menu.</p>
+
+<h2>To inna blokada niż w TVP VOD</h2>
+<p>TVP VOD blokuje pojedynczy materiał i resztę serwisu zostawia otwartą. Player w USA zamknął wszystko: stronę główną, listy odcinków i logowanie. Nie da się więc nawet sprawdzić, czy inny odcinek działa.</p>
+
+<h2>Inne komunikaty Playera o lokalizacji</h2>
+<p>W tekstach serwisu są jeszcze komunikaty dla widzów, których Player wpuszcza, ale ogranicza. Nie widzieliśmy ich w teście, bo nasz adres był spoza Unii:</p>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Co oznacza</th></tr></thead><tbody>
+<tr><td>„Materiał niedostępny w Twojej lokalizacji. Przykro nam, materiały w player można odtwarzać tylko na terenie Unii Europejskiej.”</td><td>Odtwarzanie działa tylko w krajach Unii.</td></tr>
+<tr><td>„Ze względu na ograniczenia licencyjne nie możesz oglądać wybranego materiału wideo w Twojej obecnej lokalizacji.”</td><td>Ten jeden materiał ma licencję tylko na Polskę. Inne mogą działać.</td></tr>
+<tr><td>„Nie możemy wyświetlić tego materiału. Aby odtwarzać wybrany materiał w Twojej lokalizacji, aktywuj dostęp do swojego pakietu w całej Unii Europejskiej.”</td><td>Masz płatny pakiet kupiony w Polsce, ale nie potwierdziłeś jeszcze dostępu w Unii. Zrobisz to na swoim koncie.</td></tr>
+</tbody></table></div>
+
+<h2>Co możesz zrobić</h2>
+<h3>1. Player International</h3>
+<p>To oficjalny pakiet dla widzów za granicą: 50 zł za 30 dni, z siedmiodniowym okresem próbnym. Zawiera bibliotekę Playera bez reklam oraz kanały ITVN, ITVN Extra i TVN24. Player sprzedaje go w wybranych krajach, a zawartość różni się od pakietów w Polsce. Źródło: __PLAYERINT__, sprawdzone 11.11.2026.</p>
+<h3>2. Masz pakiet kupiony w Polsce i jesteś w Unii</h3>
+<p>Włącz na koncie dostęp w całej Unii Europejskiej. Dotyczy to osób mieszkających w Polsce, które wyjechały czasowo. Darmowych odcinków ta droga nie obejmuje.</p>
+<h3>3. VPN z serwerem w Polsce</h3>
+<p>Z polskim adresem IP Player otwiera się jak w kraju, razem z odcinkami oznaczonymi „BEZ OPŁAT”. Codziennie sprawdzamy, czy darmowe wydanie „Faktów” gra przez darmowy serwer VPN w Polsce. Wynik i szczegóły są w poradniku <a href="/player-za-granica">Player za granicą</a>.</p>
+
+<h2>Wskazówka: sprawdź, jaki kraj widzi Player</h2>
+<p>Skrót kraju w rogu ekranu z komunikatem jest przydatny. Jeśli masz włączony VPN i dalej widzisz ten ekran, przeczytaj skrót. „NL” albo „DE” znaczy, że aplikacja VPN połączyła Cię z Holandią albo Niemcami, a nie z Polską. Zmień serwer na polski i odśwież stronę.</p>
+""".replace("__PLAYERINT__", SRC_PLAYERINT), "prosec", brief([("Rodzaj błędu", "Blokada całego serwisu"), ("Kiedy się pojawia", "Od razu po wejściu"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Oficjalna opcja", "Player International")],
+                     [("/player-za-granica", "Poradnik: Player za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Podobny komunikat w TVP VOD"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + faq([("Czy Player działa w Wielkiej Brytanii?", "Nie sprawdzaliśmy tego z adresu w Wielkiej Brytanii. Komunikaty serwisu mówią o Unii Europejskiej, a Wielka Brytania do niej nie należy."),
+           ("Czy aplikacja na telefon albo telewizor ominie ten komunikat?", "Nie. Aplikacja łączy się przez ten sam adres IP co przeglądarka."),
+           ("Dlaczego strona najpierw się ładuje, a potem znika?", "Player sprawdza lokalizację po załadowaniu strony. W naszym teście opis programu było widać przez chwilę, zanim serwis przeniósł nas na ekran z komunikatem."),
+           ("Czy Player International to to samo co Player w Polsce?", "Nie. To osobny pakiet z własną zawartością. Część programów z polskiej oferty może w nim nie być.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player"), ("/player-niedostepny-w-twojej-lokalizacji", "Player niedostępny w Twojej lokalizacji")])
+
+PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedostępny w kraju, z którego się łączysz” | Polski Streaming",
+    "TVP Sport za granicą pokazuje „Przepraszamy. Z uwagi na ograniczenia licencyjne materiał jest niedostępny”. Zrzut ekranu z testu, przyczyna i wyjścia przed meczem.",
+    band('<a href="/">Polska telewizja za granicą</a> / <a href="/tvp-sport-za-granica">TVP Sport</a> / Komunikat', "TVP Sport: „materiał jest niedostępny w kraju, z którego się łączysz”",
+         "Tak TVP Sport informuje o blokadzie regionalnej. Zobacz, jak wygląda komunikat i co zrobić przed transmisją.",
+         errwhen(), figure=frame("/img/blok-tvpsport.webp", "sport.tvp.pl", "Zrzut ekranu z naszego testu bez VPN, 11.11.2026, adres IP z USA."))
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> Odtwarzacz TVP Sport rozpoznał adres IP spoza Polski i nie puścił wideo. Artykuły, wyniki i program transmisji dalej działają. Wideo ruszy z polskim adresem IP. Przed ważnym meczem sprawdź połączenie wcześniej na dowolnym materiale.</p>
+
+<h2>Jak wygląda komunikat</h2>
+<p>11 listopada 2026 otworzyliśmy z komputera w USA, bez VPN, najnowszy materiał z działu „Wideo”: krótką rozmowę o koszykarskiej reprezentacji Polek. Artykuł załadował się w całości. W oknie odtwarzacza, na czarnym tle, pojawił się biały napis:</p>
+<blockquote>Przepraszamy. Z uwagi na ograniczenia licencyjne materiał jest niedostępny w kraju z którego się łączysz.</blockquote>
+<p>Przycisk odtwarzania jest widoczny, ale po kliknięciu nic się nie dzieje. Licznik pokazuje długość materiału, u nas 25 sekund.</p>
+<p>To ważna obserwacja: zablokowany był krótki, własny materiał TVP, a nie mecz na żywo. W USA blokada objęła więc także dział „Wideo”.</p>
+
+<h2>Trzy wersje tego komunikatu</h2>
+<p>Odtwarzacz TVP ma w swoich tekstach trzy warianty. Pierwszy widzieliśmy w teście, dwa kolejne znamy z kodu odtwarzacza:</p>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Gdzie się pojawia</th></tr></thead><tbody>
+<tr><td>„Przepraszamy. Z uwagi na ograniczenia licencyjne materiał jest niedostępny w kraju z którego się łączysz.”</td><td>W oknie odtwarzacza przy materiale wideo. Wariant z naszego testu.</td></tr>
+<tr><td>„Materiał niedostępny” albo „Geoblokada” w tytule okna</td><td>Ten sam powód, inny nagłówek.</td></tr>
+<tr><td>„Ze względów licencyjnych materiał niedostępny poza granicami Polski.”</td><td>Plansza zamiast transmisji na żywo.</td></tr>
+</tbody></table></div>
+
+<h2>Dlaczego sport jest blokowany częściej</h2>
+<p>Prawa do meczów i zawodów sprzedaje się osobno dla każdego kraju. TVP kupuje je na Polskę, a w Niemczech albo w USA to samo wydarzenie ma innego nadawcę. TVP musi więc zamknąć transmisję dla widzów za granicą.</p>
+
+<h2>Co możesz zrobić</h2>
+<h3>1. Sprawdź nadawcę w kraju, w którym mieszkasz</h3>
+<p>Duże wydarzenia są zwykle w lokalnej telewizji, czasem bezpłatnie. Skoki narciarskie w sezonie 2026/27 pokazują w Niemczech ARD, ZDF i Eurosport. Komentarz jest wtedy w języku danego kraju. Więcej w poradniku <a href="/polska-telewizja-w-niemczech">Polska telewizja w Niemczech</a>.</p>
+<h3>2. VPN z serwerem w Polsce</h3>
+<p>Z polskim adresem IP odtwarzacz działa jak w kraju, z polskim komentarzem. W naszych codziennych testach materiały z działu „Wideo” grały przez darmowy serwer VPN w Polsce. Transmisji na żywo jeszcze nie testujemy.</p>
+<h3>3. Przed meczem zrób próbę</h3>
+<ul>
+  <li>Połącz VPN kilkanaście minut przed startem i włącz dowolny materiał z działu „Wideo”.</li>
+  <li>Jeśli widzisz komunikat, zmień serwer na inny polski i odśwież stronę.</li>
+  <li>Przed każdym wideo są reklamy. W naszych testach trwały od 46 do 55 sekund, więc nie czekaj do pierwszego gwizdka.</li>
+</ul>
+""", "prosec", brief([("Rodzaj błędu", "Blokada regionalna"), ("Gdzie się pojawia", "W oknie odtwarzacza"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Materiał w teście", "Wideo, 25 sekund")],
+                     [("/tvp-sport-za-granica", "Poradnik: TVP Sport za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Komunikat w TVP VOD"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + faq([("Czy TVP Sport działa za granicą bez VPN?", "Strona, artykuły i wyniki tak. W naszym teście z USA wideo było zablokowane. Z krajów Unii jeszcze nie sprawdzaliśmy."),
+           ("Czy aplikacja TVP Sport zachowuje się inaczej niż strona?", "Testujemy stronę w przeglądarce. Aplikacja korzysta z tego samego adresu IP, więc blokada regionalna działa w niej tak samo."),
+           ("Czy transmisja zadziała, jeśli wideo działa?", "Nie mamy na to wyniku testu. Transmisje mają osobne licencje, dlatego zrób próbę przed meczem i miej drugi polski serwer w zapasie.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/tvp-sport-za-granica", "TVP Sport"), ("/tvp-sport-material-niedostepny", "Materiał niedostępny")])
 
 PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą | Polski Streaming",
     "Polsat Box Go za granicą: co działa w UE, pakiet Polonia i dlaczego jeszcze nie testujemy tego serwisu.",
@@ -1132,6 +1275,7 @@ a.prov{text-decoration:none}
 .prose h3{margin:26px 0 8px}
 .prose p{margin:0 0 14px}
 .prose ul{margin:0 0 14px;padding-left:20px;display:grid;gap:10px}
+.prose blockquote{margin:18px 0;padding:18px 22px;background:var(--navy);color:var(--navy-ink);border-radius:8px;font-size:17px;line-height:1.5}
 .note{border-left:4px solid var(--warn);background:var(--bg);padding:14px 18px;font-size:15px}
 .prosec.alt .note{background:var(--surface)}
 .pgrid{display:grid;grid-template-columns:minmax(0,780px) minmax(0,420px);gap:80px;justify-content:space-between;align-items:start}

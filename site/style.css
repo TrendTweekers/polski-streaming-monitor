@@ -379,6 +379,7 @@ a.prov{text-decoration:none}
 .prose h3{margin:26px 0 8px}
 .prose p{margin:0 0 14px}
 .prose ul{margin:0 0 14px;padding-left:20px;display:grid;gap:10px}
+.prose blockquote{margin:18px 0;padding:18px 22px;background:var(--navy);color:var(--navy-ink);border-radius:8px;font-size:17px;line-height:1.5}
 .note{border-left:4px solid var(--warn);background:var(--bg);padding:14px 18px;font-size:15px}
 .prosec.alt .note{background:var(--surface)}
 .pgrid{display:grid;grid-template-columns:minmax(0,780px) minmax(0,420px);gap:80px;justify-content:space-between;align-items:start}
