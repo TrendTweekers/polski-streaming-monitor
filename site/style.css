@@ -436,6 +436,8 @@ a.prov{text-decoration:none}
   .fline{animation:dash 1.1s linear infinite}
   .js .rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
   .js .rv.in{opacity:1;transform:none}
+  .js .pb.rv.in{transition:opacity .5s ease,transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+  .pb:hover,.js .pb.rv.in:hover{transform:translateY(-3px)}
   .open .otext>*{animation:rise .55s ease both}
   .open .otext>*:nth-child(2){animation-delay:.05s}.open .otext>*:nth-child(3){animation-delay:.1s}.open .otext>*:nth-child(4){animation-delay:.15s}
   .open .hero,.open .bframe{animation:rise .7s ease .1s both}

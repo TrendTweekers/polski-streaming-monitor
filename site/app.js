@@ -202,3 +202,18 @@
   Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});
   setTimeout(function(){Array.prototype.forEach.call(els,function(el){el.classList.add('in')})},2500);
 })();
+
+(function(){
+  if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  var els=document.querySelectorAll('.pbprice b, .hld, .featcta > b');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    var el=e.target,full=el.textContent,m=full.match(/\d+(,\d+)?/);if(!m)return;
+    var end=parseFloat(m[0].replace(',','.')),dec=m[1]?m[1].length-1:0,t0=null;
+    el.style.fontVariantNumeric='tabular-nums';
+    function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/700),v=end*(1-Math.pow(1-k,3));
+      el.textContent=k<1?full.replace(m[0],v.toFixed(dec).replace('.',',')):full;if(k<1)requestAnimationFrame(f)}
+    requestAnimationFrame(f);
+  })},{threshold:.6});
+  Array.prototype.forEach.call(els,function(el){io.observe(el)});
+})();

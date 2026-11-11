@@ -1088,6 +1088,8 @@ a.prov{text-decoration:none}
   .fline{animation:dash 1.1s linear infinite}
   .js .rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
   .js .rv.in{opacity:1;transform:none}
+  .js .pb.rv.in{transition:opacity .5s ease,transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+  .pb:hover,.js .pb.rv.in:hover{transform:translateY(-3px)}
   .open .otext>*{animation:rise .55s ease both}
   .open .otext>*:nth-child(2){animation-delay:.05s}.open .otext>*:nth-child(3){animation-delay:.1s}.open .otext>*:nth-child(4){animation-delay:.15s}
   .open .hero,.open .bframe{animation:rise .7s ease .1s both}
@@ -1301,6 +1303,22 @@ def build_js():
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -6% 0px'});
   Array.prototype.forEach.call(els,function(el){el.classList.add('rv');io.observe(el)});
   setTimeout(function(){Array.prototype.forEach.call(els,function(el){el.classList.add('in')})},2500);
+})();
+"""
+    s += """
+(function(){
+  if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  var els=document.querySelectorAll('.pbprice b, .hld, .featcta > b');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    var el=e.target,full=el.textContent,m=full.match(/\\d+(,\\d+)?/);if(!m)return;
+    var end=parseFloat(m[0].replace(',','.')),dec=m[1]?m[1].length-1:0,t0=null;
+    el.style.fontVariantNumeric='tabular-nums';
+    function f(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/700),v=end*(1-Math.pow(1-k,3));
+      el.textContent=k<1?full.replace(m[0],v.toFixed(dec).replace('.',',')):full;if(k<1)requestAnimationFrame(f)}
+    requestAnimationFrame(f);
+  })},{threshold:.6});
+  Array.prototype.forEach.call(els,function(el){io.observe(el)});
 })();
 """
     (SITE / "app.js").write_text(s)
