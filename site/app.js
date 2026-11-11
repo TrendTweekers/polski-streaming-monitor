@@ -227,4 +227,9 @@
     navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
   }
   document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
+  // Tell CJ which page the click came from (sid), so a sale shows its page.
+  var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),function(a){
+    if(a.href.indexOf('sid=')<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+'sid='+sid;
+  });
 })();

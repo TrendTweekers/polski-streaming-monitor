@@ -1332,7 +1332,7 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
-<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Część z nich to linki partnerskie. Link partnerski prowadzi przez serwer sieci afiliacyjnej (CJ), która zapisuje kliknięcie, żeby przypisać zakup. My nie widzimy, kto kliknął.</p>
+<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Część z nich to linki partnerskie. Link partnerski prowadzi przez serwer sieci afiliacyjnej (CJ), która zapisuje kliknięcie, żeby przypisać zakup. Do linku dodajemy nazwę naszej strony, na której był przycisk, żeby wiedzieć, która strona doprowadziła do zakupu. My nie widzimy, kto kliknął ani kto kupił.</p>
 """, "prosec"),
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
@@ -1675,6 +1675,11 @@ def build_js():
     navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
   }
   document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
+  // Tell CJ which page the click came from (sid), so a sale shows its page.
+  var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),function(a){
+    if(a.href.indexOf('sid=')<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+'sid='+sid;
+  });
 })();
 """
     (SITE / "app.js").write_text(s)
