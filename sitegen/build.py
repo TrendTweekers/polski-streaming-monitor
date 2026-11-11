@@ -364,7 +364,7 @@ def points_table():
 
 # Partner (affiliate) links. A provider without an entry gets a plain link to its home page.
 AFF = {
-    "nord": "https://www.dpbolvw.net/click-101925411-15078184",  # CJ, property "Polski Streaming" (101925411), link "2y Pricing Page"
+    "nord": "https://www.jdoqocy.com/click-101925411-13382109",  # CJ link suggested by the NordVPN manager 2026-11-11 (lands on /special/, Polish page for visitors from Poland). Before: 15078184
     "surf": "https://www.dpbolvw.net/click-101925411-15438560",  # CJ advertiser 6282055, text link "Get Surfshark VPN right away" (home page)
     "proton": "https://www.dpbolvw.net/click-101925411-15834536",  # CJ advertiser 5227916, text link "Proton VPN - Special Offer" (Polish offer page)
 }
