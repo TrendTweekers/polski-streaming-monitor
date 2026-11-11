@@ -257,7 +257,8 @@ def test_service(browser, svc, shot_path):
             save_shot(page, shot_path)
         res["shot"] = str(shot_path.relative_to(SITE))
     except Exception as e:  # a bot fault is "not tested", never "blocked"
-        res.update(status="none", reason="Błąd bota: " + type(e).__name__)
+        vpn = re.search(r"ERR_SOCKS|ERR_PROXY|ERR_TUNNEL|ERR_CONNECTION", str(e))
+        res.update(status="none", reason=VPN_DOWN if vpn else "Błąd bota: " + type(e).__name__)
         log("  bot error:", type(e).__name__, str(e)[:160])
     finally:
         ctx.close()
