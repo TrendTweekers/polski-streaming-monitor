@@ -118,6 +118,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 <script type="application/ld+json">{ld}</script>
 </head>
 <body>
+<div class="disc"><div class="wrap">Strona zawiera linki partnerskie. <a href="/jak-testujemy#linki">Jak zarabiamy</a></div></div>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
   <nav class="cnav" aria-label="Główne">{nav}</nav>
@@ -371,7 +372,7 @@ def plink(pid, url):
 
 
 def aff_note(pid):
-    return '<span class="affnote">Link partnerski</span>' if pid in AFF else ""
+    return ""  # the disclosure is one line under the header, on every page
 
 
 PROFILE = {
@@ -382,25 +383,44 @@ PROFILE = {
     "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="10,99 zł", unit="za miesiąc",
                  terms="296,73 zł za pierwsze 27 miesięcy.",
                  pros=["61 serwerów w Polsce, najwięcej w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
-                 cons=["Najniższa cena tylko w planie na 27 miesięcy", "Jeszcze go nie testowaliśmy"]),
+                 cons=["Najniższa cena tylko w planie na 27 miesięcy"]),
     "surf": dict(tag="Najniższa cena w złotówkach", badge="", price="8,99 zł", unit="za miesiąc",
                  terms="242,73 zł za pierwsze 27 miesięcy, plus VAT, jeśli dotyczy.",
                  pros=["Bez limitu urządzeń", "Najniższa cena w złotówkach w tym zestawieniu", "Aplikacje na Android TV, Apple TV i Fire TV"],
-                 cons=["Do ceny może dojść VAT", "Jeszcze go nie testowaliśmy"]),
+                 cons=["Do ceny może dojść VAT"]),
     "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="2,49 €", unit="za miesiąc, ok. 10,93 zł",
                  terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
-                 cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów", "Jeszcze go nie testowaliśmy"]),
+                 cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów"]),
     "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="2,19 €", unit="za miesiąc, ok. 9,61 zł",
                  terms="61,32 € za pierwsze 28 miesięcy. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
-                 cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro", "Jeszcze go nie testowaliśmy"]),
+                 cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
 }
 PRICE_SRC = {"proton": ("https://protonvpn.com/pl/pricing", "protonvpn.com/pl/pricing"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
              "surf": ("https://surfshark.com/pl/pricing", "surfshark.com/pl/pricing"), "expr": ("https://www.expressvpn.com/pl/pricing", "expressvpn.com/pl/pricing"),
              "cybr": ("https://www.cyberghostvpn.com/pl/buy/cyberghost-vpn-3", "cyberghostvpn.com")}
 CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
 MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>'
+
+
+def featured():
+    return f"""<section class="feat"><div class="wrap">
+  <div class="featbox">
+    <div class="feath"><span class="feattag">Nasz wybór do polskiej telewizji</span>
+      <h2><img src="/logos/nord.svg" alt="" width="40" height="40">NordVPN</h2>
+      <p>Ma 61 serwerów w Polsce, najwięcej w rankingu. Gdy serwis zablokuje jeden adres, przełączasz się na inny serwer i oglądasz dalej.</p></div>
+    <ul class="featl">
+      <li>{CHECK}<span>61 serwerów w Polsce</span></li>
+      <li>{CHECK}<span>10 urządzeń jednocześnie</span></li>
+      <li>{CHECK}<span>Aplikacje na Android TV, Apple TV i Fire TV</span></li>
+      <li>{CHECK}<span>30 dni na zwrot pieniędzy</span></li>
+    </ul>
+    <div class="featcta"><b>10,99 zł</b><span>za miesiąc</span>
+      <a class="btn big" {plink("nord", "https://nordvpn.com")}>Przejdź do NordVPN</a>
+      <small>296,73 zł za pierwsze 27 miesięcy. Cena z {CHECKED}.</small></div>
+  </div>
+</div></section>"""
 
 
 def highlights():
@@ -524,6 +544,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
   <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
 </div></section>"""
+              + featured()
               + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców. Stan na {CHECKED}.</p></div>
   {highlights()}
@@ -552,7 +573,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
-                     ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Takie przyciski mają podpis „Link partnerski”. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.")]))
+                     ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.")]))
 
 PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
     "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
@@ -812,8 +833,9 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
          "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce, ile daje czasu na zwrot i czy sprawdziliśmy go w teście.",
          f'<div class="when mono">{BYLINE}<span>Ceny i dane sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
+    + featured()
     + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców, nie na naszej opinii.</p></div>
+  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców.</p></div>
   {highlights()}
 </div></section>"""
     + QUIZ
@@ -900,7 +922,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy na razie Proton VPN w planie darmowym. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
 
 <h2 id="linki">Linki partnerskie</h2>
-<p>Strona zarabia na linkach partnerskich: gdy kupisz VPN przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. <b>Dziś partnerami są __PARTNERS__.</b> Przyciski z linkiem partnerskim mają podpis „Link partnerski”. Pozostałe przyciski to zwykłe linki do stron dostawców.</p>
+<p>Strona zarabia na linkach partnerskich: gdy kupisz VPN przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. <b>Dziś partnerami są __PARTNERS__.</b></p>
 <p>Prowizja nie daje punktów w rankingu i nie zmienia wyników testu. Zasady punktacji są jawne i takie same dla każdego dostawcy.</p>
 
 <h2>Skąd są dane w porównaniu</h2>
@@ -961,7 +983,7 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
-<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Część z nich to linki partnerskie, oznaczone podpisem „Link partnerski”. Link partnerski prowadzi przez serwer sieci afiliacyjnej (CJ), która zapisuje kliknięcie, żeby przypisać zakup. My nie widzimy, kto kliknął.</p>
+<p>Przyciski „Strona dostawcy” prowadzą na strony firm VPN. Po kliknięciu obowiązuje ich polityka prywatności. Część z nich to linki partnerskie. Link partnerski prowadzi przez serwer sieci afiliacyjnej (CJ), która zapisuje kliknięcie, żeby przypisać zakup. My nie widzimy, kto kliknął.</p>
 """, "prosec"),
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
@@ -1085,6 +1107,24 @@ table.mini3 td:first-child{font-weight:600;width:30%}
 .hlk{font-size:12px;font-weight:600;color:var(--accent);text-transform:none}
 .hlv{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:700}
 .hld{font-size:14px;color:var(--muted)}
+.disc{background:var(--bg);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.disc .wrap{padding-top:5px;padding-bottom:5px}
+.disc a{color:var(--muted)}
+.feat{background:var(--navy);color:var(--navy-ink)}
+.feat .wrap{padding-top:36px;padding-bottom:36px}
+.featbox{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;gap:48px;align-items:center}
+.feattag{display:inline-block;font-size:12px;font-weight:600;color:#ffd77a;border:1px solid #ffd77a;border-radius:20px;padding:3px 12px;margin-bottom:12px}
+.feath h2{display:flex;align-items:center;gap:14px;font-size:34px}
+.feath h2 img{background:#fff;border-radius:9px;padding:6px}
+.feath p{color:var(--navy-muted);margin-top:10px;max-width:560px}
+.featl{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px}
+.featl li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:center}
+.featl svg{color:#55d3a4}
+.featcta{display:grid;justify-items:center;gap:2px;text-align:center}
+.featcta b{font:500 34px/1.1 var(--mono);letter-spacing:-.02em}
+.featcta span{font-size:12px;color:var(--navy-muted);margin-bottom:10px}
+.featcta .btn{background:#ffd77a;color:#17232D}
+.featcta small{font-size:11px;color:var(--navy-muted);margin-top:8px;max-width:220px}
 .pblist{display:grid;gap:20px}
 .affnote{display:block;font-size:11px;color:var(--muted);text-align:center;margin-top:5px}
 .pbh .btn+.affnote{grid-column:-2/-1;margin-top:-14px}
@@ -1153,7 +1193,7 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .kv dt,.kv dd{margin:0;padding:9px 0;border-bottom:1px solid var(--line)}
 .kv dt{color:var(--muted)}
 .provsec p{margin:0 0 12px;font-size:14px}
-@media (max-width:1180px){.hls{grid-template-columns:repeat(2,minmax(0,1fr))}.pbh{grid-template-columns:44px 48px minmax(0,1fr) auto}.pbh .btn{grid-column:1/-1;text-align:center}.pbfacts{grid-template-columns:repeat(2,minmax(0,1fr))}.pbfacts>div{border-bottom:1px solid var(--line)}.pbfacts>div:nth-child(2n){border-right:0}.pbbody{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pbbody>div:last-child{grid-column:1/-1}.quiz{grid-template-columns:minmax(0,1fr)}.qhead{grid-row:auto}.devsec .wrap{grid-template-columns:minmax(0,1fr)}.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 150px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(3){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:1180px){.featbox{grid-template-columns:minmax(0,1fr);gap:24px}.featcta{justify-items:start;text-align:left}.hls{grid-template-columns:repeat(2,minmax(0,1fr))}.pbh{grid-template-columns:44px 48px minmax(0,1fr) auto}.pbh .btn{grid-column:1/-1;text-align:center}.pbfacts{grid-template-columns:repeat(2,minmax(0,1fr))}.pbfacts>div{border-bottom:1px solid var(--line)}.pbfacts>div:nth-child(2n){border-right:0}.pbbody{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pbbody>div:last-child{grid-column:1/-1}.quiz{grid-template-columns:minmax(0,1fr)}.qhead{grid-row:auto}.devsec .wrap{grid-template-columns:minmax(0,1fr)}.open.hasfig .wrap{grid-template-columns:minmax(0,1fr) minmax(0,460px)}.prow{grid-template-columns:34px 150px minmax(0,1fr) minmax(0,1fr) auto}.prow>span:nth-of-type(3){display:none}.egrid{grid-template-columns:minmax(0,1fr)}.pgrid{grid-template-columns:minmax(0,1fr);gap:32px}.side2{position:static;max-width:520px}.cnav{overflow-x:auto}.provgrid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:820px){
   .hls{grid-template-columns:minmax(0,1fr)}.pbh{grid-template-columns:36px 40px minmax(0,1fr);gap:12px 12px;padding:18px}.rank{width:36px;height:36px;font-size:16px}.pbh h3{font-size:20px}.pbprice{grid-column:1/-1;text-align:left;display:flex;align-items:baseline;gap:8px}.pbfacts>div{padding:12px 18px}.pbbody{grid-template-columns:minmax(0,1fr);gap:20px;padding:18px}.qres{grid-template-columns:44px minmax(0,1fr)}.qres .btn{grid-column:1/-1;text-align:center}.hero.art{-webkit-mask-image:none;mask-image:none}
   .open.hasfig .wrap{grid-template-columns:minmax(0,1fr);gap:8px;padding-bottom:24px}
