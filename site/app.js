@@ -217,3 +217,14 @@
   })},{threshold:.6});
   Array.prototype.forEach.call(els,function(el){io.observe(el)});
 })();
+
+(function(){
+  function hit(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[data-aff]'):null;
+    if(!a||!navigator.sendBeacon)return;
+    var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(x){}
+    if(r===location.hostname)r='';
+    navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
+  }
+  document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
+})();
