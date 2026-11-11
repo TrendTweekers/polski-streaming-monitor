@@ -37,7 +37,7 @@ BLOCK_TEXTS = [
     (r"wykryto wtyczkę adblock|wyłącz blokowanie reklam", "Serwis pokazał komunikat o blokowaniu reklam"),
     (r"niedostępn\w+ w twoim kraju|poza granicami polski|tylko na terytorium|nie jest dostępn\w+ w twoim regionie|geoblok", "Serwis pokazał komunikat o blokadzie regionalnej"),
     (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN"),
-    (r"wystąpił problem z materiałem|nie udało się odtworzyć", "Serwis pokazał błąd odtwarzania"),
+    (r"wystąpił problem z materiałem|nie udało się odtworzyć|coś poszło nie tak", "Serwis pokazał błąd odtwarzania"),
 ]
 VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,d:(isFinite(v.duration)?v.duration:0),src:(v.currentSrc||'')}))"""
 
@@ -187,7 +187,12 @@ def long_enough(page):
         ds = [v["d"] for v in videos(page) if v["src"].startswith("blob:") and v["d"] > 0]
         if ds:
             return max(ds) >= CFG["watch_seconds"] + 20
-    return True
+        try:  # the player shows its own error for this clip: take the next clip
+            if re.search(r"coś poszło nie tak", page.evaluate("()=>document.body.innerText.slice(0,60000)"), re.I):
+                return False
+        except Exception:
+            pass
+    return False  # no playable video found on this clip page
 
 
 def test_service(browser, svc, shot_path):
