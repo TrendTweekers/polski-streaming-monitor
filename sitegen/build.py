@@ -72,7 +72,7 @@ def last_rows_html():
     return out or '<p class="muted">Brak wyniku testu.</p>'
 
 NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/tvp-sport-za-granica", "TVP Sport"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN"),
-       ("/porownanie-vpn", "Ranking VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]
+       ("/porownanie-vpn", "Ranking VPN"), ("/jak-testujemy", "Jak testujemy")]
 
 
 def layout(path, title, desc, body, kind="page", crumbs=None):
@@ -128,7 +128,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 </main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
+  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Test darmowego serwera</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 </body>
@@ -167,9 +167,9 @@ WHEN = f"""<div class="when mono">
 
 RESULTS = """<section class="results" id="wyniki"><div class="wrap">
   <div class="rhead">
-    <div><h2>Wyniki ostatniego testu</h2><p id="scope">Kliknij nazwę VPN, aby zobaczyć szczegóły testu.</p></div>
+    <div><h2>Wynik ostatniego testu</h2><p id="scope">Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie.</p></div>
     <div class="nums">
-      <div><b id="s1">—</b><span>testowanych VPN-ów działa z TVP VOD</span></div>
+      <div><b id="s1">—</b><span>serwisów grało w ostatnim teście</span></div>
       <div><b id="s2">—</b><span>prób w ostatnim teście</span></div>
       <div><b id="s3">—</b><span>dni testów w historii</span></div>
     </div>
@@ -182,12 +182,19 @@ RESULTS = """<section class="results" id="wyniki"><div class="wrap">
   <div class="mlist" id="mlist"></div>
   <div class="rfoot">
     <div class="legend" id="legend"></div>
-    <div>Kolejność zależy tylko od wyniku testu. <a href="/jak-testujemy">Jak testujemy</a></div>
+    <div><a href="/jak-testujemy">Jak testujemy</a></div>
+  </div>
+</div></section>
+<section class="feat"><div class="wrap">
+  <div class="freecta">
+    <div><h2>Darmowych serwerów jest mało. Płatne VPN mają ich więcej.</h2>
+      <p>W planie darmowym wielu ludzi korzysta z tych samych serwerów w Polsce. Gdy serwer jest przeciążony albo serwis zablokuje jego adres, trudno przełączyć się na inny. NordVPN podaje 61 serwerów w Polsce i daje 30 dni na zwrot pieniędzy.</p></div>
+    <a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>
   </div>
 </div></section>"""
 
 HISTORY = """<section class="history" id="historia"><div class="wrap">
-  <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może przestać działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
+  <div class="shead"><h2>Darmowy serwer w ostatnich 30 dniach</h2><p>Darmowy serwer, który działa dziś, jutro może nie działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
   <div class="hctl">
     <div class="seg" role="group" aria-label="VPN" id="hprov"></div>
     <div class="seg" role="group" aria-label="Serwis" id="hserv"></div>
@@ -584,10 +591,10 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
                      LEGAL_Q, FREE_Q, TV_Q,
                      ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.")]))
 
-PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
-    "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
-    band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
-         "Każdego ranka bot sprawdza, czy film gra przez VPN. Tu są wyniki ostatniego testu, historia i zrzuty ekranu.", WHEN)
+PAGES["/wyniki-testow"] = ("Test darmowego serwera VPN w Polsce: wyniki | Polski Streaming",
+    "Codzienny test darmowego serwera Proton VPN w Polsce z TVP VOD, Playerem i TVP Sport: ostatni wynik, historia 30 dni i zrzuty ekranu.",
+    band('<a href="/">Polska telewizja za granicą</a> / Test darmowego serwera', "Test darmowego serwera w Polsce",
+         "Każdego ranka bot sprawdza, czy film gra przez darmowy serwer Proton VPN w Polsce. Darmowe serwery są obciążone, więc wynik zmienia się z dnia na dzień.", WHEN)
     + RESULTS + HISTORY + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
@@ -1045,6 +1052,8 @@ a.prov{text-decoration:none}
 .sidefig{margin:0}
 .sidefig img{display:block;width:100%;height:auto;border:1px solid var(--line)}
 .figcap{font-size:13px;color:var(--muted);margin-top:8px}
+.freecta{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between;padding:44px 0}
+.freecta h2{color:inherit;margin:0 0 10px}.freecta p{max-width:720px;margin:0;color:var(--navy-muted)}.freecta .btn{background:var(--surface);color:var(--ink)}
 .cta2{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
 .btn.ghost{background:transparent;color:var(--cream-ink);border:1px solid var(--cream-ink)}
 .lastrow{display:grid;grid-template-columns:30px minmax(160px,260px) minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
@@ -1243,7 +1252,9 @@ def build_js():
         "'<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona '+esc(p.name)+'</a></details>'")
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
-    rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy. Na test czekają: '+RUN.providers.filter(function(p){return !p.tested}).map(function(p){return p.name}).join(', ')+'.'")
+    rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy.'")
+    rep("$('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy.", "$('scope').textContent='Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie. Testujemy '+SVON.length+' darmowe serwisy.")
+    rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=(tested[0]?works(tested[0]):0)+'/'+SVON.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
     rep("data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});", "tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});")
     rep("    RUN.providers.forEach(function(p){\n      var o=0,t=0,cells='';", "    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){\n      var o=0,t=0,cells='';")
     rep("$('hprov').innerHTML=RUN.providers.map(", "$('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(")

@@ -48,10 +48,10 @@
     $('hero').hidden=cur!=='uk';$('credit').hidden=cur!=='uk';$('open').classList.toggle('solo',cur!=='uk');
     $('crumb').textContent=c.label;$('where').textContent=c.where;$('tcountry').textContent=c.label;
     $('last').textContent=fmtDT(RUN.finished_at);$('next').textContent=dm(addDays(RUN.date,1))+'.'+addDays(RUN.date,1).slice(0,4)+', rano';
-    $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;
+    $('s1').textContent=(tested[0]?works(tested[0]):0)+'/'+SVON.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy. Na test czekają: '+RUN.providers.filter(function(p){return !p.tested}).map(function(p){return p.name}).join(', ')+'.';
+    $('scope').textContent='Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie. Testujemy '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy.';
     var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
     var h='',m='';
     data.forEach(function(p){

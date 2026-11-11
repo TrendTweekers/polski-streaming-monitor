@@ -393,6 +393,8 @@ a.prov{text-decoration:none}
 .sidefig{margin:0}
 .sidefig img{display:block;width:100%;height:auto;border:1px solid var(--line)}
 .figcap{font-size:13px;color:var(--muted);margin-top:8px}
+.freecta{display:flex;flex-wrap:wrap;gap:24px 48px;align-items:center;justify-content:space-between;padding:44px 0}
+.freecta h2{color:inherit;margin:0 0 10px}.freecta p{max-width:720px;margin:0;color:var(--navy-muted)}.freecta .btn{background:var(--surface);color:var(--ink)}
 .cta2{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
 .btn.ghost{background:transparent;color:var(--cream-ink);border:1px solid var(--cream-ink)}
 .lastrow{display:grid;grid-template-columns:30px minmax(160px,260px) minmax(0,1fr) auto;gap:16px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
