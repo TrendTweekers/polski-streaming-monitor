@@ -6,6 +6,13 @@
     "player": "unstable",
     "tvpsport": "ok"
    }
+  },
+  "2026-11-11": {
+   "proton": {
+    "tvpvod": "none",
+    "player": "none",
+    "tvpsport": "blocked"
+   }
   }
  }
 }
