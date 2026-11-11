@@ -1327,6 +1327,8 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
 </ul>
 <h2>Statystyki odwiedzin</h2>
 <p>Liczymy odsłony stron narzędziem Vercel Web Analytics. Działa ono bez plików cookie i z naszej domeny. Widzimy tylko liczby zbiorcze: którą stronę otwarto, z jakiego kraju, z jakiej strony ktoś przyszedł i na jakim typie urządzenia. Nie widzimy, kim jesteś, i nie rozpoznajemy Cię przy kolejnej wizycie następnego dnia.</p>
+<h2>Kliknięcia w przyciski dostawców</h2>
+<p>Gdy klikniesz przycisk prowadzący do dostawcy VPN, zapisujemy samo kliknięcie: którego dostawcy dotyczy, na której naszej stronie było, z jakiego kraju i na jakim typie urządzenia. Nie zapisujemy adresu IP ani niczego, co pozwala Cię rozpoznać.</p>
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
@@ -1661,6 +1663,18 @@ def build_js():
     requestAnimationFrame(f);
   })},{threshold:.6});
   Array.prototype.forEach.call(els,function(el){io.observe(el)});
+})();
+"""
+    s += """
+(function(){
+  function hit(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[data-aff]'):null;
+    if(!a||!navigator.sendBeacon)return;
+    var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(x){}
+    if(r===location.hostname)r='';
+    navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
+  }
+  document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
 })();
 """
     (SITE / "app.js").write_text(s)

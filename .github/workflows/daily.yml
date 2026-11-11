@@ -41,3 +41,11 @@ jobs:
           # If the repo changed during the test, put the bot results on top. The bot data wins.
           git pull --rebase -X theirs origin main
           git push
+      - name: Tell the owner the result
+        if: always()
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [ "$JOB_STATUS" = "success" ]; then python bot/notify.py; else python bot/notify.py "Polski Streaming: dzisiejszy test NIE UDAŁ SIĘ (status: $JOB_STATUS). Sprawdź GitHub Actions."; fi

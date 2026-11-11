@@ -1,0 +1,27 @@
+name: watchdog
+on:
+  schedule:
+    - cron: "30 8 * * *"   # 09:30 in Poland (winter time)
+  workflow_dispatch:
+permissions:
+  actions: write
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start the daily test if it did not run today
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          last=$(python -c "import json;print(json.load(open('site/data/latest.json'))['date'])")
+          today=$(TZ=Europe/Warsaw date +%F)
+          echo "last test: $last, today: $today"
+          if [ "$last" != "$today" ]; then
+            gh workflow run daily.yml
+            python bot/notify.py "Polski Streaming: test nie ruszył dziś sam (ostatni: $last). Uruchomiłem go teraz."
+          fi
