@@ -8,18 +8,20 @@
   "max_wait_seconds": 330,
   "providers": [
     {
+      "id": "nord",
+      "name": "NordVPN",
+      "secret_env": "NORD_PL_WG",
+      "enabled": true,
+      "plan": "plan płatny",
+      "server": "Warszawa"
+    },
+    {
       "id": "proton",
       "name": "Proton VPN",
       "plan": "plan darmowy",
       "server": "PL-FREE#1",
       "secret_env": "PROTON_PL_WG",
       "enabled": true
-    },
-    {
-      "id": "nord",
-      "name": "NordVPN",
-      "secret_env": "NORD_PL_WG",
-      "enabled": false
     },
     {
       "id": "surf",

@@ -41,6 +41,18 @@ def tested():
     return [p for p in RUN.get("providers", []) if p.get("tested")]
 
 
+def tested_phrase():
+    """'NordVPN (plan płatny) i Proton VPN (plan darmowy)', built from the last bot run."""
+    names = [p["name"] + (f' ({p["plan"]})' if p.get("plan") else "") for p in tested()]
+    return (", ".join(names[:-1]) + " i " + names[-1]) if len(names) > 1 else (names[0] if names else "żaden dostawca")
+
+
+def nord_test_line():
+    if not any(p["id"] == "nord" for p in tested()):
+        return ""
+    return f'<p class="feattest">Nasz test z {LAST[:10]}: {prov_status_html("nord")}</p>'
+
+
 def prov_status_html(pid):
     """Static copy of what app.js renders, so the result is in the HTML that search engines read."""
     p = next((x for x in RUN.get("providers", []) if x["id"] == pid), None)
@@ -72,7 +84,7 @@ def last_rows_html():
     return out or '<p class="muted">Brak wyniku testu.</p>'
 
 NAV = [("/tvp-vod-za-granica", "TVP VOD"), ("/player-za-granica", "Player"), ("/tvp-sport-za-granica", "TVP Sport"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN"),
-       ("/porownanie-vpn", "Ranking VPN"), ("/jak-testujemy", "Jak testujemy")]
+       ("/porownanie-vpn", "Ranking VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]
 
 
 def layout(path, title, desc, body, kind="page", crumbs=None):
@@ -128,7 +140,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 </main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Test darmowego serwera</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
+  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Wyniki testów</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 <script>window.va=window.va||function(){{(window.vaq=window.vaq||[]).push(arguments)}};</script>
@@ -169,9 +181,9 @@ WHEN = f"""<div class="when mono">
 
 RESULTS = """<section class="results" id="wyniki"><div class="wrap">
   <div class="rhead">
-    <div><h2>Wynik ostatniego testu</h2><p id="scope">Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie.</p></div>
+    <div><h2>Wyniki ostatniego testu</h2><p id="scope">Kliknij nazwę VPN, aby zobaczyć szczegóły testu.</p></div>
     <div class="nums">
-      <div><b id="s1">—</b><span>serwisów grało w ostatnim teście</span></div>
+      <div><b id="s1">—</b><span>testowanych VPN-ów działa z TVP VOD</span></div>
       <div><b id="s2">—</b><span>prób w ostatnim teście</span></div>
       <div><b id="s3">—</b><span>dni testów w historii</span></div>
     </div>
@@ -189,14 +201,14 @@ RESULTS = """<section class="results" id="wyniki"><div class="wrap">
 </div></section>
 <section class="feat"><div class="wrap">
   <div class="freecta">
-    <div><h2>Darmowych serwerów jest mało. Płatne VPN mają ich więcej.</h2>
+    <div><h2>Darmowy serwer bywa przeciążony. Płatne VPN mają ich więcej.</h2>
       <p>W planie darmowym wielu ludzi korzysta z tych samych serwerów w Polsce. Gdy serwer jest przeciążony albo serwis zablokuje jego adres, trudno przełączyć się na inny. NordVPN podaje 61 serwerów w Polsce i daje 30 dni na zwrot pieniędzy.</p></div>
     <a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>
   </div>
 </div></section>"""
 
 HISTORY = """<section class="history" id="historia"><div class="wrap">
-  <div class="shead"><h2>Darmowy serwer w ostatnich 30 dniach</h2><p>Darmowy serwer, który działa dziś, jutro może nie działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
+  <div class="shead"><h2>Skuteczność w ostatnich 30 dniach</h2><p>VPN, który działa dziś, jutro może przestać działać. Złe dni zostają w historii. Szare pola to dni bez testu.</p></div>
   <div class="hctl">
     <div class="seg" role="group" aria-label="VPN" id="hprov"></div>
     <div class="seg" role="group" aria-label="Serwis" id="hserv"></div>
@@ -236,7 +248,7 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 
 def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Test darmowego serwera: {name}</h2><p>{note} Na razie testujemy tylko darmowy serwer Proton VPN. Darmowe serwery są obciążone i wynik zmienia się z dnia na dzień. Płatnych planów z rankingu jeszcze nie testowaliśmy.</p></div>
+  <div class="shead"><h2>Wynik naszego testu: {name}</h2><p>{note} Testujemy dziś: {tested_phrase()}. Darmowy serwer jest obciążony i jego wynik zmienia się z dnia na dzień.</p></div>
   <div class="svc" data-svc="{sid}">{svc_rows_html(sid)}</div>
   <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
@@ -427,7 +439,7 @@ def featured():
   <div class="featbox">
     <div class="feath"><span class="feattag">Nasz wybór do polskiej telewizji</span>
       <h2><img src="/logos/nord.svg" alt="" width="40" height="40">NordVPN</h2>
-      <p>Ma 61 serwerów w Polsce, najwięcej w rankingu. Gdy serwis zablokuje jeden adres, przełączasz się na inny serwer i oglądasz dalej.</p></div>
+      <p>Ma 61 serwerów w Polsce, najwięcej w rankingu. Gdy serwis zablokuje jeden adres, przełączasz się na inny serwer i oglądasz dalej.</p>{nord_test_line()}</div>
     <ul class="featl">
       <li>{CHECK}<span>61 serwerów w Polsce</span></li>
       <li>{CHECK}<span>10 urządzeń jednocześnie</span></li>
@@ -598,10 +610,10 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
                      LEGAL_Q, FREE_Q, TV_Q,
                      ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.")]))
 
-PAGES["/wyniki-testow"] = ("Test darmowego serwera VPN w Polsce: wyniki | Polski Streaming",
-    "Codzienny test darmowego serwera Proton VPN w Polsce z TVP VOD, Playerem i TVP Sport: ostatni wynik, historia 30 dni i zrzuty ekranu.",
-    band('<a href="/">Polska telewizja za granicą</a> / Test darmowego serwera', "Test darmowego serwera w Polsce",
-         "Każdego ranka bot sprawdza, czy film gra przez darmowy serwer Proton VPN w Polsce. Darmowe serwery są obciążone, więc wynik zmienia się z dnia na dzień.", WHEN)
+PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
+    "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
+    band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
+         f"Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Testujemy dziś: {tested_phrase()}.", WHEN)
     + RESULTS + HISTORY + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
@@ -889,7 +901,7 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
 <h2>5. VPN z serwerem w Polsce</h2>
 <p>VPN daje Ci polski adres IP. Serwis traktuje Cię wtedy jak widza w Polsce i pokazuje krajową wersję, także darmowe odcinki z reklamami. To jedyny z pięciu sposobów, który prowadzi do polskiej wersji TVP VOD, Playera i TVP Sport.</p>
 <p>Są dwa zastrzeżenia. Serwisy blokują część adresów VPN, więc żaden dostawca nie da gwarancji. Regulamin serwisu może też zabraniać omijania blokad regionalnych. Samo używanie VPN jest w Niemczech legalne.</p>
-<p>Każdego ranka sprawdzamy darmowy serwer w Polsce z trzema serwisami. Wynik jest w poradniku <a href="/darmowy-vpn-polska-telewizja">Darmowy VPN do polskiej telewizji</a>.</p>
+<p>Każdego ranka sprawdzamy botem, czy trzy polskie serwisy grają przez VPN z serwerem w Polsce. Aktualne wyniki są na stronie <a href="/wyniki-testow">Wyniki testów</a>.</p>
 
 <h2>Sport: skoki narciarskie i mecze</h2>
 <p>Niemcy i Polska mają ten sam czas, więc transmisje na żywo są o tej samej godzinie.</p>
@@ -953,7 +965,7 @@ PAGES["/tvp-vod-material-niedostepny-w-twoim-kraju"] = ("TVP VOD: „materiał j
 <h3>2. Mieszkasz w Polsce i masz pakiet TVP+</h3>
 <p>Zaloguj się. Według komunikatu i unijnego rozporządzenia 2017/1128 pakiet ma działać podczas wizyty w innym kraju Unii. Ta zasada nie obejmuje krajów spoza Unii, na przykład USA i Wielkiej Brytanii. Nie obejmuje też treści darmowych.</p>
 <h3>3. Połącz się przez VPN z serwerem w Polsce</h3>
-<p>Z polskim adresem IP serwis traktuje Cię jak widza w kraju. Ten sam program, „Jeden z dziesięciu”, sprawdzamy codziennie przez darmowy serwer VPN w Polsce. Wynik zmienia się z dnia na dzień i jest w poradniku <a href="/tvp-vod-za-granica">TVP VOD za granicą</a>.</p>
+<p>Z polskim adresem IP serwis traktuje Cię jak widza w kraju. Ten sam program, „Jeden z dziesięciu”, sprawdzamy codziennie przez VPN z serwerem w Polsce. Wynik z każdego dnia jest w poradniku <a href="/tvp-vod-za-granica">TVP VOD za granicą</a>.</p>
 
 <h2>Komunikat jest, mimo że VPN jest włączony</h2>
 <ul>
@@ -1001,7 +1013,7 @@ PAGES["/player-niedostepny-w-twojej-lokalizacji"] = ("„Player jest niedostępn
 <h3>2. Masz pakiet kupiony w Polsce i jesteś w Unii</h3>
 <p>Włącz na koncie dostęp w całej Unii Europejskiej. Dotyczy to osób mieszkających w Polsce, które wyjechały czasowo. Darmowych odcinków ta droga nie obejmuje.</p>
 <h3>3. VPN z serwerem w Polsce</h3>
-<p>Z polskim adresem IP Player otwiera się jak w kraju, razem z odcinkami oznaczonymi „BEZ OPŁAT”. Codziennie sprawdzamy, czy darmowe wydanie „Faktów” gra przez darmowy serwer VPN w Polsce. Wynik i szczegóły są w poradniku <a href="/player-za-granica">Player za granicą</a>.</p>
+<p>Z polskim adresem IP Player otwiera się jak w kraju, razem z odcinkami oznaczonymi „BEZ OPŁAT”. Codziennie sprawdzamy, czy darmowe wydanie „Faktów” gra przez VPN z serwerem w Polsce. Wynik i szczegóły są w poradniku <a href="/player-za-granica">Player za granicą</a>.</p>
 
 <h2>Wskazówka: sprawdź, jaki kraj widzi Player</h2>
 <p>Skrót kraju w rogu ekranu z komunikatem jest przydatny. Jeśli masz włączony VPN i dalej widzisz ten ekran, przeczytaj skrót. „NL” albo „DE” znaczy, że aplikacja VPN połączyła Cię z Holandią albo Niemcami, a nie z Polską. Zmień serwer na polski i odśwież stronę.</p>
@@ -1043,7 +1055,7 @@ PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedos
 <h3>1. Sprawdź nadawcę w kraju, w którym mieszkasz</h3>
 <p>Duże wydarzenia są zwykle w lokalnej telewizji, czasem bezpłatnie. Skoki narciarskie w sezonie 2026/27 pokazują w Niemczech ARD, ZDF i Eurosport. Komentarz jest wtedy w języku danego kraju. Więcej w poradniku <a href="/polska-telewizja-w-niemczech">Polska telewizja w Niemczech</a>.</p>
 <h3>2. VPN z serwerem w Polsce</h3>
-<p>Z polskim adresem IP odtwarzacz działa jak w kraju, z polskim komentarzem. W naszych codziennych testach materiały z działu „Wideo” grały przez darmowy serwer VPN w Polsce. Transmisji na żywo jeszcze nie testujemy.</p>
+<p>Z polskim adresem IP odtwarzacz działa jak w kraju, z polskim komentarzem. W naszych codziennych testach materiały z działu „Wideo” grały przez VPN z serwerem w Polsce. Transmisji na żywo jeszcze nie testujemy.</p>
 <h3>3. Przed meczem zrób próbę</h3>
 <ul>
   <li>Połącz VPN kilkanaście minut przed startem i włącz dowolny materiał z działu „Wideo”.</li>
@@ -1104,7 +1116,7 @@ PAGES["/polska-telewizja-w-uk"] = ("Polska telewizja w UK: co działa po brexici
 
 <h2>4. VPN z serwerem w Polsce</h2>
 <p>VPN daje polski adres IP, więc serwis pokazuje Ci krajową wersję. W UK to jedyna droga do darmowych odcinków Playera i do pełnej oferty TVP VOD. Używanie VPN jest w Wielkiej Brytanii legalne. Regulamin serwisu może jednak zabraniać omijania blokad regionalnych, a serwisy blokują część adresów VPN.</p>
-<p>Codziennie sprawdzamy darmowy serwer w Polsce z trzema serwisami. Wyniki są w poradniku <a href="/darmowy-vpn-polska-telewizja">Darmowy VPN do polskiej telewizji</a>.</p>
+<p>Codziennie sprawdzamy botem trzy polskie serwisy przez VPN z serwerem w Polsce. Dzisiejsze wyniki znajdziesz na stronie <a href="/wyniki-testow">Wyniki testów</a>.</p>
 
 <h2>TV Licence obowiązuje także przy polskiej telewizji na żywo</h2>
 <p>To często pomijana sprawa. TV Licensing pisze, że licencja jest potrzebna do oglądania telewizji na żywo w każdej usłudze, „no matter where it is broadcast or distributed from”, także przy programach z satelity i transmisjach internetowych spoza UK (<a href="https://www.tvlicensing.co.uk/faqs/FAQ16" target="_blank" rel="nofollow noopener">TV Licensing, wersja z sierpnia 2025</a>).</p>
@@ -1201,8 +1213,8 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
 </ul>
 """ + points_table() + """
 <p>Przy remisie wyżej jest dostawca z większą liczbą serwerów w Polsce, a potem tańszy.</p>
-<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny test mamy dziś dla jednego dostawcy. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
-""", "prosec", brief([("Testujemy dziś", "Proton VPN, plan darmowy"), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
+<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny test mamy dziś dla """ + str(len(tested())) + """ z 5 dostawców: """ + tested_phrase() + """. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
+""", "prosec", brief([("Testujemy dziś", " i ".join(p["name"] for p in tested())), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
 
@@ -1249,7 +1261,8 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <p>Pierwsze testy z serwerem DNS dostawcy VPN kończyły się komunikatem o adblocku w TVP VOD i w Playerze. Serwer DNS dostawcy blokował domeny reklamowe, a oba serwisy nie puszczają filmu bez reklam. Po zmianie na neutralny DNS (1.1.1.1) film ruszył. Dlatego bot zawsze używa neutralnego DNS, a w poradnikach radzimy wyłączyć blokowanie reklam w aplikacji VPN.</p>
 
 <h2>Co i kogo testujemy dziś</h2>
-<p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy na razie Proton VPN w planie darmowym. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
+<p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy dziś: """ + tested_phrase() + """. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
+<p>Konto testowe NordVPN dostaliśmy bezpłatnie od NordVPN. Nie zmienia to sposobu testu ani wyniku: bot robi to samo dla każdego dostawcy, a złe dni zostają w historii. Proton VPN testujemy na darmowym koncie.</p>
 
 <h2 id="linki">Linki partnerskie</h2>
 <p>Strona zarabia na linkach partnerskich: gdy kupisz VPN przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. <b>Dziś partnerami są __PARTNERS__.</b></p>
@@ -1269,6 +1282,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <ul>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
   <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
+  <li><b>11.11.2026:</b> do codziennego testu doszedł NordVPN (plan płatny, serwer w Warszawie). Konto testowe dał nam NordVPN.</li>
   <li><b>11.11.2026:</b> w rankingu VPN liczba serwerów w Polsce liczy się podwójnie. Zasady są na stronie <a href="/porownanie-vpn#ranking">rankingu</a>.</li>
   <li><b>10.11.2026:</b> dodana druga próba po nieudanym teście i wynik „Niestabilny”.</li>
 </ul>
@@ -1455,6 +1469,7 @@ table.mini3 td:first-child{font-weight:600;width:30%}
 .feath h2{display:flex;align-items:center;gap:14px;font-size:34px}
 .feath h2 img{background:#fff;border-radius:9px;padding:6px}
 .feath p{color:var(--navy-muted);margin-top:10px;max-width:560px}
+.feattest{margin-top:14px;font-size:14px}.feattest .pst{display:inline-block;margin-right:16px;color:inherit}
 .featl{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:15px}
 .featl li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:10px;align-items:center}
 .featl svg{color:#55d3a4}
@@ -1562,7 +1577,7 @@ def build_js():
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
         "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
-    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['darmowy','0 zł']};")
+    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")
     rep("'<button class=\"btn\" type=\"button\" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>'",
@@ -1570,8 +1585,7 @@ def build_js():
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
     rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy.'")
-    rep("$('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy.", "$('scope').textContent='Darmowy plan Proton VPN, serwer PL-FREE#1 w Warszawie. Testujemy '+SVON.length+' darmowe serwisy.")
-    rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=(tested[0]?works(tested[0]):0)+'/'+SVON.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
+    rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
     rep("data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});", "tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});")
     rep("    RUN.providers.forEach(function(p){\n      var o=0,t=0,cells='';", "    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){\n      var o=0,t=0,cells='';")
     rep("$('hprov').innerHTML=RUN.providers.map(", "$('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(")
