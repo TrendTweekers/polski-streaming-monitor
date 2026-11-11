@@ -9,9 +9,9 @@
   },
   "2026-11-11": {
    "proton": {
-    "tvpvod": "ok",
+    "tvpvod": "unstable",
     "player": "ok",
-    "tvpsport": "none"
+    "tvpsport": "blocked"
    }
   }
  }
