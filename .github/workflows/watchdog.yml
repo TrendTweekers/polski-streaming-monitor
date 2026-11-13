@@ -1,7 +1,8 @@
 name: watchdog
 on:
   schedule:
-    - cron: "30 8 * * *"   # 09:30 in Poland (winter time)
+    - cron: "41 10 * * *"   # last check, after all daily tries
+    - cron: "11 13 * * *"
   workflow_dispatch:
 permissions:
   actions: write

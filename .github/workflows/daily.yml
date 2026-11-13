@@ -1,7 +1,13 @@
 name: daily-test
 on:
   schedule:
-    - cron: "0 5 * * *"   # 06:00 in Poland (winter time). GitHub can start it late.
+    # GitHub often starts timed jobs hours late or not at all. Several tries;
+    # the gate job stops a try when today's result is already published.
+    - cron: "17 3 * * *"
+    - cron: "47 4 * * *"
+    - cron: "23 6 * * *"
+    - cron: "53 7 * * *"
+    - cron: "37 9 * * *"
   workflow_dispatch:
 permissions:
   contents: write
@@ -9,7 +15,21 @@ concurrency:
   group: daily-test
   cancel-in-progress: false
 jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      run: ${{ steps.g.outputs.run }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: g
+        run: |
+          last=$(python -c "import json;print(json.load(open('site/data/latest.json'))['date'])")
+          today=$(TZ=Europe/Warsaw date +%F)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$last" = "$today" ]; then echo "run=no" >> "$GITHUB_OUTPUT"; echo "already done today"; else echo "run=yes" >> "$GITHUB_OUTPUT"; fi
   test:
+    needs: gate
+    if: needs.gate.outputs.run == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
