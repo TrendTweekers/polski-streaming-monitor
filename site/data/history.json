@@ -32,8 +32,13 @@
     "player": "ok",
     "tvpsport": "ok"
    },
+   "proton": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
    "protonfree": {
-    "tvpvod": "unstable",
+    "tvpvod": "blocked",
     "player": "ok",
     "tvpsport": "ok"
    }
