@@ -75,9 +75,11 @@ def svc_rows_html(sid):
     return out or '<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'
 
 
-def last_rows_html():
+def last_rows_html(plan=None):
     out = ""
     for p in tested():
+        if plan and p.get("plan") != plan:
+            continue
         plan = f' ({p["plan"]})' if p.get("plan") else ""
         out += (f'<div class="lastrow"><img src="{LOGOS[p["id"]]}" alt="" width="30" height="30"><b>{p["name"]}{plan}</b><span>{prov_status_html(p["id"])}</span>'
                 f'<span class="muted">Test: {fmt_dt(RUN.get("finished_at"))}</span></div>')
@@ -524,7 +526,7 @@ DEVICES = """<section class="devsec"><div class="wrap">
   <img class="devimg" src="/img/devices.webp" alt="" width="737" height="276" loading="lazy">
 </div></section>"""
 
-LOGOS = {"proton": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
+LOGOS = {"proton": "/logos/proton.svg", "protonfree": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
 
 
 def facts_table():
@@ -811,7 +813,7 @@ PAGES["/darmowy-vpn-polska-telewizja"] = ("Darmowy VPN do polskiej telewizji: te
                      [("/wyniki-testow", "Wyniki testów i historia"), ("/porownanie-vpn", "Porównanie z płatnymi VPN"), ("/jak-testujemy", "Jak testujemy")]))
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Wynik ostatniego testu darmowego serwera</h2><p>Ten sam serwer, trzy serwisy, codziennie rano.</p></div>
-  <div class="svc lastbox" data-last>{last_rows_html()}</div>
+  <div class="svc lastbox" data-last>{last_rows_html("plan darmowy")}</div>
   <p class="after"><a href="/wyniki-testow">Historia 30 dni i zrzuty ekranu</a></p>
 </div></section>"""
     + steps("Jak ustawić darmowy serwer w Polsce", "Potrzebujesz darmowego konta Proton i aplikacji WireGuard.", [
@@ -1262,7 +1264,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 
 <h2>Co i kogo testujemy dziś</h2>
 <p>Testujemy darmowe serwisy: TVP VOD, Player i TVP Sport. Płatnych serwisów jeszcze nie. Z dostawców VPN testujemy dziś: """ + tested_phrase() + """. Pozostałych dodamy, gdy będziemy mieć konta testowe. Do tego czasu ich wynik to „Nie przetestowano”.</p>
-<p>Konto testowe NordVPN dostaliśmy bezpłatnie od NordVPN. Nie zmienia to sposobu testu ani wyniku: bot robi to samo dla każdego dostawcy, a złe dni zostają w historii. Proton VPN testujemy na darmowym koncie.</p>
+<p>Konto testowe NordVPN dostaliśmy bezpłatnie od NordVPN. Nie zmienia to sposobu testu ani wyniku: bot robi to samo dla każdego dostawcy, a złe dni zostają w historii. Konto testowe Proton VPN Plus też dostaliśmy bezpłatnie, od Proton. Osobno testujemy darmowy serwer Proton w Polsce.</p>
 
 <h2 id="linki">Linki partnerskie</h2>
 <p>Strona zarabia na linkach partnerskich: gdy kupisz VPN przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. <b>Dziś partnerami są __PARTNERS__.</b></p>
@@ -1280,6 +1282,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 
 <h2>Dziennik zmian</h2>
 <ul>
+  <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
   <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
   <li><b>11.11.2026:</b> do codziennego testu doszedł NordVPN (plan płatny, serwer w Warszawie). Konto testowe dał nam NordVPN.</li>
@@ -1578,8 +1581,8 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
-    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
+        "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};")
+    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")
     rep("'<button class=\"btn\" type=\"button\" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>'",
@@ -1604,7 +1607,7 @@ def build_js():
         "    render();\n  }")
     rep("get('data/latest.json'),get('data/history.json')", "get('/data/latest.json'),get('/data/history.json')")
     rep("proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn'",
-        "proton:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg'")
+        "proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg'")
     rep("https://flagcdn.com/", "/flags/")
     for old in ["'logos/tvpvod.png'", "'logos/player.svg'", "'logos/polsat.svg'", "'logos/canal.svg'", "'logos/cyberghost-icon.png'"]:
         rep(old, "'/" + old[1:])

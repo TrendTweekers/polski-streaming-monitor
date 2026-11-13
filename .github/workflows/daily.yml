@@ -24,6 +24,7 @@ jobs:
       - name: Run tests
         env:
           PROTON_PL_WG: ${{ secrets.PROTON_PL_WG }}
+          PROTON_PLUS_PL_WG: ${{ secrets.PROTON_PLUS_PL_WG }}
           NORD_PL_WG: ${{ secrets.NORD_PL_WG }}
           SURFSHARK_PL_WG: ${{ secrets.SURFSHARK_PL_WG }}
           EXPRESS_PL_WG: ${{ secrets.EXPRESS_PL_WG }}

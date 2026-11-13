@@ -18,6 +18,14 @@
     {
       "id": "proton",
       "name": "Proton VPN",
+      "plan": "plan płatny",
+      "server": "PL#213",
+      "secret_env": "PROTON_PLUS_PL_WG",
+      "enabled": true
+    },
+    {
+      "id": "protonfree",
+      "name": "Proton VPN",
       "plan": "plan darmowy",
       "server": "PL-FREE#1",
       "secret_env": "PROTON_PL_WG",
