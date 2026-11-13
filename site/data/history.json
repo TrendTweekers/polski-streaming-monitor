@@ -25,6 +25,18 @@
     "player": "ok",
     "tvpsport": "ok"
    }
+  },
+  "2026-11-13": {
+   "nord": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "protonfree": {
+    "tvpvod": "unstable",
+    "player": "ok",
+    "tvpsport": "ok"
+   }
   }
  }
 }
