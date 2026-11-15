@@ -8,15 +8,16 @@
     nl:{label:'Holandia',short:'Holandia',where:'w Holandii',flag:'nl'},
     us:{label:'USA',short:'USA',where:'w USA',flag:'us'}
   };
-  var LABEL={ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
+  var LABEL={okr:'Działa<small class="stn">po odświeżeniu</small>',ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
   var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
   var ICON={
     ok:'<path d="M20 6 9 17l-5-5"/>',
+    okr:'<path d="M20 6 9 17l-5-5"/>',
     blocked:'<path d="M18 6 6 18M6 6l12 12"/>',
     unstable:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
     none:'<path d="M5 12h14"/>'
   };
-  function st(s){return '<span class="st '+s+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
+  function st(s){return '<span class="st '+(s==='okr'?'ok':s)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
   function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function slogo(x){return SLOGO[x.id]?'<span class="slogo"><img src="'+SLOGO[x.id]+'" alt="'+esc(x.name)+'"></span>':'<span class="slogo stext">'+esc(x.name)+'</span>'}
   function logo(id){return '<img src="'+LOGO[id]+'" alt="" width="30" height="30">'}
@@ -28,8 +29,8 @@
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
-  function stat(p,sid){var r=p.services&&p.services[sid];return r?r.status:'none'}
-  function works(p){return SVON.filter(function(s){return stat(p,s.id)==='ok'}).length}
+  function stat(p,sid){var r=p.services&&p.services[sid];if(!r)return 'none';if(r.status==='ok'&&r.reloaded)return 'okr';if(r.status==='unstable'&&p.plan==='plan płatny'&&/^Pierwsza próba/.test(r.reason||''))return 'okr';return r.status}
+  function works(p){return SVON.filter(function(s){var x=stat(p,s.id);return x==='ok'||x==='okr'}).length}
   function sorted(){
     var d=RUN.providers.slice();
     d.sort(function(a,b){

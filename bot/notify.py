@@ -41,6 +41,8 @@ def main():
         lines.append(f'\n<b>{p["name"]}</b> ({PLAN.get(p.get("plan"), p.get("plan") or "-")}) · {ok}/{len(rs)} work · {p.get("speed_mbps", "?")} Mb/s')
         for sid, r in rs.items():
             why = f' <i>({why_en(r.get("reason"))})</i>' if r["status"] != "ok" and r.get("reason") else ""
+            if r["status"] == "ok" and r.get("reloaded"):
+                why = " <i>(after one page reload)</i>"
             lines.append(f'{ICON.get(r["status"], "?")} {names.get(sid, sid)}{why}')
     lines.append("\nhttps://polskistreaming.pl/wyniki-testow")
     send("\n".join(lines))

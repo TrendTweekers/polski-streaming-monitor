@@ -8,15 +8,16 @@
     nl:{label:'Holandia',short:'Holandia',where:'w Holandii',flag:'nl'},
     us:{label:'USA',short:'USA',where:'w USA',flag:'us'}
   };
-  var LABEL={ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
+  var LABEL={okr:'Działa<small class="stn">po odświeżeniu</small>',ok:'Działa',blocked:'Nie działa',unstable:'Niestabilny',none:'Nie przetestowano'};
   var DESC={ok:'Film grał 60 sekund bez przerwy w pierwszej próbie.',unstable:'Film zatrzymał się albo ruszył dopiero w drugiej próbie.',blocked:'Film nie ruszył w dwóch próbach. Powód może być po stronie VPN albo serwisu.',none:'Test się nie odbył. Nie liczymy tego jako blokady.'};
   var ICON={
     ok:'<path d="M20 6 9 17l-5-5"/>',
+    okr:'<path d="M20 6 9 17l-5-5"/>',
     blocked:'<path d="M18 6 6 18M6 6l12 12"/>',
     unstable:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
     none:'<path d="M5 12h14"/>'
   };
-  function st(s){return '<span class="st '+s+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
+  function st(s){return '<span class="st '+(s==='okr'?'ok':s)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICON[s]+'</svg>'+LABEL[s]+'</span>'}
   function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   function slogo(x){return SLOGO[x.id]?'<span class="slogo"><img src="'+SLOGO[x.id]+'" alt="'+esc(x.name)+'"></span>':'<span class="slogo stext">'+esc(x.name)+'</span>'}
   function logo(id){return '<img src="'+LOGO[id]+'" alt="" width="30" height="30">'}
@@ -29,8 +30,8 @@
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
-  function stat(p,sid){var r=p.services&&p.services[sid];return r?r.status:'none'}
-  function works(p){return SVON.filter(function(s){return stat(p,s.id)==='ok'}).length}
+  function stat(p,sid){var r=p.services&&p.services[sid];if(!r)return 'none';if(r.status==='ok'&&r.reloaded)return 'okr';if(r.status==='unstable'&&p.plan==='plan płatny'&&/^Pierwsza próba/.test(r.reason||''))return 'okr';return r.status}
+  function works(p){return SVON.filter(function(s){var x=stat(p,s.id);return x==='ok'||x==='okr'}).length}
   function sorted(){
     var d=RUN.providers.slice();
     d.sort(function(a,b){
@@ -48,7 +49,7 @@
     $('hero').hidden=cur!=='uk';$('credit').hidden=cur!=='uk';$('open').classList.toggle('solo',cur!=='uk');
     $('crumb').textContent=c.label;$('where').textContent=c.where;$('tcountry').textContent=c.label;
     $('last').textContent=fmtDT(RUN.finished_at);$('next').textContent=dm(addDays(RUN.date,1))+'.'+addDays(RUN.date,1).slice(0,4)+', rano';
-    $('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
+    $('s1').textContent=tested.filter(function(p){var x=stat(p,'tvpvod');return x==='ok'||x==='okr'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
     $('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów jeszcze nie testujemy.';
@@ -141,7 +142,7 @@
     $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');
     $('legend').innerHTML=['ok','unstable','blocked','none'].map(st).join('');
     $('cats').innerHTML=['ok','unstable','blocked','none'].map(function(s){return '<li>'+st(s)+'<span>'+DESC[s]+'</span></li>'}).join('');
-    all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;h+='<div class="svcrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(r.status)+'<span class="muted">Test: '+fmtDT(r.tested_at)+(r.reason?'. '+esc(r.reason):'')+'</span>'+(r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener">zrzut ekranu</a>':'<span></span>')+'</div>'});el.innerHTML=h||'<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'});
+    all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;h+='<div class="svcrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(stat(p,sid))+'<span class="muted">Test: '+fmtDT(r.tested_at)+(r.reason&&stat(p,sid)!=='okr'?'. '+esc(r.reason):'')+'</span>'+(r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener">zrzut ekranu</a>':'<span></span>')+'</div>'});el.innerHTML=h||'<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'});
     all('[data-prov-status]',function(el){var p=RUN.providers.filter(function(x){return x.id===el.dataset.provStatus})[0];el.innerHTML=p&&p.tested?SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join(''):st('none')});
     all('[data-last]',function(el){var h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){h+='<div class="lastrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b><span>'+SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join('')+'</span><span class="muted">Test: '+fmtDT(RUN.finished_at)+'</span></div>'});el.innerHTML=h});
     all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu" loading="lazy" width="1440" height="900"></a>':''});

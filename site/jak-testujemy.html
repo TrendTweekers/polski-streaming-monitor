@@ -59,6 +59,8 @@
         <li>Wynik dotyczy serwera i przeglądarki użytych w teście.</li>
         <li>Prędkość mierzymy z jednego miejsca (podanego w tabeli), nie z każdego kraju.</li>
         <li>Po nieudanej próbie bot próbuje drugi raz. Dopiero dwie nieudane próby dają wynik „Nie działa”.</li>
+        <li>Gdy odtwarzacz pokaże błąd albo komunikat o blokowaniu reklam, bot raz odświeża stronę, tak jak zrobiłby widz.</li>
+        <li>Płatny plan, w którym film zagrał po odświeżeniu albo w drugiej próbie, ma wynik „Działa” z dopiskiem „po odświeżeniu”. Darmowy serwer w takim przypadku ma wynik „Niestabilny”. Szczegóły każdej próby są w danych testu.</li>
         <li>Nie widzimy przyczyny. „Nie działa” może wynikać z blokady, z obciążenia serwera VPN albo z awarii serwisu.</li>
       </ul>
     </div>
@@ -95,6 +97,7 @@
 
 <h2>Dziennik zmian</h2>
 <ul>
+  <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
   <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
   <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>

@@ -39,6 +39,8 @@ BLOCK_TEXTS = [
     (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN"),
     (r"wystąpił problem z materiałem|nie udało się odtworzyć|coś poszło nie tak", "Serwis pokazał błąd odtwarzania"),
 ]
+# Messages after which the bot reloads the page one time, as a viewer would.
+RELOAD_ON = {"Serwis pokazał błąd odtwarzania", "Serwis pokazał komunikat o blokowaniu reklam"}
 VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,d:(isFinite(v.duration)?v.duration:0),src:(v.currentSrc||'')}))"""
 
 
@@ -244,6 +246,17 @@ def test_service(browser, svc, shot_path):
                     if re.search(pat, body, re.I):
                         res.update(status="blocked", reason=why)
                         break
+                if res["status"] == "blocked" and res["reason"] in RELOAD_ON and not res.get("reloaded") and start is None:
+                    # A viewer reloads the page after a player error. The bot does the same, one time, and says so.
+                    log("   ", res["reason"], "- reload the page one time")
+                    res.update(status="none", reason=None, reloaded=True)
+                    page.reload(wait_until="domcontentloaded", timeout=90000)
+                    page.wait_for_timeout(6000)
+                    click_first(page, CONSENT)
+                    page.wait_for_timeout(2500)
+                    start_playback(page, svc)
+                    t0 = time.time()
+                    continue
                 if res["status"] == "blocked" and time.time() - t0 > 60:
                     break
         if start and last:

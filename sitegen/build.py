@@ -23,13 +23,23 @@ NOINDEX = {"/polsat-box-go-za-granica", "/wyniki-testow", "/prywatnosc"}
 _latest = SITE / "data" / "latest.json"
 RUN = json.loads(_latest.read_text()) if _latest.exists() else {"providers": [], "services": []}
 SVON = [x for x in RUN.get("services", []) if x.get("enabled")]
-ST_LABEL = {"ok": "Działa", "blocked": "Nie działa", "unstable": "Niestabilny", "none": "Nie przetestowano"}
-ST_ICON = {"ok": '<path d="M20 6 9 17l-5-5"/>', "blocked": '<path d="M18 6 6 18M6 6l12 12"/>',
+ST_LABEL = {"okr": 'Działa<small class="stn">po odświeżeniu</small>', "ok": "Działa", "blocked": "Nie działa", "unstable": "Niestabilny", "none": "Nie przetestowano"}
+ST_ICON = {"okr": '<path d="M20 6 9 17l-5-5"/>', "ok": '<path d="M20 6 9 17l-5-5"/>', "blocked": '<path d="M18 6 6 18M6 6l12 12"/>',
            "unstable": '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>', "none": '<path d="M5 12h14"/>'}
 
 
+def shown(p, r):
+    """Display status. A paid VPN that played after one reload counts as working, with a note."""
+    s = r.get("status", "none")
+    if s == "ok" and r.get("reloaded"):
+        return "okr"
+    if s == "unstable" and p.get("plan") == "plan płatny" and (r.get("reason") or "").startswith("Pierwsza próba"):
+        return "okr"
+    return s
+
+
 def st(status):
-    return (f'<span class="st {status}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" '
+    return (f'<span class="st {"ok" if status == "okr" else status}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" '
             f'stroke-linejoin="round" aria-hidden="true">{ST_ICON[status]}</svg>{ST_LABEL[status]}</span>')
 
 
@@ -58,7 +68,7 @@ def prov_status_html(pid):
     p = next((x for x in RUN.get("providers", []) if x["id"] == pid), None)
     if not p or not p.get("tested"):
         return st("none")
-    return "".join(f'<span class="pst">{x["name"]}:{st(p["services"].get(x["id"], {}).get("status", "none"))}</span>' for x in SVON)
+    return "".join(f'<span class="pst">{x["name"]}:{st(shown(p, p["services"].get(x["id"], {})))}</span>' for x in SVON)
 
 
 def svc_rows_html(sid):
@@ -68,9 +78,9 @@ def svc_rows_html(sid):
         if not r:
             continue
         plan = f' ({p["plan"]})' if p.get("plan") else ""
-        why = f'. {r["reason"]}' if r.get("reason") else ""
+        why = f'. {r["reason"]}' if r.get("reason") and shown(p, r) != "okr" else ""
         link = f'<a href="/{r["shot"]}" target="_blank" rel="noopener">zrzut ekranu</a>' if r.get("shot") else "<span></span>"
-        out += (f'<div class="svcrow"><img src="{LOGOS[p["id"]]}" alt="" width="30" height="30"><b>{p["name"]}{plan}</b>{st(r["status"])}'
+        out += (f'<div class="svcrow"><img src="{LOGOS[p["id"]]}" alt="" width="30" height="30"><b>{p["name"]}{plan}</b>{st(shown(p, r))}'
                 f'<span class="muted">Test: {fmt_dt(r.get("tested_at"))}{why}</span>{link}</div>')
     return out or '<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'
 
@@ -1245,6 +1255,8 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
         <li>Wynik dotyczy serwera i przeglądarki użytych w teście.</li>
         <li>Prędkość mierzymy z jednego miejsca (podanego w tabeli), nie z każdego kraju.</li>
         <li>Po nieudanej próbie bot próbuje drugi raz. Dopiero dwie nieudane próby dają wynik „Nie działa”.</li>
+        <li>Gdy odtwarzacz pokaże błąd albo komunikat o blokowaniu reklam, bot raz odświeża stronę, tak jak zrobiłby widz.</li>
+        <li>Płatny plan, w którym film zagrał po odświeżeniu albo w drugiej próbie, ma wynik „Działa” z dopiskiem „po odświeżeniu”. Darmowy serwer w takim przypadku ma wynik „Niestabilny”. Szczegóły każdej próby są w danych testu.</li>
         <li>Nie widzimy przyczyny. „Nie działa” może wynikać z blokady, z obciążenia serwera VPN albo z awarii serwisu.</li>
       </ul>
     </div>
@@ -1282,6 +1294,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 
 <h2>Dziennik zmian</h2>
 <ul>
+  <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
   <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
   <li><b>10.11.2026:</b> dodany TVP Sport. Bot wybiera codziennie najnowszy materiał wideo z sport.tvp.pl.</li>
@@ -1590,13 +1603,13 @@ def build_js():
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
     rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy.'")
-    rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
+    rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=tested.filter(function(p){var x=stat(p,'tvpvod');return x==='ok'||x==='okr'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
     rep("data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});", "tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});")
     rep("    RUN.providers.forEach(function(p){\n      var o=0,t=0,cells='';", "    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){\n      var o=0,t=0,cells='';")
     rep("$('hprov').innerHTML=RUN.providers.map(", "$('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(")
     rep("    render();\n  }",
         "    all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;"
-        "h+='<div class=\"svcrow\">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(r.status)+'<span class=\"muted\">Test: '+fmtDT(r.tested_at)+(r.reason?'. '+esc(r.reason):'')+'</span>'"
+        "h+='<div class=\"svcrow\">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(stat(p,sid))+'<span class=\"muted\">Test: '+fmtDT(r.tested_at)+(r.reason&&stat(p,sid)!=='okr'?'. '+esc(r.reason):'')+'</span>'"
         "+(r.shot?'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\">zrzut ekranu</a>':'<span></span>')+'</div>'});"
         "el.innerHTML=h||'<p class=\"muted\" style=\"padding:14px 0\">Tego serwisu jeszcze nie testujemy.</p>'});\n"
         "    all('[data-prov-status]',function(el){var p=RUN.providers.filter(function(x){return x.id===el.dataset.provStatus})[0];"
