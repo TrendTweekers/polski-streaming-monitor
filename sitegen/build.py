@@ -1345,6 +1345,8 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
 <p>Liczymy odsłony stron narzędziem Vercel Web Analytics. Działa ono bez plików cookie i z naszej domeny. Widzimy tylko liczby zbiorcze: którą stronę otwarto, z jakiego kraju, z jakiej strony ktoś przyszedł i na jakim typie urządzenia. Nie widzimy, kim jesteś, i nie rozpoznajemy Cię przy kolejnej wizycie następnego dnia.</p>
 <h2>Kliknięcia w przyciski dostawców</h2>
 <p>Gdy klikniesz przycisk prowadzący do dostawcy VPN, zapisujemy samo kliknięcie: którego dostawcy dotyczy, na której naszej stronie było, z jakiego kraju i na jakim typie urządzenia. Nie zapisujemy adresu IP ani niczego, co pozwala Cię rozpoznać.</p>
+<h2>Powiadomienie o wizycie</h2>
+<p>Przy pierwszej stronie, którą otworzysz, wysyłamy sobie krótkie powiadomienie: którą stronę otwarto, z jakiego kraju i miasta, na jakim typie urządzenia i z jakiej strony ktoś przyszedł. Niczego nie zapisujemy w bazie i nie wysyłamy adresu IP.</p>
 <h2>Co widzi serwer</h2>
 <p>Strona działa na serwerach firmy Vercel. Jak każdy serwer WWW zapisuje ona techniczne logi: adres IP, czas i adres otwartej strony. Nie łączymy tych danych z niczym innym.</p>
 <h2>Linki do dostawców</h2>
@@ -1691,6 +1693,17 @@ def build_js():
     navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
   }
   document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
+  // One visit notice per browser session. Not sent from the owner's devices (open the site once with ?me=1).
+  try{
+    if(/[?&]me=1/.test(location.search))localStorage.setItem('ps_me','1');
+    if(/[?&]me=0/.test(location.search))localStorage.removeItem('ps_me');
+    if(navigator.sendBeacon&&!localStorage.getItem('ps_me')&&!sessionStorage.getItem('ps_v')&&!navigator.webdriver){
+      sessionStorage.setItem('ps_v','1');
+      var vr='';try{vr=document.referrer?new URL(document.referrer).hostname:''}catch(x){}
+      if(vr===location.hostname)vr='';
+      navigator.sendBeacon('/api/visit',new Blob([JSON.stringify({u:location.pathname,r:vr})],{type:'application/json'}));
+    }
+  }catch(x){}
   // Tell CJ which page the click came from (sid), so a sale shows its page.
   var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
   Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),function(a){
