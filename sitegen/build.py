@@ -508,6 +508,34 @@ CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="cur
 MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>'
 
 
+TOP3_WHY = {
+    "nord": "61 polskich serwerów, najwięcej w zestawieniu",
+    "surf": "Jeden plan na dowolną liczbę urządzeń",
+    "proton": "Najniższa cena przy planie na 2 lata",
+}
+
+
+def top3():
+    """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
+    ids = sorted(RANK, key=RANK.get)[:3]
+    daily = {p["id"] for p in tested()}
+    rows = ""
+    for pid in ids:
+        name = AFF_NAMES[pid]
+        url = next(f[2] for f in FACTS if f[0] == pid)
+        test = "testowany codziennie" if pid in daily else "bez naszego testu"
+        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{RANK[pid]}. {name}</b>'
+                 f'<span><em>Punkty</em>{sum(wpts(pid))} z {MAXPTS}</span><span><em>Mocna strona</em>{TOP3_WHY[pid]}</span>'
+                 f'<span><em>Test z TVP VOD, Playerem, TVP Sport</em>{test}</span>'
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>{PROFILE[pid]["price"]} / mies.</a>{aff_note(pid)}</span></div>')
+    return f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {CHECKED}.</p></div>
+  <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
+  <div class="pstrip">{rows}</div>
+  <p class="after"><a href="/porownanie-vpn">Pełny ranking 5 VPN z cenami, wadami i zasadami punktów</a></p>
+</div></section>"""
+
+
 def featured():
     return f"""<section class="feat"><div class="wrap">
   <div class="featbox">
@@ -648,11 +676,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
   <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
 </div></section>"""
-              + featured()
-              + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców. Stan na {CHECKED}.</p></div>
-  {highlights()}
-</div></section>"""
+              + top3()
               + """<section class="guides"><div class="wrap">
   <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, który chcesz oglądać. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
   <ul class="glist">
@@ -672,15 +696,6 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
   {flow("Polski serwis", "")}
 </div></section>"""
-              + QUIZ
-              + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Ranking VPN do polskiej telewizji</h2><p>Ranking według punktów za ceny, serwery w Polsce, liczbę urządzeń i zwrot pieniędzy. <a href="/porownanie-vpn#ranking">Jak liczymy punkty</a>.</p></div>
-  <p class="note">{tested_since_line()}</p>
-  {DISCLOSE}
-  <div class="pblist compact">{provblocks(False)}</div>
-  <p class="after"><a href="/porownanie-vpn">Pełne porównanie z tabelą</a> · Ceny sprawdzone {CHECKED}. To ceny promocyjne i mogą się zmienić.</p>
-</div></section>"""
-              + DEVICES
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
