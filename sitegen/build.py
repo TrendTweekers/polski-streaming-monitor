@@ -178,6 +178,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="impact-site-verification" value="7e5c2fe8-11cc-46c9-a6db-9950f62d1bfb">
 {robots}<title>{title}</title>
 <meta name="description" content="{desc}">
 <link rel="canonical" href="{url}">
