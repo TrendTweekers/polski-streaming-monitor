@@ -346,6 +346,10 @@ footer a{color:var(--navy-muted)}
   .mcols li{grid-template-columns:minmax(0,1fr);gap:2px}
 }
 
+.affn{display:block;font-size:.72rem;color:var(--muted,#6b7280);margin-top:4px;text-align:center}
+.disc{font-size:.82rem;color:var(--muted,#6b7280);margin:0 0 14px;max-width:70ch}
+table.days td,table.days th{white-space:nowrap;text-align:left!important;padding-left:0}table.days th:first-child{font-weight:600}table.mini3.days{min-width:0;width:100%}@media (max-width:640px){table.days{font-size:12px}table.days td,table.days th{padding-right:6px}table.days .st svg{display:none}}
+
 /* multi-page additions */
 a.logo{color:var(--ink);text-decoration:none}
 .cnav{gap:4px}

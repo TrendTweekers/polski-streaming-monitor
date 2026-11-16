@@ -14,7 +14,7 @@ HERE = Path(__file__).resolve().parent
 SITE = HERE.parent / "site"
 DOMAIN = "https://polskistreaming.pl"
 UPDATED = "10 listopada 2026"
-CHECKED = "10.11.2026"
+CHECKED = "16.11.2026"
 PUBLISHED = "2026-11-10"
 MODIFIED = "2026-11-10"
 INDEXABLE = True  # set True when the owner opens the site to search engines
@@ -49,6 +49,63 @@ def fmt_dt(iso):
 
 def tested():
     return [p for p in RUN.get("providers", []) if p.get("tested")]
+
+
+def tested_companies():
+    """Distinct VPN companies in the last run (Proton paid and Proton free are one company)."""
+    out = []
+    for p in tested():
+        if p["name"] not in out:
+            out.append(p["name"])
+    return out
+
+
+TEST_SINCE = {"nord": "11.11.2026", "proton": "13.11.2026", "protonfree": "10.11.2026"}
+TEST_NAME = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "darmowy serwer Proton VPN"}
+_hist = SITE / "data" / "history.json"
+HIST = json.loads(_hist.read_text()) if _hist.exists() else {"days": {}}
+
+
+def tested_since_line():
+    """Who is tested since when, and who is not tested. For the ranking."""
+    done = [f'{TEST_NAME[p["id"]]} od {TEST_SINCE[p["id"]]}' for p in tested() if p["id"] in TEST_SINCE]
+    names = set(tested_companies())
+    todo = [n for n in ("NordVPN", "Surfshark", "Proton VPN", "ExpressVPN", "CyberGhost") if n not in names]
+    return ("<b>Testujemy codziennie:</b> " + ", ".join(done) + "."
+            + (" <b>Jeszcze nie testujemy:</b> " + ", ".join(todo) + ". Ich miejsce wynika tylko z danych ze stron dostawców." if todo else ""))
+
+
+def svc_days(sid, note, n=10):
+    """Day-by-day results of one service, newest first."""
+    days = sorted(HIST.get("days", {}), reverse=True)[:n]
+    cols = [pid for pid in ("nord", "proton", "protonfree") if any(pid in HIST["days"][d] for d in days)]
+    short = {"nord": "NordVPN", "proton": "Proton Plus", "protonfree": "Proton, darmowy"}
+    head = "".join(f"<th>{short[c]}</th>" for c in cols)
+    rows = ""
+    for d in days:
+        cells = ""
+        for c in cols:
+            v = HIST["days"][d].get(c, {}).get(sid)
+            cells += f"<td>{st(v)}</td>" if v else '<td class="muted">—</td>'
+        rows += f"<tr><th>{d[8:10]}.{d[5:7]}</th>{cells}</tr>"
+    return (f'<div class="scrollx keep"><table class="mini3 days"><thead><tr><th>2026</th>{head}</tr></thead><tbody>{rows}</tbody></table></div>'
+            f'<p class="muted small">{note}</p>')
+
+
+def tested_cta(service, lead):
+    """Buttons only for the VPNs we really test every day, with the partner note."""
+    rows = ""
+    for pid, name, since, srv in (("nord", "NordVPN", "11.11.2026", "Warszawa"), ("proton", "Proton VPN", "13.11.2026", "PL#213, Warszawa")):
+        pr = PROFILE[pid]
+        url = next(f[2] for f in FACTS if f[0] == pid)
+        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
+                 f'<span><em>W teście z {service}</em>codziennie od {since}</span><span><em>Cena</em>{pr["price"]} {pr["unit"]}</span><span><em>Serwer w teście</em>{srv}</span>'
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}</span></div>')
+    return f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>VPN, które testujemy z {service}</h2><p>{lead}</p></div>
+  <p class="disc">Przyciski to linki partnerskie: przy zakupie dostajemy prowizję, a Ty płacisz tyle samo. Nie wpływa to na wynik testu.</p>
+  <div class="pstrip">{rows}</div>
+</div></section>"""
 
 
 def tested_phrase():
@@ -260,7 +317,7 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 
 def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Wynik naszego testu: {name}</h2><p>{note} Testujemy dziś: {tested_phrase()}. Darmowy serwer jest obciążony i jego wynik zmienia się z dnia na dzień.</p></div>
+  <div class="shead"><h2>Wynik naszego testu: {name}</h2><p>{note}</p></div>
   <div class="svc" data-svc="{sid}">{svc_rows_html(sid)}</div>
   <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
@@ -279,9 +336,9 @@ def facts_box(title, rows, note=""):
     return f'<h2>{title}</h2><table class="mini"><tbody>{trs}</tbody></table>' + (f'<p class="muted small">{note}</p>' if note else "")
 
 
-def errors_box(rows):
+def errors_box(rows, title="Komunikaty błędów i co z nimi zrobić"):
     trs = "".join(f"<tr><td>„{m}”</td><td>{w}</td><td>{d}</td></tr>" for m, w, d in rows)
-    return ('<h2>Komunikaty błędów i co z nimi zrobić</h2><div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Co oznacza</th><th>Co zrobić</th></tr></thead>'
+    return (f'<h2>{title}</h2><div class="scrollx keep"><table class="mini3"><thead><tr><th>Komunikat</th><th>Co oznacza</th><th>Co zrobić</th></tr></thead>'
             f"<tbody>{trs}</tbody></table></div>")
 
 
@@ -321,6 +378,7 @@ def provstrip(note=""):
                  f'<span class="pcta"><a class="btn" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
+  {DISCLOSE}
   <div class="pstrip">{rows}</div>
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
 </div></section>"""
@@ -340,7 +398,7 @@ def brief(rows, links=()):
 
 
 def shot(sid, name):
-    return f'<figure class="sidefig" data-shot="{sid}"></figure><p class="figcap">Zrzut ekranu z ostatniego testu: {name}. To prawdziwy obraz z bota.</p>'
+    return f'<figure class="sidefig" data-shot="{sid}"></figure><p class="figcap">Zrzut ekranu z ostatniego testu: {name}.</p>'
 
 
 def faq(items):
@@ -349,7 +407,7 @@ def faq(items):
 
 
 LEGAL_Q = ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin serwisu streamingowego może jednak zabraniać omijania blokad regionalnych. Przeczytaj regulamin swojego serwisu.")
-FREE_Q = ("Czy darmowy VPN wystarczy?", "Czasem tak. Testujemy darmowy plan Proton VPN z serwerem w Polsce i wynik zmienia się z dnia na dzień. Aktualny wynik jest na górze tej strony. Darmowe serwery są obciążone, więc film może się zacinać.")
+FREE_Q = ("Czy darmowy VPN wystarczy?", "Czasem tak. Obok płatnych planów NordVPN i Proton VPN Plus testujemy codziennie darmowy serwer Proton VPN w Polsce. Jego wynik zmienia się z dnia na dzień. Aktualny wynik jest na górze tej strony. Darmowe serwery są obciążone, więc film może się zacinać.")
 TV_Q = ("Czy to działa na telewizorze?", "Tak, jeśli Twój telewizor albo przystawka ma aplikację VPN. Większość dostawców ma aplikacje na Android TV, Fire TV i Apple TV. Szczegóły są w <a href=\"/porownanie-vpn\">porównaniu VPN</a>.")
 
 FACTS = [
@@ -367,7 +425,7 @@ FACTS = [
 
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
-POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 1, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 2, 1, 3, 3, 0), "expr": (1, 1, 3, 2, 3, 0)}
+POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 2, 1, 3, 3, 0), "expr": (1, 1, 3, 2, 3, 0)}
 WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
 MAXPTS = 19
 
@@ -414,16 +472,20 @@ def plink(pid, url):
 
 
 def aff_note(pid):
-    return ""  # the disclosure is one line under the header, on every page
+    return '<small class="affn">Link partnerski</small>' if pid in AFF else ""
+
+
+DISCLOSE = ('<p class="disc">Przyciski NordVPN, Surfshark i Proton VPN to linki partnerskie. Gdy kupisz przez nie VPN, dostajemy prowizję, '
+            'a Ty płacisz tyle samo. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.</p>')
 
 
 PROFILE = {
     "proton": dict(tag="Najniższa cena w zestawieniu", badge="", price="6,29 zł", unit="za miesiąc",
-                   terms="Plan na 2 lata w ofercie Black Friday (−75%), płatny z góry: 6,29 zł × 24 miesiące. Cena z oferty dla partnerów, sprawdzona 11.11.2026. Bez promocji 24,99 zł za miesiąc.",
+                   terms="Plan na 2 lata w ofercie Black Friday (−75%), płatny z góry: 6,29 zł × 24 miesiące. Cena z oferty dla partnerów, sprawdzona 16.11.2026. Bez promocji 24,99 zł za miesiąc.",
                    pros=["Najniższa cena w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                    cons=["Najniższa cena tylko w planie na 2 lata, odnowienie jest droższe"]),
-    "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="10,99 zł", unit="za miesiąc",
-                 terms="296,73 zł za pierwsze 27 miesięcy.",
+    "nord": dict(tag="Najwięcej serwerów w Polsce", badge="", price="9,39 zł", unit="za miesiąc",
+                 terms="253,53 zł za pierwsze 27 miesięcy.",
                  pros=["61 serwerów w Polsce, najwięcej w zestawieniu", "10 urządzeń jednocześnie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Najniższa cena tylko w planie na 27 miesięcy"]),
     "surf": dict(tag="Bez limitu urządzeń", badge="", price="8,99 zł", unit="za miesiąc",
@@ -458,9 +520,9 @@ def featured():
       <li>{CHECK}<span>Aplikacje na Android TV, Apple TV i Fire TV</span></li>
       <li>{CHECK}<span>30 dni na zwrot pieniędzy</span></li>
     </ul>
-    <div class="featcta"><b>10,99 zł</b><span>za miesiąc</span>
-      <a class="btn big" {plink("nord", "https://nordvpn.com")}>Przejdź do NordVPN</a>
-      <small>296,73 zł za pierwsze 27 miesięcy. Cena z {CHECKED}.</small></div>
+    <div class="featcta"><b>9,39 zł</b><span>za miesiąc</span>
+      <a class="btn big" {plink("nord", "https://nordvpn.com")}>Przejdź do NordVPN</a>{aff_note("nord")}
+      <small>253,53 zł za pierwsze 27 miesięcy. Cena z {CHECKED}.</small></div>
   </div>
 </div></section>"""
 
@@ -613,6 +675,8 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               + QUIZ
               + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Ranking VPN do polskiej telewizji</h2><p>Ranking według punktów za ceny, serwery w Polsce, liczbę urządzeń i zwrot pieniędzy. <a href="/porownanie-vpn#ranking">Jak liczymy punkty</a>.</p></div>
+  <p class="note">{tested_since_line()}</p>
+  {DISCLOSE}
   <div class="pblist compact">{provblocks(False)}</div>
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie z tabelą</a> · Ceny sprawdzone {CHECKED}. To ceny promocyjne i mogą się zmienić.</p>
 </div></section>"""
@@ -632,8 +696,8 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
     "TVP VOD za granicą: co działa bez VPN, co jest zablokowane, wynik codziennego testu i komunikaty błędów z rozwiązaniami.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP VOD', "Jak oglądać TVP VOD za granicą",
          "TVP VOD jest darmowy, ale wiele materiałów działa tylko w Polsce. Sprawdzamy to codziennie na programie „Jeden z dziesięciu”.",
-         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
-         figure=frame("/img/tvpvod-test.webp", "vod.tvp.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Film gra."))
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>16 listopada 2026</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
+         figure=frame("/img/tvpvod-test.webp", "vod.tvp.pl", "„Jeden z dziesięciu” gra przez VPN z polskim serwerem. Nasz test z 10.11.2026."))
     + prose("""
 <p class="answer"><b>Krótka odpowiedź.</b> Część materiałów TVP VOD działa za granicą bez niczego. Reszta wymaga polskiego adresu IP, czyli VPN z serwerem w Polsce. To, czy film ruszy, zmienia się z dnia na dzień, dlatego niżej jest wynik naszego ostatniego testu.</p>
 
@@ -659,24 +723,36 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
 <h3>3. VPN z serwerem w Polsce</h3>
 <!--flow:tvpvod-->
 <p>VPN daje Twojemu urządzeniu polski adres IP, więc TVP VOD widzi widza z Polski. To, czy film naprawdę ruszy, zależy od dostawcy VPN i od dnia.</p>
-""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed filmem", "Około 2,5 minuty"), ("Nasz test", "Codziennie, „Jeden z dziesięciu”")],
+""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed filmem", "Około 3 minut"), ("Nasz test", "Codziennie, „Jeden z dziesięciu”")],
                      [("/porownanie-vpn", "Ranking VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
-    + provstrip()
+    + prose("""
+<h2>Dziennik testu TVP VOD</h2>
+<p>Test trwa od 10.11.2026. Bot otwiera najnowszy odcinek „Jeden z dziesięciu”. Nowy odcinek pojawia się w dni robocze: między 10 a 14 listopada bot przeszedł od odcinka 3643 do 3647. W weekend 14–15 listopada testował ten sam odcinek 3647, bo nowego nie było.</p>
+<ul>
+  <li><b>Reklamy są tu najdłuższe.</b> W udanych testach trwały od 133 do 191 sekund, zwykle około trzech minut. W Playerze i TVP Sport reklama trwa najwyżej około minuty.</li>
+  <li><b>NordVPN</b> (w teście od 11.11.2026): film ruszył za pierwszym razem w każdym teście.</li>
+  <li><b>Proton VPN Plus</b> (od 13.11.2026): działa. 15.11.2026 odtwarzacz za pierwszym razem pokazał błąd, po odświeżeniu film zagrał.</li>
+  <li><b>Darmowy serwer Proton</b>: 10.11 i 13.11.2026 film nie ruszył w ciągu 330 sekund, a 15.11.2026 zatrzymał się po 51 sekundach.</li>
+  <li><b>Obraz:</b> 1920 × 1080 we wszystkich udanych testach poza jednym (640 × 360, 10.11.2026). Ten program nie ma zabezpieczenia DRM.</li>
+</ul>
+<h3>Wyniki TVP VOD dzień po dniu</h3>
+""" + svc_days("tvpvod", "Jeden wynik dziennie dla TVP VOD. Kreska: dostawcy nie było jeszcze w teście."), "prosec")
+    + tested_cta("TVP VOD", "Te dwa płatne VPN sprawdzamy z TVP VOD każdego ranka. Surfsharka, ExpressVPN i CyberGhost jeszcze nie testujemy, są w <a href=\"/porownanie-vpn\">rankingu</a>.")
     + svc_result("tvpvod", "TVP VOD", "Bot włącza najnowszy odcinek programu „Jeden z dziesięciu” i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć TVP VOD przez VPN", "Kolejność ma znaczenie: najpierw VPN, potem strona.", [
         ("Połącz VPN z serwerem w Polsce", "Zrób to przed otwarciem strony. Jeśli strona była już otwarta, odśwież ją po połączeniu."),
         ("Otwórz vod.tvp.pl i kliknij „Akceptuję”", "Bez zgody w okienku prywatności reklamy się nie ładują, a wtedy film nie rusza."),
         ("Wybierz program i kliknij „Odtwórz”", "Przycisk jest pod tytułem programu. Serwis przeniesie Cię do najnowszego odcinka."),
-        ("Poczekaj na koniec reklam", "W naszych testach trwały od 156 do 176 sekund. Nie odświeżaj strony, bo reklamy zaczną się od nowa.")])
+        ("Poczekaj na koniec reklam", "W naszych testach trwały od 133 do 191 sekund. Nie odświeżaj strony w czasie reklam, bo zaczną się od nowa.")])
     + prose(facts_box("Liczby z naszego testu", [
         ("Program testowy", "„Jeden z dziesięciu”, najnowszy odcinek"),
-        ("Czas reklam przed filmem", "156 do 176 sekund"),
-        ("Jakość obrazu", "1920 × 1080 na zwykłym komputerze, 640 × 360 na serwerze testowym"),
+        ("Czas reklam przed filmem", "133 do 191 sekund"),
+        ("Jakość obrazu", "1920 × 1080, raz 640 × 360"),
         ("Zabezpieczenie DRM", "Nie, w tym programie"),
         ("Logowanie", "Nie było potrzebne"),
-        ("Dni pomiarów", "10.11.2026, kilka uruchomień")],
+        ("Dni pomiarów", "Codziennie od 10.11.2026, stan na 16.11.2026")],
         "To są pomiary naszego bota, a nie dane producenta.")
-    + errors_box([
+    + errors_box(title="Błędy TVP VOD, które widzieliśmy", rows=[
         ("Wykryto wtyczkę adblock", "Reklamy się nie załadowały. Zdarza się, gdy VPN blokuje reklamy na poziomie DNS.", "Wyłącz w aplikacji VPN blokowanie reklam i odśwież stronę."),
         ("Wystąpił problem z materiałem. Spróbuj ponownie za chwilę", "Serwis nie podał filmu. W naszym teście ten sam serwer VPN godzinę wcześniej działał.", "Zmień serwer na inny polski albo spróbuj po kilku minutach."),
         ("Materiał niedostępny w Twoim kraju", "Serwis widzi zagraniczny adres IP.", "Sprawdź, czy VPN jest połączony z Polską, i odśwież stronę.")])
@@ -685,15 +761,15 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
     + faq([("Czy potrzebuję konta w TVP VOD?", "W naszym teście „Jeden z dziesięciu” grał bez logowania. Część materiałów wymaga konta albo opłaty."),
            ("Czy TVP Sport działa tak samo?", "TVP Sport to osobny serwis (sport.tvp.pl) i testujemy go osobno. Wynik jest na stronie <a href=\"/wyniki-testow\">Wyniki testów</a>."),
            ("Czy mogę oglądać TVP VOD na telewizorze za granicą?", "Tak, jeśli telewizor albo przystawka ma aplikację VPN. TVP VOD ma aplikację na Android TV. Listę aplikacji każdego dostawcy VPN znajdziesz w <a href=\"/porownanie-vpn\">porównaniu</a>."),
-           ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin TVP VOD może jednak zabraniać omijania blokad regionalnych, więc przeczytaj go przed użyciem.")]),
+           ("Czy wolno oglądać TVP VOD przez VPN?", "Sam VPN nie jest zabroniony w krajach Unii, w Wielkiej Brytanii ani w USA. Regulamin TVP VOD może jednak zabraniać omijania blokad regionalnych. Przeczytaj go, zanim zaczniesz.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/tvp-vod-za-granica", "TVP VOD")])
 
 PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Polski Streaming",
     "Player za granicą: darmowe odcinki „BEZ OPŁAT”, pakiet Player International, wynik codziennego testu VPN i typowe błędy.",
     band('<a href="/">Polska telewizja za granicą</a> / Player', "Jak oglądać Player za granicą",
          "Player ma darmowe odcinki z reklamami i płatne pakiety. Sprawdzamy codziennie, czy darmowe „Fakty” grają przez VPN.",
-         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
-         figure=frame("/img/player-test.webp", "player.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. „Fakty” grają."))
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>16 listopada 2026</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
+         figure=frame("/img/player-test.webp", "player.pl", "Darmowy odcinek „Faktów” w Playerze przez VPN, test z 10.11.2026."))
     + prose("""
 <p class="answer"><b>Krótka odpowiedź.</b> Masz dwie drogi. Oficjalna to pakiet Player International, który działa bez VPN, ale nie obejmuje całej oferty. Druga to VPN z serwerem w Polsce: wtedy Player działa jak w kraju, a darmowe odcinki grają bez konta.</p>
 
@@ -716,23 +792,34 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Pol
 <p>Z polskim adresem IP Player zachowuje się tak jak w Polsce. To jedyny sposób na darmowe odcinki poza krajem.</p>
 """, "prosec", brief([("Darmowe odcinki", "Tak, z etykietą „BEZ OPŁAT”"), ("Opcja oficjalna", "Player International"), ("Zabezpieczenie", "DRM, działa w Chrome"), ("Nasz test", "Codziennie, „Fakty”")],
                      [("/porownanie-vpn", "Ranking VPN"), ("/wyniki-testow", "Wyniki testów"), ("/jak-testujemy", "Jak testujemy")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + prose("""
+<h2>Dziennik testu Playera</h2>
+<p>Test trwa od 10.11.2026. Bot otwiera listę odcinków „Faktów”, wybiera najnowszy z etykietą „BEZ OPŁAT” i włącza go bez logowania. Każdy odcinek jest chroniony DRM, a mimo to grał w zwykłym Chrome.</p>
+<ul>
+  <li><b>Reklama jest krótka:</b> od 25 do 56 sekund. Przez płatne serwery NordVPN i Proton od 13.11.2026 trwała 25–31 sekund.</li>
+  <li><b>Jakość zależy od dostawcy VPN.</b> Przez Proton VPN Plus Player dawał obraz 960 × 540, przez NordVPN i darmowy serwer 640 × 360. To pomiar w przeglądarce bota, nie na telewizorze.</li>
+  <li><b>NordVPN</b> (od 11.11.2026) i <b>Proton VPN Plus</b> (od 13.11.2026): ani jednego błędu w Playerze.</li>
+  <li><b>Darmowy serwer Proton</b>: 10.11.2026 zamiast filmu był czarny ekran, a 14.11.2026 Player za pierwszym razem pokazał komunikat o blokowaniu reklam.</li>
+</ul>
+<h3>Wyniki Playera dzień po dniu</h3>
+""" + svc_days("player", "Wynik Playera z porannego testu. Pusta kratka oznacza dzień przed dodaniem dostawcy."), "prosec")
+    + tested_cta("Playerem", "Z darmowymi „Faktami” codziennie łączymy się przez te dwa płatne plany. Inni dostawcy są na razie tylko w <a href=\"/porownanie-vpn\">zestawieniu</a>, bez testu.")
     + svc_result("player", "Player", "Bot włącza najnowszy darmowy odcinek „Faktów” bez logowania i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć Player przez VPN", "Darmowe odcinki nie wymagają konta.", [
-        ("Połącz VPN z serwerem w Polsce", "Player sprawdza adres IP przy starcie filmu, więc VPN musi działać, zanim klikniesz „Oglądaj”."),
+        ("Włącz VPN, wybierz Polskę", "Player sprawdza adres IP przy starcie filmu, więc VPN musi działać, zanim klikniesz „Oglądaj”."),
         ("Otwórz player.pl i kliknij „Akceptuję”", "Okienko zgody pojawia się przy pierwszej wizycie. Bez niej reklamy się nie włączą."),
         ("Wybierz odcinek z etykietą „BEZ OPŁAT”", "Odcinki bez tej etykiety wymagają płatnego pakietu i logowania."),
-        ("Kliknij „Oglądaj” i poczekaj na reklamę", "W naszym teście reklama trwała około 40 sekund, potem ruszył odcinek.")])
+        ("Kliknij „Oglądaj” i poczekaj na reklamę", "W naszych testach reklama trwała od 25 do 56 sekund, potem ruszał odcinek.")])
     + prose(facts_box("Liczby z naszego testu", [
         ("Materiał testowy", "„Fakty”, najnowszy odcinek „BEZ OPŁAT”"),
-        ("Czas reklam przed filmem", "Około 40 sekund"),
-        ("Jakość obrazu w teście", "640 × 360"),
+        ("Czas reklam przed filmem", "25 do 56 sekund"),
+        ("Jakość obrazu w teście", "640 × 360, przez Proton VPN Plus 960 × 540"),
         ("Zabezpieczenie DRM", "Tak"),
         ("Logowanie", "Nie było potrzebne"),
-        ("Dni pomiarów", "10.11.2026, kilka uruchomień")],
-        "Jakość 640 × 360 dotyczy przeglądarki bota. Na zwykłym komputerze może być wyższa, tego nie mierzyliśmy.")
-    + errors_box([
-        ("Wyłącz blokowanie reklam, aby oglądać", "Reklamy się nie załadowały. W naszym teście powodem był serwer DNS dostawcy VPN.", "Wyłącz w aplikacji VPN blokowanie reklam albo zmień DNS i odśwież stronę."),
+        ("Pomiary", "Każdego dnia od 10 listopada, ostatnia aktualizacja 16 listopada 2026")],
+        "Jakość dotyczy przeglądarki bota. Na zwykłym komputerze może być wyższa, tego nie mierzyliśmy.")
+    + errors_box(title="Błędy Playera i co z nimi zrobić", rows=[
+        ("Wyłącz blokowanie reklam, aby oglądać", "Player nie dostał reklamy. U nas winny był serwer DNS dostawcy VPN.", "Wyłącz w aplikacji VPN blokowanie reklam albo zmień DNS i odśwież stronę."),
         ("Czarny ekran po kliknięciu „Oglądaj”", "Film się nie załadował. U nas druga próba po chwili zadziałała.", "Odśwież stronę. Jeśli to nie pomoże, zmień serwer VPN na inny polski."),
         ("Przekierowanie na stronę logowania", "Wybrany materiał jest w płatnym pakiecie.", "Wybierz odcinek „BEZ OPŁAT” albo zaloguj się na konto z pakietem.")])
     + '<p class="note">Testujemy darmową część Playera. Płatnych pakietów i Player International jeszcze nie testujemy. Ekran „Player jest niedostępny w Twojej lokalizacji” opisujemy <a href="/player-niedostepny-w-twojej-lokalizacji">na osobnej stronie</a>.</p>',
@@ -740,15 +827,15 @@ PAGES["/player-za-granica"] = ("Jak oglądać Player za granicą: test VPN | Pol
     + faq([("Czym różni się Player International od VPN?", "Player International to płatny pakiet od Playera, legalny i bez VPN, ale z ograniczoną ofertą. Z VPN widzisz polską wersję serwisu, w tym darmowe odcinki."),
            ("Dlaczego darmowy odcinek zniknął?", "Darmowe odcinki są dostępne przez kilka dni. Przy „Faktach” serwis pokazuje etykietę z dniem, w którym odcinek zniknie."),
            ("Czy potrzebuję konta?", "Do odcinków „BEZ OPŁAT” nie. W naszym teście „Fakty” grały bez logowania."),
-           ("Czy to jest legalne?", "Używanie VPN jest legalne w Wielkiej Brytanii, Unii Europejskiej i USA. Regulamin Playera może zabraniać omijania blokad regionalnych. Oficjalną drogą jest Player International.")]),
+           ("Czy Player przez VPN jest zgodny z prawem?", "VPN jako narzędzie jest dozwolony w Unii, w Wielkiej Brytanii i w USA. Regulamin Playera może zabraniać omijania blokad regionalnych. Bez takiego ryzyka jest pakiet Player International.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player")])
 
 PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: test VPN | Polski Streaming",
     "TVP Sport za granicą: czym różnią się materiały wideo od transmisji na żywo, wynik codziennego testu VPN i liczby z naszych pomiarów.",
     band('<a href="/">Polska telewizja za granicą</a> / TVP Sport', "Jak oglądać TVP Sport za granicą",
          "TVP Sport jest darmowy i działa w przeglądarce. Za granicą część materiałów jest zablokowana. Sprawdzamy codziennie, czy wideo gra przez VPN.",
-         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>{UPDATED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
-         figure=frame("/img/tvpsport-test.webp", "sport.tvp.pl", "Zrzut ekranu z naszego testu przez VPN, 10.11.2026. Wideo gra."))
+         f'<div class="when mono">{BYLINE}<span>Aktualizacja: <b>16 listopada 2026</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>',
+         figure=frame("/img/tvpsport-test.webp", "sport.tvp.pl", "Materiał z działu Wideo na sport.tvp.pl, nasz test przez VPN z 10.11.2026."))
     + prose("""
 <p class="answer"><b>Krótka odpowiedź.</b> Materiały wideo z TVP Sport grały w naszym teście przez VPN z serwerem w Polsce, bez konta i w pełnej jakości. Transmisji na żywo nie testujemy, a to one są najczęściej ograniczone licencją.</p>
 
@@ -769,22 +856,23 @@ PAGES["/tvp-sport-za-granica"] = ("Jak oglądać TVP Sport za granicą: test VPN
 <p>Gdy materiał jest zablokowany, polski adres IP z VPN zwykle wystarcza. W naszym teście wideo ruszyło za pierwszym razem także wtedy, gdy TVP VOD przez ten sam serwer nie działał.</p>
 <h3>3. Transmisje na żywo</h3>
 <p>Nie mamy jeszcze wyniku testu dla transmisji na żywo. Jeśli zależy Ci na konkretnym meczu, sprawdź połączenie wcześniej na innej transmisji i miej w zapasie drugi polski serwer.</p>
-""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed wideo", "Około 50 sekund"), ("Nasz test", "Codziennie, najnowsze wideo")],
+""", "prosec", brief([("Cena", "Darmowy, z reklamami"), ("Konto", "W teście niepotrzebne"), ("Reklamy przed wideo", "Zwykle poniżej minuty"), ("Nasz test", "Codziennie, najnowsze wideo")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/wyniki-testow", "Wyniki testów"), ("/porownanie-vpn", "Porównanie VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + prose("<h3>Wyniki TVP Sport dzień po dniu</h3><p>Od 13.11.2026 materiał wideo zagrał przez każdy testowany serwer, także darmowy. Bot co dzień bierze inny, najnowszy materiał.</p>" + svc_days("tvpsport", "TVP Sport, jeden materiał dziennie. „—” przed datą dodania dostawcy do testu."), "prosec")
+    + tested_cta("TVP Sport", "Wideo z TVP Sport bot włącza każdego dnia przez oba płatne plany. Pozostałe VPN opisujemy w <a href=\"/porownanie-vpn\">rankingu</a> tylko na podstawie danych ze stron firm.")
     + svc_result("tvpsport", "TVP Sport", "Bot otwiera dział „Wideo”, wybiera najnowszy materiał dłuższy niż 80 sekund i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć wideo z TVP Sport przez VPN", "Odtwarzacz jest na stronie artykułu, pod tytułem.", [
-        ("Połącz VPN z serwerem w Polsce", "Najlepiej przed otwarciem strony."),
+        ("Najpierw polski serwer VPN", "Połącz się, zanim otworzysz sport.tvp.pl."),
         ("Otwórz sport.tvp.pl i kliknij „Akceptuję”", "Okienko zgody zasłania stronę przy pierwszej wizycie."),
         ("Wejdź w dział „Wideo” i wybierz materiał", "Materiały wideo mają w tytule dopisek [WIDEO]."),
-        ("Kliknij przycisk odtwarzania na obrazie", "Najpierw lecą reklamy. W naszych testach trwały od 46 do 55 sekund.")])
+        ("Kliknij przycisk odtwarzania na obrazie", "Najpierw lecą reklamy. W naszych testach trwały od 10 do 71 sekund.")])
     + prose(facts_box("Liczby z naszego testu", [
         ("Materiał testowy", "Najnowsze wideo z działu „Wideo”"),
-        ("Czas reklam przed wideo", "46 do 55 sekund"),
+        ("Czas reklam przed wideo", "10 do 71 sekund"),
         ("Jakość obrazu", "1920 × 1080"),
         ("Zabezpieczenie DRM", "Nie"),
         ("Logowanie", "Nie było potrzebne"),
-        ("Dni pomiarów", "10.11.2026, dwa uruchomienia")],
+        ("Dni pomiarów", "Codziennie od 10.11.2026, stan na 16.11.2026")],
         "To są pomiary naszego bota. Dotyczą materiałów wideo, a nie transmisji na żywo.")
     + '<p class="note">TVP Sport był w naszych testach najbardziej stabilny z trzech serwisów: działał w obu uruchomieniach, także gdy TVP VOD pokazywał błąd.</p>',
     "prosec alt", shot("tvpsport", "TVP Sport"))
@@ -1185,7 +1273,7 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
 PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
-         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce, ile daje czasu na zwrot i czy sprawdziliśmy go w teście.",
+         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. Dwóch z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
          f'<div class="when mono">{BYLINE}<span>Ceny i dane sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
     + featured()
     + f"""<section class="results"><div class="wrap narrowpad">
@@ -1195,6 +1283,8 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
     + QUIZ
     + f"""<section class="guides"><div class="wrap">
   <div class="shead"><h2>Ranking VPN do polskiej telewizji</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców: serwery w Polsce, cena, urządzenia, zwrot, aplikacje i waluta. <a href="#ranking">Zasady punktacji</a> są niżej.</p></div>
+  <p class="note">{tested_since_line()}</p>
+  {DISCLOSE}
   <div class="pblist">{provblocks()}</div>
   <p class="after">Ceny odczytaliśmy ze stron dostawców {CHECKED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
 </div></section>"""
@@ -1225,8 +1315,8 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
 </ul>
 """ + points_table() + """
 <p>Przy remisie wyżej jest dostawca z większą liczbą serwerów w Polsce, a potem tańszy.</p>
-<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny test mamy dziś dla """ + str(len(tested())) + """ z 5 dostawców: """ + tested_phrase() + """. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
-""", "prosec", brief([("Testujemy dziś", " i ".join(p["name"] for p in tested())), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
+<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny codzienny test mamy dziś dla """ + str(len(tested_companies())) + """ z 5 dostawców: """ + " i ".join(tested_companies()) + """. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
+""", "prosec", brief([("Testujemy dziś", " i ".join(tested_companies())), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
 
@@ -1355,6 +1445,10 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
 EXTRA_CSS = """
+.affn{display:block;font-size:.72rem;color:var(--muted,#6b7280);margin-top:4px;text-align:center}
+.disc{font-size:.82rem;color:var(--muted,#6b7280);margin:0 0 14px;max-width:70ch}
+table.days td,table.days th{white-space:nowrap;text-align:left!important;padding-left:0}table.days th:first-child{font-weight:600}table.mini3.days{min-width:0;width:100%}@media (max-width:640px){table.days{font-size:12px}table.days td,table.days th{padding-right:6px}table.days .st svg{display:none}}
+
 /* multi-page additions */
 a.logo{color:var(--ink);text-decoration:none}
 .cnav{gap:4px}

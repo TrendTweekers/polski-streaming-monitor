@@ -98,7 +98,7 @@
 
   function renderHistory(){
     var days=[];for(var i=29;i>=0;i--)days.push(addDays(RUN.date,-i));
-    function ds(pid,d){var x=HIST.days[d]&&HIST.days[d][pid];return x&&x[hs]?x[hs]:'none'}
+    function ds(pid,d){var x=HIST.days[d]&&HIST.days[d][pid];var v=x&&x[hs]?x[hs]:'none';return v==='okr'?'ok':v}
     var mine=days.map(function(d){return ds(hp,d)}),n=mine.filter(function(s){return s!=='none'}).length,ok=mine.filter(function(s){return s==='ok'}).length,bl=mine.filter(function(s){return s==='blocked'}).length;
     $('h1').textContent=n?ok+'/'+n:'—';$('h2').textContent=n?bl:'—';$('h3').textContent=n;
     if(n<7){

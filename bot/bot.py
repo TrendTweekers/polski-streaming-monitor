@@ -286,6 +286,16 @@ def test_service(browser, svc, shot_path):
 VPN_DOWN = "Serwer VPN nie odpowiadał"
 
 
+def hist_status(entry, r):
+    """Status for the history file. 'okr' = a paid plan played after one reload or in the second try (same rule as the site)."""
+    s = r["status"]
+    if s == "ok" and r.get("reloaded"):
+        return "okr"
+    if s == "unstable" and entry.get("plan") == "plan płatny" and (r.get("reason") or "").startswith("Pierwsza próba"):
+        return "okr"
+    return s
+
+
 def tunnel_alive():
     """Is the tunnel up and is the exit address still Polish?"""
     for _ in range(2):
@@ -390,7 +400,7 @@ def main():
     (DATA / "latest.json").write_text(json.dumps(run, ensure_ascii=False, indent=1))
     hist_f = DATA / "history.json"
     hist = json.loads(hist_f.read_text()) if hist_f.exists() else {"days": {}}
-    hist["days"][day] = {e["id"]: {k: v["status"] for k, v in e["services"].items()} for e in tested}
+    hist["days"][day] = {e["id"]: {k: hist_status(e, v) for k, v in e["services"].items()} for e in tested}
     hist["days"] = dict(sorted(hist["days"].items())[-90:])
     hist_f.write_text(json.dumps(hist, ensure_ascii=False, indent=1))
     # keep screenshots for 30 days
