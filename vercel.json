@@ -19,5 +19,11 @@
       "destination": "/porownanie-vpn",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/kick",
+      "schedule": "5 5 * * *"
+    }
   ]
 }
