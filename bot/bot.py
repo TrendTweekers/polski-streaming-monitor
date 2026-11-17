@@ -184,17 +184,19 @@ def start_playback(page, svc):
 
 def long_enough(page):
     """For clips picked from a listing: is the clip long enough for the 60 s check?"""
-    for _ in range(9):
+    # An advert plays first and is short, so a short video alone proves nothing.
+    # Wait up to 100 s for a video that is long enough (the clip after the advert).
+    for _ in range(20):
         page.wait_for_timeout(5000)
         ds = [v["d"] for v in videos(page) if v["src"].startswith("blob:") and v["d"] > 0]
-        if ds:
-            return max(ds) >= CFG["watch_seconds"] + 20
+        if ds and max(ds) >= CFG["watch_seconds"] + 20:
+            return True
         try:  # the player shows its own error for this clip: take the next clip
             if re.search(r"coś poszło nie tak", page.evaluate("()=>document.body.innerText.slice(0,60000)"), re.I):
                 return False
         except Exception:
             pass
-    return False  # no playable video found on this clip page
+    return False  # only short videos, or no playable video, on this clip page
 
 
 def test_service(browser, svc, shot_path):
@@ -206,13 +208,18 @@ def test_service(browser, svc, shot_path):
         urls = listing_urls(page, svc) if svc.get("listing") else [svc["url"]]
         if not urls:
             raise RuntimeError("no video link on the listing page")
-        for url in urls[:6]:
+        for url in urls[:4]:
             page.goto(url, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(6000)
             click_first(page, CONSENT)
             page.wait_for_timeout(2500)
             start_playback(page, svc)
-            if not svc.get("listing") or long_enough(page):
+            if not svc.get("listing"):
+                break
+            t_clip = time.time()
+            good = long_enough(page)
+            log("    clip", url.rsplit("/", 1)[-1][:50], "long enough" if good else "skipped", f"({int(time.time() - t_clip)} s)")
+            if good:
                 break
         res["url"] = page.url
         t0 = time.time()
