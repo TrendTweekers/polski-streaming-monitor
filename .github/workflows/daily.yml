@@ -31,7 +31,7 @@ jobs:
     needs: gate
     if: needs.gate.outputs.run == 'yes'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -69,4 +69,4 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           JOB_STATUS: ${{ job.status }}
         run: |
-          if [ "$JOB_STATUS" = "success" ]; then python bot/notify.py; else python bot/notify.py "🚨 <b>Polski Streaming</b>: the daily test FAILED (status: $JOB_STATUS). Check GitHub Actions."; fi
+          if [ "$JOB_STATUS" = "success" ]; then python bot/notify.py; elif [ "$JOB_STATUS" = "cancelled" ]; then python bot/notify.py "⏱️ <b>Polski Streaming</b>: the daily test was stopped (time limit or a newer run). The next try runs later today."; else python bot/notify.py "🚨 <b>Polski Streaming</b>: the daily test FAILED (status: $JOB_STATUS). Check GitHub Actions."; fi
