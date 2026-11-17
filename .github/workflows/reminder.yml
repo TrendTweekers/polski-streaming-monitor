@@ -1,0 +1,27 @@
+name: reminder
+on:
+  schedule:
+    - cron: "17 8 24 11 *"   # 24 Nov, about 09:17 Polish time
+    - cron: "47 10 24 11 *"  # second try, GitHub skips some timed runs
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send the reminder once
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ "$(date -u +%Y)" = "2026" ] || exit 0
+          # the second timed try sends nothing if the first one already ran today
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            n=$(gh run list --workflow reminder.yml --status success --created ">=$(date -u +%F)" --json databaseId -q length)
+            [ "$n" -gt 0 ] && exit 0
+          fi
+          python bot/notify.py "🔔 <b>Reminder</b>: open Google Search Console → Indexing → Pages. If a page says <i>Crawled – currently not indexed</i>, click that row and send the screenshot to Claude. Also check Performance (7 days) for clicks and impressions."
