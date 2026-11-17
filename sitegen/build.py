@@ -1803,12 +1803,13 @@ def build_js():
     navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
   }
   document.addEventListener('click',hit,true);document.addEventListener('auxclick',hit,true);
-  // One visit notice per browser session. Not sent from the owner's devices (open the site once with ?me=1).
+  // One visit notice per browser per 30 minutes (new tabs do not count again). Not sent from the owner's devices (open the site once with ?me=1).
   try{
     if(/[?&]me=1/.test(location.search))localStorage.setItem('ps_me','1');
     if(/[?&]me=0/.test(location.search))localStorage.removeItem('ps_me');
-    if(navigator.sendBeacon&&!localStorage.getItem('ps_me')&&!sessionStorage.getItem('ps_v')&&!navigator.webdriver){
-      sessionStorage.setItem('ps_v','1');
+    var lv=+localStorage.getItem('ps_v')||0;
+    if(navigator.sendBeacon&&!localStorage.getItem('ps_me')&&Date.now()-lv>1800000&&!navigator.webdriver){
+      localStorage.setItem('ps_v',String(Date.now()));
       var vr='';try{vr=document.referrer?new URL(document.referrer).hostname:''}catch(x){}
       if(vr===location.hostname)vr='';
       navigator.sendBeacon('/api/visit',new Blob([JSON.stringify({u:location.pathname,r:vr})],{type:'application/json'}));
