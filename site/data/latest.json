@@ -1,6 +1,6 @@
 {
- "date": "2026-11-17",
- "started_at": "2026-11-17T07:27:35+01:00",
+ "date": "2026-11-18",
+ "started_at": "2026-11-18T06:39:51+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,44 +16,44 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:27:50+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3648,S01E3648,3535458",
-     "played_seconds": 61.3,
-     "wait_seconds": 176,
+     "tested_at": "2026-11-18T06:40:06+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
+     "played_seconds": 60.9,
+     "wait_seconds": 181,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-18/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:32:00+01:00",
+     "tested_at": "2026-11-18T06:44:20+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 61.0,
-     "wait_seconds": 35,
+     "played_seconds": 60.6,
+     "wait_seconds": 40,
      "resolution": "640x360",
      "drm": true,
-     "shot": "data/shots/2026-11-17/nord-player.webp"
+     "shot": "data/shots/2026-11-18/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:33:52+01:00",
-     "url": "https://sport.tvp.pl/96513278/graham-potter-przed-meczem-z-polska-baraze-byly-waznym-momentem-pod-wzgledem-rozwoju-wideo",
-     "played_seconds": 61.2,
+     "tested_at": "2026-11-18T06:46:13+01:00",
+     "url": "https://sport.tvp.pl/96533017/jan-bednarek-zawiedlismy-samych-siebie-naszych-kibicow-i-rodziny-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-18/nord-tvpsport.webp"
     }
    },
    "exit": {
-    "ip": "187.15.161.x",
+    "ip": "187.15.162.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS212238 Datacamp Limited"
+    "org": "AS137409 GSL Networks Pty LTD"
    },
-   "speed_mbps": 69.7
+   "speed_mbps": 65.6
   },
   {
    "id": "proton",
@@ -65,35 +65,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:41:18+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3648,S01E3648,3535458",
-     "played_seconds": 60.8,
-     "wait_seconds": 171,
+     "tested_at": "2026-11-18T06:50:51+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
+     "played_seconds": 60.5,
+     "wait_seconds": 175,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/proton-tvpvod.webp"
+     "shot": "data/shots/2026-11-18/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:45:39+01:00",
+     "tested_at": "2026-11-18T06:55:17+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.8,
+     "played_seconds": 60.6,
      "wait_seconds": 25,
      "resolution": "960x540",
      "drm": true,
-     "shot": "data/shots/2026-11-17/proton-player.webp"
+     "shot": "data/shots/2026-11-18/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:47:33+01:00",
-     "url": "https://sport.tvp.pl/96513010/reprezentacja-polski-koszykarek-w-grze-o-eurobasket-2027-kowalewski-mamy-argumenty-zeby-powalczyc-wideo",
-     "played_seconds": 61.0,
-     "wait_seconds": 25,
+     "tested_at": "2026-11-18T06:57:10+01:00",
+     "url": "https://sport.tvp.pl/96532916/jan-urban-o-stalych-fragmentach-gry-ze-szwecja-recepta-czas-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 70,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-18/proton-tvpsport.webp"
     }
    },
    "exit": {
@@ -102,7 +102,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 81.1
+   "speed_mbps": 64.9
   },
   {
    "id": "protonfree",
@@ -114,35 +114,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T07:58:05+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3648,S01E3648,3535458",
-     "played_seconds": 61.5,
-     "wait_seconds": 111,
+     "tested_at": "2026-11-18T07:06:34+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
+     "played_seconds": 60.7,
+     "wait_seconds": 40,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/protonfree-tvpvod.webp"
+     "shot": "data/shots/2026-11-18/protonfree-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T08:01:11+01:00",
+     "tested_at": "2026-11-18T07:08:29+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 61.1,
-     "wait_seconds": 51,
+     "played_seconds": 60.7,
+     "wait_seconds": 50,
      "resolution": "640x360",
      "drm": true,
-     "shot": "data/shots/2026-11-17/protonfree-player.webp"
+     "shot": "data/shots/2026-11-18/protonfree-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-17T08:03:17+01:00",
-     "url": "https://sport.tvp.pl/96513302/yasin-ayari-kazdy-mecz-traktujemy-powaznie-wideo",
-     "played_seconds": 61.6,
-     "wait_seconds": 61,
+     "tested_at": "2026-11-18T07:10:32+01:00",
+     "url": "https://sport.tvp.pl/96533017/jan-bednarek-zawiedlismy-samych-siebie-naszych-kibicow-i-rodziny-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 40,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-17/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-18/protonfree-tvpsport.webp"
     }
    },
    "exit": {
@@ -151,7 +151,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 55.4
+   "speed_mbps": 64.5
   },
   {
    "id": "surf",
@@ -205,5 +205,5 @@
    "enabled": false
   }
  ],
- "finished_at": "2026-11-17T08:07:51+01:00"
+ "finished_at": "2026-11-18T07:14:50+01:00"
 }
