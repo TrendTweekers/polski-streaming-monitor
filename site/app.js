@@ -26,7 +26,7 @@
   function addDays(d,n){var x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
   function dm(d){return d.slice(8,10)+'.'+d.slice(5,7)}
   var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};
-  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://www.expressvpn.com',cybr:'https://www.cyberghostvpn.com'};
+  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1462856/16063',cybr:'https://www.cyberghostvpn.com'};
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
@@ -240,9 +240,10 @@
       navigator.sendBeacon('/api/visit',new Blob([JSON.stringify({u:location.pathname,r:vr})],{type:'application/json'}));
     }
   }catch(x){}
-  // Tell CJ which page the click came from (sid), so a sale shows its page.
+  // Tell CJ (sid) / Impact (subId1) which page the click came from (sid), so a sale shows its page.
   var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
   Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),function(a){
-    if(a.href.indexOf('sid=')<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+'sid='+sid;
+    var k=a.href.indexOf('go.expressvpn.com')>=0?'subId1=':'sid=';
+    if(a.href.indexOf(k)<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+k+sid;
   });
 })();
