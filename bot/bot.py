@@ -104,6 +104,45 @@ def pia_conf():
         return None
 
 
+class OvpnTunnel:
+    """OpenVPN in a small Docker container (bot/ovpn) that offers the same SOCKS5 port as wireproxy.
+    conf is 'OVPN_TEXT\x00AUTH_TEXT'. Needs Docker (GitHub runner)."""
+    IMAGE = "ps-ovpn"
+
+    def __init__(self, conf):
+        ovpn, auth = conf.split("\x00", 1)
+        self.dir = tempfile.TemporaryDirectory()
+        d = Path(self.dir.name)
+        (d / "client.ovpn").write_text(ovpn.replace("\r", ""))
+        (d / "auth.txt").write_text(auth.replace("\r", ""))
+        os.chmod(d, 0o755)
+        for f in ("client.ovpn", "auth.txt"):
+            (d / f).chmod(0o644)
+        if subprocess.run(["docker", "image", "inspect", self.IMAGE], capture_output=True).returncode != 0:
+            subprocess.run(["docker", "build", "-q", "-t", self.IMAGE, str(ROOT / "ovpn")], check=True, capture_output=True)
+        self.name = f"psovpn{os.getpid()}{int(time.time()) % 100000}"
+        subprocess.run(["docker", "run", "-d", "--rm", "--name", self.name, "--cap-add=NET_ADMIN", "--device", "/dev/net/tun",
+                        "-e", "DNS=" + CFG["dns"], "-p", f"127.0.0.1:{PORT}:1080", "-v", f"{d}:/vpn:ro", self.IMAGE],
+                       check=True, capture_output=True)
+        for _ in range(45):
+            out = subprocess.run(["docker", "logs", self.name], capture_output=True, text=True)
+            if "vpn up" in out.stdout:
+                break
+            if "did not come up" in out.stdout:
+                log("  openvpn failed:", out.stdout[-400:])
+                break
+            time.sleep(1)
+        time.sleep(2)
+
+    def close(self):
+        subprocess.run(["docker", "rm", "-f", self.name], capture_output=True)
+        self.dir.cleanup()
+
+
+def make_tunnel(conf):
+    return OvpnTunnel(conf) if "\x00" in conf else Tunnel(conf)
+
+
 class Tunnel:
     def __init__(self, wg_conf):
         self.dir = tempfile.TemporaryDirectory()
@@ -340,7 +379,7 @@ def ensure_tunnel(holder, conf):
         log("   tunnel is down - reconnect", n + 1)
         holder[0].close()
         time.sleep(5)
-        holder[0] = Tunnel(conf)
+        holder[0] = make_tunnel(conf)
         if tunnel_alive():
             return True
     return False
@@ -363,12 +402,15 @@ def main():
             if not prov.get("enabled"):
                 continue
             conf = pia_conf() if prov.get("pia") else secret_for(prov["secret_env"])
+            if conf and prov.get("auth_env"):  # OpenVPN provider: config + login
+                auth = secret_for(prov["auth_env"])
+                conf = conf + "\x00" + auth if auth else None
             if not conf:
                 entry["note"] = "Brak konfiguracji VPN"
                 log(prov["name"], "- no secret, skipped")
                 continue
             log(prov["name"], "- connecting")
-            tun = [Tunnel(conf)]
+            tun = [make_tunnel(conf)]
             try:
                 ip = fetch_json("https://ipinfo.io/json", proxy=True)
                 if ip.get("country") != "PL":

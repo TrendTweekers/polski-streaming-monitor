@@ -1,0 +1,26 @@
+name: vpn-check
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "provider id from bot/config.json"
+        default: "cybr"
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r bot/requirements.txt
+      - name: Connect and show the exit address
+        env:
+          CYBERGHOST_PL_OVPN: ${{ secrets.CYBERGHOST_PL_OVPN }}
+          CYBERGHOST_AUTH: ${{ secrets.CYBERGHOST_AUTH }}
+          PIA_USER: ${{ secrets.PIA_USER }}
+          PIA_PASS: ${{ secrets.PIA_PASS }}
+        run: python bot/vpn_check.py "${{ github.event.inputs.provider }}"
