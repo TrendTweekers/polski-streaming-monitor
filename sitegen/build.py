@@ -1732,9 +1732,9 @@ PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " 
   <li><b>Masz czas na zwrot.</b> Każdy z pięciu dostawców daje co najmniej 30 dni na zwrot pieniędzy w długim planie. To wystarczy, żeby sprawdzić VPN ze swoim serwisem.</li>
 </ul>
 <h2>Który VPN z promocji działa z polską telewizją</h2>
-<p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy """ + join_pl(paid_tested_names() or ["NordVPN"]) + """ z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
+<p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy """ + join_pl(paid_tested_names() or ["NordVPN"]) + f""" z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
 <div data-last>{last_rows_html()}</div>
-<p>""" + untested_line() + """ Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
+<p>""" + untested_line() + f""" Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
 <h2>Skąd mamy ceny</h2>
 <p>{PRICED} otworzyliśmy polskie strony cenników wszystkich pięciu dostawców i zapisaliśmy to, co pokazują: cenę za miesiąc, sumę do zapłaty i rabat. Nie przepisujemy cen z innych serwisów. Ceny w euro przeliczamy po kursie {EUR}. Gdy cena się zmieni, poprawiamy ją tutaj i w <a href="/porownanie-vpn">rankingu</a>.</p>
 """, "prosec")
