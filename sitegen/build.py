@@ -343,6 +343,7 @@ def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Wynik naszego testu: {name}</h2><p>{note}</p></div>
   <div class="svc" data-svc="{sid}">{svc_rows_html(sid)}</div>
+  {reliab_box(sid, SVC_INS[sid] if sid != "tvpsport" else "TVP Sport")}
   <p class="after"><a href="/wyniki-testow#historia">Historia 30 dni</a> · <a href="/wyniki-testow#dowod">Wszystkie zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
 
@@ -675,6 +676,46 @@ def score10(pid):
     return f"{sum(wpts(pid)) / MAXPTS * 10:.1f}".replace(".", ",")
 
 
+def reliab(pid, sid):
+    """(days it played, days tested) for one VPN and one service, over the whole history."""
+    ok = n = 0
+    for d in HIST.get("days", {}).values():
+        v = d.get(pid, {}).get(sid)
+        if v and v != "none":
+            n += 1
+            ok += v in ("ok", "okr")
+    return ok, n
+
+
+def reliab_line(pid, cls="rel"):
+    """'TVP VOD 9/9 · Player 9/9 · TVP Sport 9/9' since the VPN joined the test."""
+    parts = []
+    for x in SVON:
+        ok, n = reliab(pid, x["id"])
+        if n:
+            parts.append(f'<span>{x["name"]} <b>{ok}/{n}</b></span>')
+    if not parts:
+        return ""
+    since = TEST_SINCE.get(pid, "")
+    return f'<small class="{cls}">Skuteczność{" od " + since if since else ""}: ' + " · ".join(parts) + "</small>"
+
+
+def reliab_box(sid, name):
+    rows = ""
+    for p in sorted(tested(), key=lambda x: {"nord": 0, "proton": 1, "protonfree": 9}.get(x["id"], RANK.get(x["id"], 5))):
+        ok, n = reliab(p["id"], sid)
+        if not n:
+            continue
+        pct = round(ok / n * 100)
+        nm = {"proton": "Proton VPN Plus", "protonfree": "Proton VPN, darmowy"}.get(p["id"], p["name"])
+        rows += (f'<div class="rlrow"><img src="{LOGOS[p["id"]]}" alt="" width="24" height="24"><b>{nm}</b>'
+                 f'<span class="rlbar"><i style="width:{pct}%"></i></span><span class="rlnum">{ok} z {n} dni</span></div>')
+    if not rows:
+        return ""
+    return (f'<div class="rlbox"><h3>Skuteczność z {name} od początku testu</h3>{rows}'
+            f'<p class="muted small">Dzień liczymy jako udany, gdy film grał 60 sekund, także po jednym odświeżeniu strony w planie płatnym. Liczymy tylko dni, w których dany VPN był w teście.</p></div>')
+
+
 def day_bars(pid, n=14):
     """One small bar per test day, oldest first: green = every tested service played, red = none, amber = some."""
     days = sorted(HIST.get("days", {}))[-n:]
@@ -711,7 +752,7 @@ def rank_rows(n=5):
             p = next(x for x in tested() if x["id"] == pid)
             nok = sum(1 for x in SVON if _works(p, x["id"]))
             cls = "ok" if nok == len(SVON) else ("blocked" if nok == 0 else "unstable")
-            test = f'<b class="rrt {cls}">Test {LAST[:5]}: działa {nok} z {len(SVON)}</b>{day_bars(pid)}'
+            test = f'<b class="rrt {cls}">Test {LAST[:5]}: działa {nok} z {len(SVON)}</b>{day_bars(pid)}{reliab_line(pid)}'
         else:
             test = '<b class="rrt none">Jeszcze nie testujemy</b><small class="dbl">Miejsce wynika z danych ze strony dostawcy</small>'
         deal = f'<em>{BF[pid][0]}</em>' if BF_ON else ""
@@ -877,7 +918,7 @@ def status_matrix():
         cta = (f'<a class="btn" {plink(aid, url)}>Zobacz ofertę</a>{aff_note(aid)}' if p.get("plan") == "plan płatny"
                else '<a class="smfree" href="/darmowy-vpn-polska-telewizja">Jak ustawić darmowy serwer</a>')
         rows += (f'<div class="smrow"><div class="smn"><img src="{LOGOS[pid]}" alt="" width="36" height="36"><div><b>{names.get(pid, p["name"])}</b><small>{plans.get(pid, "")}</small></div></div>'
-                 f'{cells}<div class="smb">{day_bars(pid)}</div><div class="pcta">{cta}</div></div>')
+                 f'{cells}<div class="smb">{day_bars(pid)}{reliab_line(pid, "rel sm")}</div><div class="pcta">{cta}</div></div>')
     return f"""<section class="sm" id="status"><div class="wrap">
   <div class="smtop">
     <div><span class="smlive"><i></i>Test automatyczny · codziennie rano</span>
@@ -2015,6 +2056,13 @@ EXTRA_CSS = """
 .freecta .pcta .more{display:block;margin-top:12px;font-size:14px;color:var(--navy-muted)}
 .mlist .affn{margin-top:6px}.mcta{padding:0 0 16px;border-bottom:1px solid var(--line)}.mlist .mcta .btn{margin-top:0}
 .sbar{display:none}
+.rel{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}.rel span{white-space:nowrap}.rel b{color:var(--ok);font-weight:700}
+.sm .rel{color:var(--navy-muted,#A0ADB8)}.sm .rel b{color:#5FDD95}
+.rlbox{margin-top:22px;border:1px solid var(--line);border-radius:10px;padding:18px 20px;background:var(--surface)}.rlbox h3{font-size:16px;margin:0 0 12px}
+.rlrow{display:grid;grid-template-columns:24px minmax(150px,220px) minmax(0,1fr) 90px;gap:12px;align-items:center;padding:7px 0}.rlrow b{font-size:14px}
+.rlbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}.rlbar i{display:block;height:100%;background:var(--ok);border-radius:5px}
+.rlnum{font:600 13px var(--mono,monospace);text-align:right}
+@media (max-width:620px){.rlrow{grid-template-columns:24px minmax(0,1fr) auto}.rlbar{grid-column:2/-1;grid-row:2}}
 a.btn[data-aff]{background:#D9480F;color:#fff}
 .rrs5{border-top:2px solid var(--ink)}
 .rr{display:grid;grid-template-columns:44px minmax(180px,1.1fr) 92px minmax(0,1.5fr) minmax(0,1.2fr) minmax(110px,.8fr) auto;gap:10px 22px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
