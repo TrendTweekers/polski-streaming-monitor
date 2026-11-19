@@ -339,6 +339,34 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 </div></section>"""
 
 
+def access_checks():
+    """WP Pilot and Polsat Box Go: access check without playback (no account). Empty until the bot has a result."""
+    names = [c for c in RUN.get("checks", [])]
+    rows_p = [p for p in tested() if p.get("checks")]
+    if not names or not rows_p:
+        return ""
+    head = "".join(f"<th>{c['name']}</th>" for c in names)
+
+    def cell(r):
+        if not r:
+            return f"<td>{st('none')}</td>"
+        extra = ""
+        if r.get("vpn_flag"):
+            extra = '<small class="muted"> · serwis oznaczył adres jako VPN</small>'
+        lab = st(r["status"]).replace(">Działa<", ">Polski adres<").replace(">Nie działa<", ">Zablokowane<")
+        return f"<td>{lab}{extra}</td>"
+    rows = "".join(f"<tr><td><b>{p['name']}</b>{' (' + p['plan'] + ')' if p.get('plan') else ''}</td>"
+                   + "".join(cell(p["checks"].get(c["id"])) for c in names) + "</tr>" for p in rows_p)
+    when = fmt_dt(max((r.get("tested_at") or "") for p in rows_p for r in p["checks"].values()) or None)
+    return (f'''<section class="prosec" id="dostep"><div class="wrap"><div class="prose">
+<h2>WP Pilot i Polsat Box Go: sprawdzenie dostępu</h2>
+<p>W tych dwóch serwisach film wymaga konta albo płatnego pakietu, więc bot go nie włącza. Bot sprawdza tylko, czy serwis uznaje adres z VPN za polski. To pierwszy warunek oglądania, ale jeszcze nie dowód, że film zagra.</p>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>VPN</th>{head}</tr></thead><tbody>{rows}</tbody></table></div>
+<p class="muted small">Sprawdzenie: {when}. Bez VPN, z serwera w USA (19.11.2026), oba serwisy blokowały: WP Pilot pokazał komunikat „Nie możesz oglądać poza Europejskim Obszarem Gospodarczym”, a Polsat Box Go uznał adres za zagraniczny.</p>
+<p class="muted small">„Serwis oznaczył adres jako VPN”: Polsat Box Go zapisuje to w danych sesji. Bez płatnego konta nie wiemy, czy to blokuje film. Podajemy sam fakt.</p>
+</div></div></section>''')
+
+
 def svc_result(sid, name, note):
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Wynik naszego testu: {name}</h2><p>{note}</p></div>
@@ -1104,7 +1132,7 @@ PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Str
          f"Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Testujemy dziś: {tested_phrase()}.", WHEN)
     + RESULTS.replace('<a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>',
                       f'<div class="pcta"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}<a class="more" href="/porownanie-vpn">Zobacz ranking 6 VPN</a></div>')
-    + HISTORY + EVIDENCE)
+    + HISTORY + access_checks() + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
     "TVP VOD za granicą: co działa bez VPN, co jest zablokowane, wynik codziennego testu i komunikaty błędów z rozwiązaniami.",

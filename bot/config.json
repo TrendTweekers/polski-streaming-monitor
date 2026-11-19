@@ -88,10 +88,20 @@
       "enabled": true
     },
     {
+      "id": "wppilot",
+      "name": "WP Pilot",
+      "check": "wppilot",
+      "url": "https://pilot.wp.pl/tv/",
+      "enabled": true,
+      "note": "Access check only: WP Pilot API /api/v1/user/location + EEA message. Playback needs an account."
+    },
+    {
       "id": "polsat",
       "name": "Polsat Box Go",
-      "enabled": false,
-      "note": "paid plan needed"
+      "check": "pbg",
+      "url": "https://polsatboxgo.pl/live",
+      "enabled": true,
+      "note": "Access check only: session token groups loc:pl / loc:world and vpn:true. Playback needs a paid plan."
     },
     {
       "id": "canal",

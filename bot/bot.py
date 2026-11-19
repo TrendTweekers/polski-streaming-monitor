@@ -33,12 +33,16 @@ PROXY = f"socks5://127.0.0.1:{PORT}"
 WARSAW = dt.timezone(dt.timedelta(hours=1))  # CET; good enough for a timestamp label
 
 CONSENT = ["Akceptuję", "Akceptuj wszystkie", "Zaakceptuj wszystko", "Zaakceptuj", "Zgadzam się", "Przejdź do serwisu", "Akceptuj"]
-BLOCK_TEXTS = [
-    (r"wykryto wtyczkę adblock|wyłącz blokowanie reklam", "Serwis pokazał komunikat o blokowaniu reklam"),
-    (r"niedostępn\w+ w twoim kraju|poza granicami polski|tylko na terytorium|nie jest dostępn\w+ w twoim regionie|geoblok", "Serwis pokazał komunikat o blokadzie regionalnej"),
-    (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN"),
-    (r"wystąpił problem z materiałem|nie udało się odtworzyć|coś poszło nie tak", "Serwis pokazał błąd odtwarzania"),
+BLOCK_TEXTS = [  # (pattern, reason on the site, kind). First match wins.
+    (r"wykryto wtyczkę adblock|wyłącz blokowanie reklam", "Serwis pokazał komunikat o blokowaniu reklam", "adblock"),
+    (r"niedostępn\w+ w twoim kraju|poza granicami polski|tylko na terytorium|nie jest dostępn\w+ w twoim regionie|geoblok", "Serwis pokazał komunikat o blokadzie regionalnej", "geo"),
+    (r"vpn lub proxy|wyłącz vpn|korzystasz z vpn", "Serwis wykrył VPN", "vpn"),
+    (r"wystąpił problem z materiałem|nie udało się odtworzyć|coś poszło nie tak", "Serwis pokazał błąd odtwarzania", "player"),
+    (r"musisz się zalogować|zaloguj się, aby (oglądać|obejrzeć)", "Serwis wymagał logowania", "login"),
+    (r"wykup dostęp|kup pakiet, aby oglądać|materiał dostępny w pakiecie", "Serwis wymagał płatnego pakietu", "paid"),
 ]
+# Kinds that say nothing about the VPN: the result is "not tested", never "blocked".
+NOT_VPN = {"login", "paid", "outage", "bot", "vpn_down"}
 # Messages after which the bot reloads the page one time, as a viewer would.
 RELOAD_ON = {"Serwis pokazał błąd odtwarzania", "Serwis pokazał komunikat o blokowaniu reklam"}
 VIDEO_JS = """()=>Array.from(document.querySelectorAll('video')).map(v=>({t:v.currentTime,paused:v.paused,w:v.videoWidth,h:v.videoHeight,drm:!!v.mediaKeys,d:(isFinite(v.duration)?v.duration:0),src:(v.currentSrc||'')}))"""
@@ -308,14 +312,14 @@ def test_service(browser, svc, shot_path):
                     body = page.evaluate("()=>document.body.innerText.slice(0,60000)")
                 except Exception:
                     pass
-                for pat, why in BLOCK_TEXTS:
+                for pat, why, kind in BLOCK_TEXTS:
                     if re.search(pat, body, re.I):
-                        res.update(status="blocked", reason=why)
+                        res.update(status="blocked", reason=why, kind=kind)
                         break
                 if res["status"] == "blocked" and res["reason"] in RELOAD_ON and not res.get("reloaded") and start is None:
                     # A viewer reloads the page after a player error. The bot does the same, one time, and says so.
                     log("   ", res["reason"], "- reload the page one time")
-                    res.update(status="none", reason=None, reloaded=True)
+                    res.update(status="none", reason=None, kind=None, reloaded=True)
                     page.reload(wait_until="domcontentloaded", timeout=90000)
                     page.wait_for_timeout(6000)
                     click_first(page, CONSENT)
@@ -330,19 +334,21 @@ def test_service(browser, svc, shot_path):
             wall = time.time() - start[0]
             res.update(played_seconds=played, wait_seconds=ads_until, resolution=f'{last["w"]}x{last["h"]}', drm=last["drm"])
             if played >= CFG["watch_seconds"] - 8:
-                res.update(status="ok", reason=None)
+                res.update(status="ok", reason=None, kind=None)
             elif played >= 3:
-                res.update(status="unstable", reason=f"Film grał {int(played)} s w ciągu {int(wall)} s")
+                res.update(status="unstable", reason=f"Film grał {int(played)} s w ciągu {int(wall)} s", kind="stall")
             else:
-                res.update(status="blocked", reason="Film nie ruszył")
+                res.update(status="blocked", reason="Film nie ruszył", kind="timeout")
         elif res["status"] != "blocked":
-            res.update(status="blocked", reason="Film nie ruszył w ciągu %d s" % CFG["max_wait_seconds"])
+            res.update(status="blocked", reason="Film nie ruszył w ciągu %d s" % CFG["max_wait_seconds"], kind="timeout")
+        if res.get("kind") in NOT_VPN:
+            res["status"] = "none"
         if not shot_done:
             save_shot(page, shot_path)
         res["shot"] = str(shot_path.relative_to(SITE))
     except Exception as e:  # a bot fault is "not tested", never "blocked"
         vpn = re.search(r"ERR_SOCKS|ERR_PROXY|ERR_TUNNEL|ERR_CONNECTION", str(e))
-        res.update(status="none", reason=VPN_DOWN if vpn else "Błąd bota: " + type(e).__name__)
+        res.update(status="none", reason=VPN_DOWN if vpn else "Błąd bota: " + type(e).__name__, kind="vpn_down" if vpn else "bot")
         log("  bot error:", type(e).__name__, str(e)[:160])
     finally:
         ctx.close()
@@ -350,6 +356,94 @@ def test_service(browser, svc, shot_path):
 
 
 VPN_DOWN = "Serwer VPN nie odpowiadał"
+OUTAGE = "Serwis nie odpowiadał (awaria po stronie serwisu, nie VPN)"
+
+
+def http_code(url, proxy):
+    cmd = ["curl", "-s", "-o", "/dev/null", "-L", "--max-time", "25", "-w", "%{http_code}", "-A", "Mozilla/5.0"]
+    if proxy:
+        cmd += ["--socks5-hostname", f"127.0.0.1:{PORT}"]
+    try:
+        return int(subprocess.run(cmd + [url], capture_output=True, text=True).stdout or 0)
+    except Exception:
+        return 0
+
+
+def service_down(svc):
+    """True when the service itself fails: no answer or a 5xx error, through the VPN and directly."""
+    url = svc.get("listing") or svc.get("url")
+    codes = [http_code(url, True), http_code(url, False)]
+    return all(c == 0 or c >= 500 for c in codes)
+
+
+def jwt_groups(text):
+    """Polsat Box Go: the access groups inside the session token (loc:pl, loc:world, vpn:true ...)."""
+    import base64
+    try:
+        tok = json.loads(text)["result"]
+        part = tok.split(".")[1]
+        part += "=" * (-len(part) % 4)
+        return json.loads(base64.urlsafe_b64decode(part)).get("accessGroups", [])
+    except Exception:
+        return None
+
+
+def check_service(browser, svc, shot_path):
+    """Access check without playback (no login, no paid plan): does the service treat the VPN address as Polish?
+    status: ok | blocked | none. vpn_flag: True when the service marks the address as a VPN (Polsat Box Go only)."""
+    res = {"status": "none", "reason": None, "kind": None, "tested_at": now().isoformat(timespec="seconds")}
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900}, locale="pl-PL", timezone_id="Europe/Warsaw")
+    page = ctx.new_page()
+    seen = {}
+
+    def on_resp(r):
+        try:
+            if svc["check"] == "wppilot" and "/api/v1/user/location" in r.url:
+                seen["loc"] = r.json().get("data") or {}
+            elif svc["check"] == "pbg" and "/rpc/system/" in r.url and "groups" not in seen:
+                g = jwt_groups(r.text())
+                if g:
+                    seen["groups"] = g
+        except Exception:
+            pass
+    page.on("response", on_resp)
+    try:
+        page.goto(svc["url"], wait_until="domcontentloaded", timeout=90000)
+        page.wait_for_timeout(9000)
+        click_first(page, CONSENT)
+        page.wait_for_timeout(3000)
+        body = ""
+        try:
+            body = page.evaluate("()=>document.body.innerText.slice(0,20000)")
+        except Exception:
+            pass
+        if svc["check"] == "wppilot":
+            loc = seen.get("loc")
+            if re.search(r"nie możesz oglądać poza", body, re.I) or (loc and loc.get("iso_code") != "PL"):
+                res.update(status="blocked", kind="geo", reason="Serwis pokazał komunikat: nie możesz oglądać poza Europejskim Obszarem Gospodarczym")
+            elif loc and loc.get("iso_code") == "PL":
+                res.update(status="ok")
+            res["country"] = (loc or {}).get("iso_code")
+        else:
+            g = seen.get("groups")
+            if g:
+                res["country"] = "PL" if "loc:pl" in g else "inny"
+                res["vpn_flag"] = "vpn:true" in g
+                if "loc:pl" in g:
+                    res.update(status="ok")
+                else:
+                    res.update(status="blocked", kind="geo", reason="Serwis nie uznał adresu za polski")
+        if res["status"] == "none":
+            res.update(reason="Serwis nie podał lokalizacji", kind="bot")
+        save_shot(page, shot_path)
+        res["shot"] = str(shot_path.relative_to(SITE))
+    except Exception as e:
+        vpn = re.search(r"ERR_SOCKS|ERR_PROXY|ERR_TUNNEL|ERR_CONNECTION", str(e))
+        res.update(status="none", reason=VPN_DOWN if vpn else "Błąd bota: " + type(e).__name__, kind="vpn_down" if vpn else "bot")
+        log("  check error:", type(e).__name__, str(e)[:160])
+    finally:
+        ctx.close()
+    return res
 
 
 def hist_status(entry, r):
@@ -395,12 +489,14 @@ def main():
     run = {"date": day, "started_at": started.isoformat(timespec="seconds"),
            "runner": {"country": runner.get("country")},  # country only: a local run must not publish the owner's city
            "watch_seconds": CFG["watch_seconds"], "providers": [], "services": [
-               {"id": s["id"], "name": s["name"], "enabled": s.get("enabled", False)} for s in CFG["services"]]}
-    services = [s for s in CFG["services"] if s.get("enabled")]
+               {"id": s["id"], "name": s["name"], "enabled": s.get("enabled", False)} for s in CFG["services"] if not s.get("check")],
+           "checks": [{"id": s["id"], "name": s["name"]} for s in CFG["services"] if s.get("check") and s.get("enabled")]}
+    services = [s for s in CFG["services"] if s.get("enabled") and not s.get("check")]
+    checks = [s for s in CFG["services"] if s.get("enabled") and s.get("check")]
     with sync_playwright() as p:
         for prov in CFG["providers"]:
             entry = {"id": prov["id"], "name": prov["name"], "plan": prov.get("plan"), "server": prov.get("server"),
-                     "tested": False, "services": {}}
+                     "tested": False, "services": {}, "checks": {}}
             run["providers"].append(entry)
             if not prov.get("enabled"):
                 continue
@@ -435,7 +531,7 @@ def main():
                         log("  testing", svc["name"])
                         shot = DATA / "shots" / day / f'{prov["id"]}-{svc["id"]}.webp'
                         if not ensure_tunnel(tun, conf):
-                            r = {"status": "none", "reason": VPN_DOWN, "tested_at": now().isoformat(timespec="seconds")}
+                            r = {"status": "none", "reason": VPN_DOWN, "kind": "vpn_down", "tested_at": now().isoformat(timespec="seconds")}
                         else:
                             r = test_service(browser, svc, shot)
                             if r["status"] != "ok":
@@ -449,11 +545,25 @@ def main():
                                         r.update(status="unstable", reason="Pierwsza próba nieudana (%s), druga udana" % first_reason)
                                     elif r["status"] == "blocked" and not tunnel_alive():
                                         # The film did not start because the VPN server dropped. That is not a block by the service.
-                                        r.update(status="none", reason=VPN_DOWN)
+                                        r.update(status="none", reason=VPN_DOWN, kind="vpn_down")
                                 else:
-                                    r = {"status": "none", "reason": VPN_DOWN, "tested_at": now().isoformat(timespec="seconds"), "attempts": 1}
+                                    r = {"status": "none", "reason": VPN_DOWN, "kind": "vpn_down", "tested_at": now().isoformat(timespec="seconds"), "attempts": 1}
+                        if r["status"] == "blocked" and r.get("kind") in ("timeout", "player") and service_down(svc):
+                            r.update(status="none", reason=OUTAGE, kind="outage")
                         entry["services"][svc["id"]] = r
                         log("   ->", r["status"], r.get("reason") or "", r.get("played_seconds"))
+                    for svc in checks:
+                        log("  checking", svc["name"])
+                        shot = DATA / "shots" / day / f'{prov["id"]}-{svc["id"]}.webp'
+                        if not ensure_tunnel(tun, conf):
+                            r = {"status": "none", "reason": VPN_DOWN, "kind": "vpn_down", "tested_at": now().isoformat(timespec="seconds")}
+                        else:
+                            r = check_service(browser, svc, shot)
+                            if r["status"] != "ok" and ensure_tunnel(tun, conf):
+                                r = check_service(browser, svc, shot)
+                                r["attempts"] = 2
+                        entry["checks"][svc["id"]] = r
+                        log("   ->", r["status"], r.get("country"), "vpn flag" if r.get("vpn_flag") else "", r.get("reason") or "")
                 finally:
                     browser.close()
                 entry["tested"] = any(r["status"] != "none" for r in entry["services"].values())
@@ -471,6 +581,9 @@ def main():
     hist = json.loads(hist_f.read_text()) if hist_f.exists() else {"days": {}}
     hist["days"][day] = {e["id"]: {k: hist_status(e, v) for k, v in e["services"].items()} for e in tested}
     hist["days"] = dict(sorted(hist["days"].items())[-90:])
+    # access checks (no playback) live apart from the playback history, so playback counts stay the same
+    hist.setdefault("checks", {})[day] = {e["id"]: {k: v["status"] for k, v in e.get("checks", {}).items()} for e in tested if e.get("checks")}
+    hist["checks"] = dict(sorted(hist["checks"].items())[-90:])
     hist_f.write_text(json.dumps(hist, ensure_ascii=False, indent=1))
     # keep screenshots for 30 days
     keep = set(sorted(hist["days"])[-30:])
