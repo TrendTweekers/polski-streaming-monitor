@@ -7,7 +7,9 @@ WHY = [("Film nie ruszył w ciągu", "the film did not start in time"), ("Film n
        ("Pierwsza próba nieudana", "first try failed, second try OK"), ("Serwer VPN nie odpowiadał", "the VPN server did not answer"),
        ("blokowaniu reklam", "the service showed an ad-block message"), ("blokadzie regionalnej", "the service showed a region block"),
        ("wykrył VPN", "the service detected the VPN"), ("błąd odtwarzania", "the service showed a player error"),
-       ("Film grał", "the film stopped early"), ("Błąd bota", "bot error")]
+       ("Film grał", "the film stopped early"), ("Błąd bota", "bot error"),
+       ("wymagał logowania", "the service asked for a login (not counted)"), ("płatnego pakietu", "the service asked for a paid plan (not counted)"),
+       ("awaria po stronie serwisu", "the service was down (not counted)")]
 PLAN = {"plan płatny": "paid", "plan darmowy": "free"}
 
 
