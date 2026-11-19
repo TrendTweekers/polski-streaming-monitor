@@ -126,7 +126,6 @@ def tested_cta(service, lead):
                  f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN, które testujemy z {service}</h2><p>{lead}</p></div>
-  <p class="disc">Przyciski to linki partnerskie: przy zakupie dostajemy prowizję, a Ty płacisz tyle samo. Nie wpływa to na wynik testu.</p>
   <div class="pstrip">{rows}</div>
 </div></section>"""
 
@@ -431,7 +430,6 @@ def provstrip(note=""):
                  f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
-  {DISCLOSE}
   <div class="pstrip">{rows}</div>
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
 </div></section>"""
@@ -805,7 +803,6 @@ def top3():
     """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
     return f"""<section class="results soft"><div class="wrap narrowpad">
   <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu sześciu dostawców. Ceny z {PRICED}.</p></div>
-  <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
   {rank_rows(3)}
   {SCORE_NOTE}
   <p class="after"><a href="/porownanie-vpn">Pełny ranking 6 VPN z cenami, wadami i zasadami punktów</a></p>
@@ -817,7 +814,6 @@ def rank_top():
     return f"""<section class="results soft"><div class="wrap narrowpad">
   <div class="shead"><h2>Ranking w skrócie</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców. Obok oceny pokazujemy wynik naszego codziennego testu, jeśli dany VPN już testujemy.</p></div>
   <p class="note">{tested_since_line()}</p>
-  {DISCLOSE}
   {rank_rows(len(RANK))}
   {SCORE_NOTE}
   {brand_slot()}
@@ -1832,7 +1828,6 @@ PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " 
          f'<div class="when mono">{BYLINE}<span>Ceny odczytane: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Oferty Black Friday, stan na {PRICED}</h2><p>Kolejność jak w naszym <a href="/porownanie-vpn">rankingu punktowym</a>, nie według wielkości rabatu. Dostawcy nie podają daty końca promocji, więc oferta może się zmienić z dnia na dzień.</p></div>
-  {DISCLOSE}
   <div class="deals">{deals_page()}</div>
 </div></section>"""
     + prose(f"""
