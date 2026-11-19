@@ -48,6 +48,16 @@
       "name": "CyberGhost",
       "secret_env": "CYBERGHOST_PL_WG",
       "enabled": false
+    },
+    {
+      "id": "pia",
+      "name": "Private Internet Access",
+      "plan": "plan płatny",
+      "server": "PIA Warszawa",
+      "secret_env": "PIA_PL_WG",
+      "pia": true,
+      "enabled": false,
+      "note": "Turn on after PIA is added to the site (FACTS, PROFILE, POINTS in sitegen/build.py). Needs GitHub secrets PIA_USER and PIA_PASS."
     }
   ],
   "services": [

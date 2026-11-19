@@ -87,6 +87,23 @@ def secret_for(env_name):
     return f.read_text() if f.exists() else None
 
 
+def pia_conf():
+    """PIA has no WireGuard file: build one for this run from the username and password."""
+    user, pw = os.environ.get("PIA_USER"), os.environ.get("PIA_PASS")
+    f = ROOT / "secrets" / "pia.env"
+    if not (user and pw) and f.exists():
+        kv = dict(l.split("=", 1) for l in f.read_text().splitlines() if "=" in l)
+        user, pw = kv.get("PIA_USER"), kv.get("PIA_PASS")
+    if not (user and pw):
+        return None
+    try:
+        import pia
+        return pia.make_conf(user, pw)
+    except Exception as e:
+        log("  PIA config failed:", type(e).__name__)
+        return None
+
+
 class Tunnel:
     def __init__(self, wg_conf):
         self.dir = tempfile.TemporaryDirectory()
@@ -345,7 +362,7 @@ def main():
             run["providers"].append(entry)
             if not prov.get("enabled"):
                 continue
-            conf = secret_for(prov["secret_env"])
+            conf = pia_conf() if prov.get("pia") else secret_for(prov["secret_env"])
             if not conf:
                 entry["note"] = "Brak konfiguracji VPN"
                 log(prov["name"], "- no secret, skipped")

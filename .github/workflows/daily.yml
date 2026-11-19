@@ -49,6 +49,8 @@ jobs:
           SURFSHARK_PL_WG: ${{ secrets.SURFSHARK_PL_WG }}
           EXPRESS_PL_WG: ${{ secrets.EXPRESS_PL_WG }}
           CYBERGHOST_PL_WG: ${{ secrets.CYBERGHOST_PL_WG }}
+          PIA_USER: ${{ secrets.PIA_USER }}
+          PIA_PASS: ${{ secrets.PIA_PASS }}
         run: xvfb-run -a python bot/bot.py
       - name: Rebuild pages with the new results
         run: python sitegen/build.py
