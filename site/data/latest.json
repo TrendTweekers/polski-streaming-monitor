@@ -1,6 +1,6 @@
 {
- "date": "2026-11-18",
- "started_at": "2026-11-18T06:39:51+01:00",
+ "date": "2026-11-19",
+ "started_at": "2026-11-19T06:39:55+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,44 +16,44 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T06:40:06+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
-     "played_seconds": 60.9,
-     "wait_seconds": 181,
+     "tested_at": "2026-11-19T06:40:12+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
+     "played_seconds": 61.0,
+     "wait_seconds": 167,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-19/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T06:44:20+01:00",
+     "tested_at": "2026-11-19T06:44:12+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
-     "wait_seconds": 40,
+     "played_seconds": 61.0,
+     "wait_seconds": 30,
      "resolution": "640x360",
      "drm": true,
-     "shot": "data/shots/2026-11-18/nord-player.webp"
+     "shot": "data/shots/2026-11-19/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T06:46:13+01:00",
-     "url": "https://sport.tvp.pl/96533017/jan-bednarek-zawiedlismy-samych-siebie-naszych-kibicow-i-rodziny-wideo",
-     "played_seconds": 60.7,
+     "tested_at": "2026-11-19T06:45:57+01:00",
+     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
+     "played_seconds": 60.9,
      "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-19/nord-tvpsport.webp"
     }
    },
    "exit": {
-    "ip": "187.15.162.x",
+    "ip": "187.15.161.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS137409 GSL Networks Pty LTD"
+    "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 65.6
+   "speed_mbps": 52.1
   },
   {
    "id": "proton",
@@ -65,35 +65,36 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T06:50:51+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
-     "played_seconds": 60.5,
-     "wait_seconds": 175,
+     "tested_at": "2026-11-19T06:50:37+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
+     "played_seconds": 60.9,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/proton-tvpvod.webp"
+     "shot": "data/shots/2026-11-19/proton-tvpvod.webp"
     },
     "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-18T06:55:17+01:00",
+     "status": "unstable",
+     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
+     "tested_at": "2026-11-19T07:01:13+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.6,
-     "wait_seconds": 25,
+     "wait_seconds": 30,
      "resolution": "960x540",
      "drm": true,
-     "shot": "data/shots/2026-11-18/proton-player.webp"
+     "shot": "data/shots/2026-11-19/proton-player.webp",
+     "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T06:57:10+01:00",
-     "url": "https://sport.tvp.pl/96532916/jan-urban-o-stalych-fragmentach-gry-ze-szwecja-recepta-czas-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 70,
+     "tested_at": "2026-11-19T07:03:12+01:00",
+     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-19/proton-tvpsport.webp"
     }
    },
    "exit": {
@@ -102,7 +103,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 64.9
+   "speed_mbps": 62.0
   },
   {
    "id": "protonfree",
@@ -114,35 +115,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T07:06:34+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3649,S01E3649,3538593",
-     "played_seconds": 60.7,
-     "wait_seconds": 40,
+     "tested_at": "2026-11-19T07:08:49+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
+     "played_seconds": 61.0,
+     "wait_seconds": 181,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/protonfree-tvpvod.webp"
+     "shot": "data/shots/2026-11-19/protonfree-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T07:08:29+01:00",
+     "tested_at": "2026-11-19T07:13:05+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
-     "wait_seconds": 50,
+     "played_seconds": 60.9,
+     "wait_seconds": 37,
      "resolution": "640x360",
      "drm": true,
-     "shot": "data/shots/2026-11-18/protonfree-player.webp"
+     "shot": "data/shots/2026-11-19/protonfree-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-18T07:10:32+01:00",
-     "url": "https://sport.tvp.pl/96533017/jan-bednarek-zawiedlismy-samych-siebie-naszych-kibicow-i-rodziny-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 40,
+     "tested_at": "2026-11-19T07:14:56+01:00",
+     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
+     "played_seconds": 60.9,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-18/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-19/protonfree-tvpsport.webp"
     }
    },
    "exit": {
@@ -151,7 +152,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 64.5
+   "speed_mbps": 62.2
   },
   {
    "id": "surf",
@@ -205,5 +206,5 @@
    "enabled": false
   }
  ],
- "finished_at": "2026-11-18T07:14:50+01:00"
+ "finished_at": "2026-11-19T07:19:32+01:00"
 }
