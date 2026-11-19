@@ -798,20 +798,18 @@ def how_home():
         (ic('<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m10 8 5 2.5-5 2.5z"/>'), "Serwis widzi widza z Polski",
          "Odświeżasz stronę i włączasz film. To, czy naprawdę ruszy, zależy od VPN i od dnia, dlatego testujemy to co rano."),
     ]
-    lis = "".join(f'<li><span class="hwn">{i + 1}</span><span class="hwi">{svg}</span><div><h3>{h}</h3><p>{t}</p></div></li>' for i, (svg, h, t) in enumerate(steps))
+    lis = "".join(f'<li><div class="hwdot"><span class="hwi">{svg}</span><span class="hwn">{i + 1}</span></div><h3>{h}</h3><p>{t}</p></li>' for i, (svg, h, t) in enumerate(steps))
     return f"""<section class="hw"><div class="wrap">
-  <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
-  <div class="hwg">
-    <ol class="hws">{lis}</ol>
-    <div class="hwba">
-      <figure class="hwf bad"><span class="hwtag">Bez VPN</span><img src="/img/blok-tvpvod.webp" alt="TVP VOD bez VPN: komunikat, że materiał jest niedostępny w Twoim kraju" width="1200" height="750" loading="lazy">
-        <figcaption>TVP VOD z adresu w USA: materiał zablokowany. Nasz zrzut ekranu z 11.11.2026.</figcaption></figure>
-      <span class="hwarrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      <figure class="hwf good"><span class="hwtag">Z VPN w Polsce</span><img src="/img/tvpvod-test.webp" alt="TVP VOD przez VPN z serwerem w Polsce: program gra" width="1440" height="900" loading="lazy">
-        <figcaption>Ten sam serwis przez serwer VPN w Polsce: „Jeden z dziesięciu” gra. Nasz test z 10.11.2026.</figcaption></figure>
-    </div>
+  <div class="hwhead"><span class="hwk">Jak to działa</span><h2>Trzy kroki od blokady do filmu</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
+  <ol class="hws">{lis}</ol>
+  <div class="hwba">
+    <figure class="hwf bad"><span class="hwtag">Bez VPN</span><img src="/img/blok-tvpvod.webp" alt="TVP VOD bez VPN: komunikat, że materiał jest niedostępny w Twoim kraju" width="1200" height="750" loading="lazy">
+      <figcaption><b>Zablokowane.</b> TVP VOD z adresu w USA. Nasz zrzut ekranu z 11.11.2026.</figcaption></figure>
+    <span class="hwarrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    <figure class="hwf good"><span class="hwtag">Z VPN w Polsce</span><img src="/img/tvpvod-test.webp" alt="TVP VOD przez VPN z serwerem w Polsce: program gra" width="1440" height="900" loading="lazy">
+      <figcaption><b>Gra.</b> Ten sam serwis przez serwer VPN w Polsce. Nasz test z 10.11.2026.</figcaption></figure>
   </div>
-  <p class="after"><a href="/jak-testujemy">Jak dokładnie testujemy</a> · <a href="/wyniki-testow">Wyniki dzień po dniu</a></p>
+  <p class="hwafter"><a href="/jak-testujemy">Jak dokładnie testujemy</a> · <a href="/wyniki-testow">Wyniki dzień po dniu</a></p>
 </div></section>"""
 
 
@@ -2324,23 +2322,29 @@ h1{font-weight:800;letter-spacing:-.012em;word-spacing:.04em}h2{font-weight:800;
 .bcode{width:100%;box-sizing:border-box;font:12px var(--mono,monospace);border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--bg);color:var(--ink);resize:none}
 @media (max-width:820px){.bgrid{grid-template-columns:minmax(0,1fr)}}
 .pfig{max-width:760px;margin:22px 0}.pfig .bframe{margin:0}
-.hw{background:var(--cream);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:56px;padding-bottom:52px}
-.hwg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
-.hws{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
-.hws:before{content:"";position:absolute;left:35px;top:36px;bottom:36px;border-left:2px dashed var(--ok);opacity:.55}
-.hws li{position:relative;display:grid;grid-template-columns:36px 44px minmax(0,1fr);gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px 18px 18px;box-shadow:0 1px 2px rgba(23,35,45,.05)}
-.hwn{width:36px;height:36px;border-radius:50%;background:var(--ok);color:#fff;font:700 16px var(--mono,monospace);display:grid;place-items:center;position:relative;z-index:1}
-.hwi{width:44px;height:44px;border-radius:10px;background:rgba(22,131,74,.1);color:var(--ok);display:grid;place-items:center}
-.hws h3{font-size:17px;margin:0 0 4px}.hws p{font-size:14px;color:var(--muted);margin:0;line-height:1.5}
-.hwba{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);gap:12px;align-items:center}
-.hwf{margin:0;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(23,35,45,.55)}
+.hw{background:var(--surface);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:64px;padding-bottom:60px}
+.hwhead{text-align:center;max-width:720px;margin:0 auto 44px}.hwhead h2{font-size:32px;margin:8px 0 10px}.hwhead p{color:var(--muted);font-size:16px}
+.hwk{display:inline-block;font:700 12px var(--mono,monospace);text-transform:uppercase;letter-spacing:.08em;color:var(--ok);background:rgba(22,131,74,.1);border-radius:999px;padding:5px 12px}
+.hws{list-style:none;margin:0 0 48px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;position:relative}
+.hws:before{content:"";position:absolute;top:36px;left:16.6%;right:16.6%;border-top:2px dashed rgba(22,131,74,.45)}
+.hws li{text-align:center;position:relative}
+.hwdot{position:relative;width:72px;height:72px;margin:0 auto 18px}
+.hwi{width:72px;height:72px;border-radius:50%;background:var(--surface);border:2px solid var(--ok);color:var(--ok);display:grid;place-items:center;box-shadow:0 10px 24px -14px rgba(22,131,74,.7)}
+.hwi svg{width:30px;height:30px}
+.hwn{position:absolute;top:-6px;right:-8px;width:26px;height:26px;border-radius:50%;background:var(--ok);color:#fff;font:700 13px var(--mono,monospace);display:grid;place-items:center;border:3px solid var(--surface)}
+.hws li:last-child .hwi{background:var(--ok);color:#fff}
+.hws h3{font-size:18px;margin:0 0 8px}.hws p{font-size:14px;color:var(--muted);margin:0 auto;line-height:1.55;max-width:34ch}
+.hwba{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);gap:16px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:24px}
+.hwf{margin:0;position:relative;background:var(--surface);border:2px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 18px 36px -26px rgba(23,35,45,.6)}
 .hwf img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
-.hwf figcaption{font-size:12px;color:var(--muted);padding:10px 14px;line-height:1.45}
-.hwtag{position:absolute;top:10px;left:10px;font-size:12px;font-weight:700;border-radius:999px;padding:4px 11px;color:#fff;background:var(--bad)}
-.hwf.good .hwtag{background:var(--ok)}.hwf.bad{border-color:rgba(194,59,59,.45)}.hwf.good{border-color:rgba(22,131,74,.55)}
-.hwarrow{width:40px;height:40px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center}
-@media (max-width:1180px){.hwg{grid-template-columns:minmax(0,1fr);gap:28px}}
-@media (max-width:620px){.hwba{grid-template-columns:minmax(0,1fr)}.hwarrow{margin:0 auto;transform:rotate(90deg)}.hw .wrap{padding-top:40px;padding-bottom:40px}.hws li{grid-template-columns:32px minmax(0,1fr);padding:16px}.hwi{display:none}.hwn{width:32px;height:32px}.hws:before{left:31px}}
+.hwf figcaption{font-size:13px;color:var(--muted);padding:12px 16px;line-height:1.45}.hwf figcaption b{color:var(--ink)}
+.hwf.bad figcaption b{color:var(--bad)}.hwf.good figcaption b{color:var(--ok)}
+.hwtag{position:absolute;top:12px;left:12px;font-size:13px;font-weight:700;border-radius:999px;padding:5px 12px;color:#fff;background:var(--bad);box-shadow:0 4px 10px -4px rgba(0,0,0,.4)}
+.hwf.good .hwtag{background:var(--ok)}.hwf.bad{border-color:rgba(194,59,59,.5)}.hwf.good{border-color:rgba(22,131,74,.6)}
+.hwarrow{width:48px;height:48px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center;box-shadow:0 8px 18px -8px rgba(22,131,74,.8)}
+.hwafter{text-align:center;margin-top:20px;font-size:14px}
+@media (max-width:820px){.hws{grid-template-columns:minmax(0,1fr);gap:22px}.hws:before{top:36px;bottom:36px;left:36px;right:auto;border-top:0;border-left:2px dashed rgba(22,131,74,.45)}.hws li{text-align:left;display:grid;grid-template-columns:72px minmax(0,1fr);gap:4px 16px;align-items:start}.hwdot{grid-row:span 2;margin:0}.hws p{margin:0}.hwhead{text-align:left;margin-bottom:28px}.hwhead h2{font-size:26px}}
+@media (max-width:620px){.hwba{grid-template-columns:minmax(0,1fr);padding:14px}.hwarrow{margin:0 auto;transform:rotate(90deg)}.hw .wrap{padding-top:44px;padding-bottom:44px}}
 .hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:40px;min-height:0;padding-bottom:34px}
 .hh .otext{padding:44px 0 30px}.hh h1{font-size:40px}
 .hhk{display:inline-flex;gap:7px;align-items:center;font-size:13px;font-weight:600;color:var(--ok);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-bottom:16px}
