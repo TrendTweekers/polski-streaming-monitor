@@ -1,6 +1,6 @@
 // Counts a click on a partner button and tells the owner in Telegram.
 // Stores nothing. Sends: provider, page, country, city, device type, where the visit came from, network type. No IP address.
-const NAMES = { nord: 'NordVPN', surf: 'Surfshark', proton: 'Proton VPN', cybr: 'CyberGhost', expr: 'ExpressVPN' };
+const NAMES = { nord: 'NordVPN', surf: 'Surfshark', proton: 'Proton VPN', cybr: 'CyberGhost', expr: 'ExpressVPN', pia: 'PIA' };
 const HOSTS = ['polskistreaming.pl', 'www.polskistreaming.pl'];
 // Networks of hosting firms and VPN providers. A click from one of these is a robot or a person who already uses a VPN.
 const DC = new Set([16509, 14618, 15169, 396982, 8075, 14061, 16276, 24940, 212238, 60068, 9009, 63949, 20473, 51167, 13335, 45102,

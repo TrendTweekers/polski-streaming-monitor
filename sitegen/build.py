@@ -62,8 +62,8 @@ def tested_companies():
     return out
 
 
-TEST_SINCE = {"nord": "11.11.2026", "proton": "13.11.2026", "protonfree": "10.11.2026", "cybr": "20.11.2026"}
-TEST_NAME = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "darmowy serwer Proton VPN", "cybr": "CyberGhost"}
+TEST_SINCE = {"nord": "11.11.2026", "proton": "13.11.2026", "protonfree": "10.11.2026", "cybr": "20.11.2026", "pia": "20.11.2026"}
+TEST_NAME = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "darmowy serwer Proton VPN", "cybr": "CyberGhost", "pia": "PIA"}
 _hist = SITE / "data" / "history.json"
 HIST = json.loads(_hist.read_text()) if _hist.exists() else {"days": {}}
 
@@ -78,7 +78,7 @@ def paid_tested_names():
     return names
 
 
-NUM_PL = {1: "Jednego", 2: "Dwóch", 3: "Trzech", 4: "Czterech", 5: "Pięciu"}
+NUM_PL = {1: "Jednego", 2: "Dwóch", 3: "Trzech", 4: "Czterech", 5: "Pięciu", 6: "Sześciu"}
 
 
 def untested_line():
@@ -401,7 +401,7 @@ def provstrip(note=""):
                  f'<span><em>Nasz test {LAST[:10]}</em>{test_summary(pid)}</span><span><em>Serwer w Polsce</em>{pl}</span>'
                  f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
+  <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
   {DISCLOSE}
   <div class="pstrip">{rows}</div>
   <p class="after"><a href="/porownanie-vpn">Pełne porównanie i źródła danych</a></p>
@@ -443,6 +443,8 @@ FACTS = [
      "https://protonvpn.com/pricing", "protonvpn.com/pricing", ""),
     ("cybr", "CyberGhost", "https://www.cyberghostvpn.com", "Tak, 1 lokalizacja", "45 dni (14 dni w planie miesięcznym)", "7", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.cyberghostvpn.com/vpn-server", "cyberghostvpn.com/vpn-server", ""),
+    ("pia", "PIA", "https://www.privateinternetaccess.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV",
+     "https://www.privateinternetaccess.com/vpn-server", "privateinternetaccess.com/vpn-server", ""),
     ("expr", "ExpressVPN", "https://www.expressvpn.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Do 14", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.expressvpn.com/vpn-server/poland-vpn", "expressvpn.com/vpn-server/poland-vpn", ""),
 ]
@@ -450,7 +452,7 @@ FACTS = [
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
 REFUND = {f[0]: re.match(r"\d+ dni", f[4]).group(0) for f in FACTS}
-POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 3, 1, 3, 3, 0), "expr": (1, 2, 3, 2, 3, 0)}  # 19.11.2026: Black Friday prices moved both one price step up
+POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 3, 1, 3, 3, 0), "expr": (1, 2, 3, 2, 3, 0), "pia": (1, 3, 3, 2, 2, 0)}  # 19.11.2026: Black Friday prices moved both one price step up
 WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
 MAXPTS = 19
 
@@ -459,7 +461,7 @@ def wpts(pid):
     return [x * w for x, w in zip(POINTS[pid], WEIGHTS)]
 
 
-RANK = {pid: i + 1 for i, pid in enumerate(["nord", "surf", "proton", "cybr", "expr"])}
+RANK = {pid: i + 1 for i, pid in enumerate(["nord", "surf", "proton", "pia", "cybr", "expr"])}  # ties (12 points): cheaper plan first
 assert sorted(RANK, key=lambda p: -sum(wpts(p)))[:3] == ["nord", "surf", "proton"]
 EUR = "4,3895 zł (kurs średni NBP z 10.11.2026)"
 
@@ -479,7 +481,7 @@ AFF = {
     "expr": "https://go.expressvpn.com/c/8234307/1636009/16063",
     "cybr": "https://www.dpbolvw.net/click-101925411-17379867",  # CJ advertiser 4996371, approved 19.11.2026 via Ana (Kape). "Black Friday & Cyber Monday 2026" page; after the offers end use 15735261 (Evergreen, home page)  # Impact, link from Ana 2026-11-19, lands on the Polish page (program 16063); page tag goes in subId1
 }
-AFF_NAMES = {"surf": "Surfshark", "nord": "NordVPN", "proton": "Proton VPN", "cybr": "CyberGhost", "expr": "ExpressVPN"}
+AFF_NAMES = {"surf": "Surfshark", "nord": "NordVPN", "proton": "Proton VPN", "cybr": "CyberGhost", "expr": "ExpressVPN", "pia": "PIA"}
 
 
 def partners():
@@ -608,12 +610,16 @@ PROFILE = {
                  terms="66,92 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Cena z oferty Black Friday, sprawdzona 19.11.2026. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów"]),
+    "pia": dict(tag="Private Internet Access: bez limitu urządzeń", badge="", price="ok. 7,42 zł", unit="za miesiąc (1,69 €)",
+                terms="67,60 € za pierwsze 40 miesięcy (3 lata i 4 miesiące), potem 67,60 € co 3 lata. Cena z oferty Black Friday, sprawdzona 19.11.2026. Plan na 1 miesiąc: 11,69 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
+                pros=["Bez limitu urządzeń", "Odnowienie w tej samej cenie co 3 lata", "Aplikacje na Android TV i Apple TV"],
+                cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro", "Na stronie dostawcy nie znaleźliśmy aplikacji na Fire TV"]),
     "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="ok. 8,74 zł", unit="za miesiąc (1,99 €)",
                  terms="55,72 € za pierwsze 28 miesięcy. Cena z oferty Black Friday, sprawdzona 19.11.2026. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
                  cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
 }
-PRICE_SRC = {"proton": ("https://protonvpn.com/pl/l/bf-vpn-offers-2026", "protonvpn.com, oferta Black Friday"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
+PRICE_SRC = {"pia": ("https://www.privateinternetaccess.com/buy-vpn-online", "privateinternetaccess.com/buy-vpn-online"),"proton": ("https://protonvpn.com/pl/l/bf-vpn-offers-2026", "protonvpn.com, oferta Black Friday"), "nord": ("https://nordvpn.com/pl/pricing/", "nordvpn.com/pl/pricing"),
              "surf": ("https://surfshark.com/pl/pricing", "surfshark.com/pl/pricing"), "expr": ("https://www.expressvpn.com/pl/pricing", "expressvpn.com/pl/pricing"),
              "cybr": ("https://www.cyberghostvpn.com/pl/buy/cyberghost-vpn-3", "cyberghostvpn.com")}
 CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
@@ -626,6 +632,7 @@ BF = {  # as shown on each provider's Polish pricing page on PRICED: (discount, 
     "surf": ("−90% i 3 miesiące ekstra", "242,73 zł za pierwsze 27 miesięcy, plus VAT", "33,18 zł za miesiąc", "Dostawca podaje cenę odnowienia przy zamówieniu"),
     "proton": ("−75% w planie na 2 lata", "150,96 zł za pierwsze 24 miesiące", "24,99 zł za miesiąc", "209,88 zł co 12 miesięcy"),
     "cybr": ("−83%, 2 lata i 4 miesiące", "55,72 € za pierwsze 28 miesięcy", "11,99 € za miesiąc (plan miesięczny)", "55,72 € za rok"),
+    "pia": ("−85%, 3 lata i 4 miesiące", "67,60 € za pierwsze 40 miesięcy", "11,69 € za miesiąc", "67,60 € co 3 lata"),
     "expr": ("−81%, 2 lata i 4 miesiące", "66,92 € za pierwsze 28 miesięcy", "12,99 € za miesiąc", "79,95 € za rok"),
 }
 
@@ -728,11 +735,11 @@ SCORE_NOTE = (f'<p class="after">Ocena to punkty z naszego rankingu przeliczone 
 def top3():
     """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
     return f"""<section class="results soft"><div class="wrap narrowpad">
-  <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {PRICED}.</p></div>
+  <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu sześciu dostawców. Ceny z {PRICED}.</p></div>
   <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
   {rank_rows(3)}
   {SCORE_NOTE}
-  <p class="after"><a href="/porownanie-vpn">Pełny ranking 5 VPN z cenami, wadami i zasadami punktów</a></p>
+  <p class="after"><a href="/porownanie-vpn">Pełny ranking 6 VPN z cenami, wadami i zasadami punktów</a></p>
 </div></section>"""
 
 
@@ -999,7 +1006,7 @@ DEVICES = """<section class="devsec"><div class="wrap">
   <img class="devimg" src="/img/devices.webp" alt="" width="737" height="276" loading="lazy">
 </div></section>"""
 
-LOGOS = {"proton": "/logos/proton.svg", "protonfree": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
+LOGOS = {"pia": "/logos/pia.svg", "proton": "/logos/proton.svg", "protonfree": "/logos/proton.svg", "nord": "/logos/nord.svg", "surf": "/logos/surf.svg", "expr": "/logos/expr.svg", "cybr": "/logos/cyberghost-icon.png"}
 
 
 def facts_table():
@@ -1055,7 +1062,7 @@ PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Str
     band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
          f"Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Testujemy dziś: {tested_phrase()}.", WHEN)
     + RESULTS.replace('<a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>',
-                      f'<div class="pcta"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}<a class="more" href="/porownanie-vpn">Zobacz ranking 5 VPN</a></div>')
+                      f'<div class="pcta"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}<a class="more" href="/porownanie-vpn">Zobacz ranking 6 VPN</a></div>')
     + HISTORY + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
@@ -1388,7 +1395,7 @@ PAGES["/polska-telewizja-w-niemczech"] = ("Polska telewizja w Niemczech: 5 sposo
    .replace("__PLAYERINT__", SRC_PLAYERINT).replace("__POLONIA__", SRC_POLONIA).replace("__TVPFAQ__", SRC_TVPFAQ),
     "prosec", brief([("Za darmo", "Satelita Hot Bird 13°E"), ("Najtańszy pakiet", "4,94 € (Telekom)"), ("TVP1, TVP2, Polsat, TVN", "Tylko przez polskie serwisy"), ("Ceny sprawdzone", "11.11.2026")],
                      [("/polska-telewizja-w-uk", "Polska telewizja w UK"), ("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy w Niemczech da się oglądać TVP1 i TVP2 na żywo?", "Nie ma ich w ofertach niemieckich operatorów ani wśród niekodowanych kanałów na satelicie Hot Bird. Programy TVP są w serwisie TVP VOD, a za granicą część z nich jest zablokowana."),
            ("Ile kosztuje polska telewizja w Niemczech?", "Kanały niekodowane z satelity są bezpłatne. Pakiet polski w Telekom MagentaTV kosztuje 4,94 € za miesiąc, a w Vodafone 8,99 € za miesiąc. Player International kosztuje 50 zł za 30 dni."),
            ("Czy Rundfunkbeitrag obejmuje polskie kanały?", "Nie. Rundfunkbeitrag finansuje niemieckie media publiczne: ARD, ZDF i Deutschlandradio. Za polskie pakiety płacisz osobno."),
@@ -1442,7 +1449,7 @@ PAGES["/tvp-vod-material-niedostepny-w-twoim-kraju"] = ("TVP VOD: „materiał j
 <p>Gdy TVP VOD przez VPN pokazuje inny tekst, na przykład „Wystąpił problem z materiałem”, to nie jest blokada regionalna. Ten przypadek opisujemy w poradniku TVP VOD.</p>
 """, "prosec", brief([("Rodzaj błędu", "Blokada regionalna"), ("Kiedy się pojawia", "Po kliknięciu odcinka"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Program w teście", "Jeden z dziesięciu")],
                      [("/tvp-vod-za-granica", "Poradnik: TVP VOD za granicą"), ("/tvp-sport-material-niedostepny", "Ten sam problem w TVP Sport"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy komunikat oznacza, że moje konto jest zablokowane?", "Nie. Komunikat dotyczy adresu IP i jednego materiału. Konto działa normalnie."),
            ("Czy zmiana przeglądarki albo wyczyszczenie ciasteczek pomoże?", "Nie. Serwis sprawdza adres IP, a ten jest taki sam w każdej przeglądarce."),
            ("Czy w Niemczech albo Holandii jest tak samo?", "Nasz test był z USA. W krajach Unii działa dodatkowo zasada dla abonentów pakietu TVP+, ale treści darmowe mogą być zablokowane tak samo."),
@@ -1485,7 +1492,7 @@ PAGES["/player-niedostepny-w-twojej-lokalizacji"] = ("„Player jest niedostępn
 <p>Skrót kraju w rogu ekranu z komunikatem jest przydatny. Jeśli masz włączony VPN i dalej widzisz ten ekran, przeczytaj skrót. „NL” albo „DE” znaczy, że aplikacja VPN połączyła Cię z Holandią albo Niemcami, a nie z Polską. Zmień serwer na polski i odśwież stronę.</p>
 """.replace("__PLAYERINT__", SRC_PLAYERINT), "prosec", brief([("Rodzaj błędu", "Blokada całego serwisu"), ("Kiedy się pojawia", "Od razu po wejściu"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Oficjalna opcja", "Player International")],
                      [("/player-za-granica", "Poradnik: Player za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Podobny komunikat w TVP VOD"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy Player działa w Wielkiej Brytanii?", "Nie sprawdzaliśmy tego z adresu w Wielkiej Brytanii. Komunikaty serwisu mówią o Unii Europejskiej, a Wielka Brytania do niej nie należy."),
            ("Czy aplikacja na telefon albo telewizor ominie ten komunikat?", "Nie. Aplikacja łączy się przez ten sam adres IP co przeglądarka."),
            ("Dlaczego strona najpierw się ładuje, a potem znika?", "Player sprawdza lokalizację po załadowaniu strony. W naszym teście opis programu było widać przez chwilę, zanim serwis przeniósł nas na ekran z komunikatem."),
@@ -1559,7 +1566,7 @@ PAGES["/tvp-na-zywo-za-granica"] = ("TVP 1 i TVP 2 na żywo za granicą: test z 
 <p>Część widzów szuka komunikatu „Wybrana audycja została czasowo zablokowana z powodów licencyjnych”. W naszym teście z 19.11.2026 go nie zobaczyliśmy: TVP VOD pokazał planszę opisaną wyżej. Jeśli widzisz ten drugi napis, powód jest ten sam, czyli licencja na dany program, i sprawdzasz to samo: adres IP i kanał.</p>
 """, "prosec", brief([("Rodzaj błędu", "Blokada licencyjna kanału"), ("Zablokowane w teście", "TVP 1, TVP 2"), ("Grało bez VPN", "TVP Info"), ("Przez VPN w Polsce", "3 z 3 w drugiej próbie"), ("Reklamy przed obrazem", "Do około 3 minut"), ("Nasz test", "USA, 19.11.2026")],
                      [("/tvp-vod-za-granica", "Poradnik: TVP VOD za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Ten sam komunikat przy filmach i serialach"), ("/tvp-sport-za-granica", "TVP Sport za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu. Kanały na żywo sprawdziliśmy tylko przez NordVPN.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu. Kanały na żywo sprawdziliśmy tylko przez NordVPN.")
     + faq([("Czy TVP 1 działa za granicą bez VPN?", "W naszym teście z USA z 19.11.2026 nie: po kliknięciu „Na żywo” pojawiła się plansza „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”. Z krajów Unii nie sprawdzaliśmy."),
            ("Czy TVP Info działa za granicą?", "W naszym teście tak. TVP Info grało z adresu w USA bez VPN, w jakości 1920 × 1080."),
            ("Ile trwają reklamy przed kanałem na żywo?", "W naszym teście przed obrazem na żywo było sześć albo siedem reklam. Po trzech minutach kanał już grał."),
@@ -1605,7 +1612,7 @@ PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedos
 </ul>
 """, "prosec", brief([("Rodzaj błędu", "Blokada regionalna"), ("Gdzie się pojawia", "W oknie odtwarzacza"), ("Nasz test", "USA, bez VPN, 11.11.2026"), ("Materiał w teście", "Wideo, 25 sekund")],
                      [("/tvp-sport-za-granica", "Poradnik: TVP Sport za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Komunikat w TVP VOD"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy TVP Sport działa za granicą bez VPN?", "Strona, artykuły i wyniki tak. W naszym teście z USA wideo było zablokowane. Z krajów Unii jeszcze nie sprawdzaliśmy."),
            ("Czy aplikacja TVP Sport zachowuje się inaczej niż strona?", "Testujemy stronę w przeglądarce. Aplikacja korzysta z tego samego adresu IP, więc blokada regionalna działa w niej tak samo."),
            ("Czy transmisja zadziała, jeśli wideo działa?", "Nie mamy na to wyniku testu. Transmisje mają osobne licencje, dlatego zrób próbę przed meczem i miej drugi polski serwer w zapasie.")]),
@@ -1677,7 +1684,7 @@ PAGES["/polska-telewizja-w-uk"] = ("Polska telewizja w UK: co działa po brexici
 """,
     "prosec", brief([("Polskie kanały w Sky i Virgin", "Nie znaleźliśmy"), ("Za darmo", "Hot Bird 13°E, druga antena"), ("Zasada z Unii o abonamencie", "Nie działa w UK"), ("TV Licence", "180 funtów za rok")],
                      [("/polska-telewizja-w-niemczech", "Polska telewizja w Niemczech"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
-    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
+    + provstrip("Sześciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.")
     + faq([("Czy Sky ma polskie kanały?", "Na listach kanałów Sky z czerwca 2026, prowadzonych przez serwis RXTV, nie znaleźliśmy żadnego polskiego kanału."),
            ("Czy antena Sky odbierze TVP Polonia?", "Nie. Antena Sky patrzy na pozycję 28,2°E, a polskie kanały niekodowane są na Hot Bird 13°E. Potrzebna jest osobna czasza, najlepiej około 80 cm."),
            ("Czy mój polski abonament Polsat Box Go albo Canal+ zadziała w Anglii?", "Nie ma takiej gwarancji. Unijna zasada o przenoszeniu abonamentu nie obowiązuje w Wielkiej Brytanii od 2021 roku. Zapytaj swój serwis przed wyjazdem."),
@@ -1715,7 +1722,7 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
 PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " + PRICED + " | Polski Streaming",
     "Promocje VPN na Black Friday 2026: NordVPN, Surfshark, Proton VPN, CyberGhost i ExpressVPN. Cena w promocji, cena bez promocji, ile płacisz z góry i ile po pierwszym okresie.",
     band('<a href="/">Polska telewizja za granicą</a> / Promocje VPN', "Promocje VPN: Black Friday 2026",
-         "Pięć VPN z serwerem w Polsce i ich oferty na Black Friday. Każdą cenę odczytaliśmy sami z polskiej strony dostawcy. Pokazujemy też to, czego reklama nie mówi: ile płacisz z góry i ile kosztuje odnowienie.",
+         "Sześć VPN z serwerem w Polsce i ich oferty na Black Friday. Każdą cenę odczytaliśmy sami z polskiej strony dostawcy. Pokazujemy też to, czego reklama nie mówi: ile płacisz z góry i ile kosztuje odnowienie.",
          f'<div class="when mono">{BYLINE}<span>Ceny odczytane: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Oferty Black Friday, stan na {PRICED}</h2><p>Kolejność jak w naszym <a href="/porownanie-vpn">rankingu punktowym</a>, nie według wielkości rabatu. Dostawcy nie podają daty końca promocji, więc oferta może się zmienić z dnia na dzień.</p></div>
@@ -1728,16 +1735,16 @@ PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " 
   <li><b>Rabat liczy dostawca.</b> Zwykle porównuje cenę długiego planu z ceną planu na jeden miesiąc. Dlatego rabaty są tak duże.</li>
   <li><b>Płacisz z góry za cały okres.</b> Cena „za miesiąc” to suma podzielona przez liczbę miesięcy. Przy NordVPN to 253,53 zł od razu, a nie 9,39 zł co miesiąc.</li>
   <li><b>Po pierwszym okresie jest drożej.</b> Proton VPN odnawia się za 209,88 zł co 12 miesięcy, ExpressVPN za 79,95 € za rok. NordVPN i Surfshark pokazują cenę odnowienia dopiero przy zamówieniu.</li>
-  <li><b>Masz czas na zwrot.</b> Każdy z pięciu dostawców daje co najmniej 30 dni na zwrot pieniędzy w długim planie. To wystarczy, żeby sprawdzić VPN ze swoim serwisem.</li>
+  <li><b>Masz czas na zwrot.</b> Każdy z sześciu dostawców daje co najmniej 30 dni na zwrot pieniędzy w długim planie. To wystarczy, żeby sprawdzić VPN ze swoim serwisem.</li>
 </ul>
 <h2>Który VPN z promocji działa z polską telewizją</h2>
 <p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy """ + join_pl(paid_tested_names() or ["NordVPN"]) + f""" z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
 <div data-last>{last_rows_html()}</div>
 <p>""" + untested_line() + f""" Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
 <h2>Skąd mamy ceny</h2>
-<p>{PRICED} otworzyliśmy polskie strony cenników wszystkich pięciu dostawców i zapisaliśmy to, co pokazują: cenę za miesiąc, sumę do zapłaty i rabat. Nie przepisujemy cen z innych serwisów. Ceny w euro przeliczamy po kursie {EUR}. Gdy cena się zmieni, poprawiamy ją tutaj i w <a href="/porownanie-vpn">rankingu</a>.</p>
+<p>{PRICED} otworzyliśmy polskie strony cenników wszystkich sześciu dostawców i zapisaliśmy to, co pokazują: cenę za miesiąc, sumę do zapłaty i rabat. Nie przepisujemy cen z innych serwisów. Ceny w euro przeliczamy po kursie {EUR}. Gdy cena się zmieni, poprawiamy ją tutaj i w <a href="/porownanie-vpn">rankingu</a>.</p>
 """, "prosec")
-    + faq([("Kiedy kończą się promocje VPN na Black Friday 2026?", f"Black Friday wypada 27 listopada 2026. Żaden z pięciu dostawców nie podaje na stronie cennika daty końca promocji. Ceny na tej stronie odczytaliśmy {PRICED}."),
+    + faq([("Kiedy kończą się promocje VPN na Black Friday 2026?", f"Black Friday wypada 27 listopada 2026. Żaden z sześciu dostawców nie podaje na stronie cennika daty końca promocji. Ceny na tej stronie odczytaliśmy {PRICED}."),
            ("Czy cena z promocji zostaje na zawsze?", "Nie. Cena z promocji dotyczy pierwszego okresu, zwykle 24 do 28 miesięcy. Potem plan odnawia się po wyższej cenie. Odnowienie można wyłączyć na koncie u dostawcy."),
            ("Czy mogę oddać VPN kupiony w promocji?", "Tak. W długich planach NordVPN, Surfshark, Proton VPN i ExpressVPN dają 30 dni na zwrot pieniędzy, a CyberGhost 45 dni. ExpressVPN daje zwrot tylko nowym klientom."),
            ("Który VPN z promocji jest najtańszy?", f"Na {PRICED} najniższą cenę za miesiąc ma Proton VPN: 6,29 zł w planie na 2 lata, razem 150,96 zł z góry."),
@@ -1824,9 +1831,9 @@ PAGES["/odznaka"] = ("Odznaka z wynikiem testu VPN dla Twojej strony | Polski St
     + badge_page_body())
 
 PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
-    "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
+    "Ranking sześciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
-         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. " + NUM_PL.get(len(tested_companies()), str(len(tested_companies()))) + " z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
+         "Sześciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. " + NUM_PL.get(len(tested_companies()), str(len(tested_companies()))) + " z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
          f'<div class="when mono">{BYLINE}<span>Ceny sprawdzone: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
     + rank_top()
     + bf_box()
@@ -1859,12 +1866,12 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
   <li><b>Cena za miesiąc w najtańszym planie:</b> 3 punkty poniżej 9 zł, 2 punkty do 10,50 zł, 1 punkt powyżej. Euro przeliczamy po kursie """ + EUR + """.</li>
   <li><b>Urządzenia jednocześnie:</b> 3 punkty od 14 w górę, 2 punkty za 10, 1 punkt poniżej 10.</li>
   <li><b>Zwrot pieniędzy:</b> 3 punkty od 45 dni, 2 punkty za 30 dni.</li>
-  <li><b>Aplikacje na telewizor:</b> 3 punkty za Android TV, Apple TV i Fire TV.</li>
+  <li><b>Aplikacje na telewizor:</b> 3 punkty za Android TV, Apple TV i Fire TV, 2 punkty za dwie z tych platform.</li>
   <li><b>Płatność w złotówkach:</b> 1 punkt.</li>
 </ul>
 """ + points_table() + """
 <p>Przy remisie wyżej jest dostawca z większą liczbą serwerów w Polsce, a potem tańszy.</p>
-<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny codzienny test mamy dziś dla """ + str(len(tested_companies())) + """ z 5 dostawców: """ + " i ".join(tested_companies()) + """. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich pięciu dostawców.</p>
+<p class="note"><b>To ranking na podstawie danych producentów, a nie testów.</b> Własny codzienny test mamy dziś dla """ + str(len(tested_companies())) + """ z 5 dostawców: """ + " i ".join(tested_companies()) + """. Wyniki testu są na stronie <a href="/wyniki-testow">Wyniki testów</a>. Nie wliczamy ich do punktów, dopóki nie przetestujemy wszystkich sześciu dostawców.</p>
 """, "prosec", brief([("Testujemy dziś", " i ".join(tested_companies())), ("Serwisy w teście", "TVP VOD, Player, TVP Sport"), ("Ceny", "Ze stron dostawców, z datą")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/porownanie-vpn", "Porównanie VPN")])
@@ -1934,6 +1941,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <h2>Dziennik zmian</h2>
 <ul>
   <li><b>19.11.2026:</b> nowe ceny Black Friday. CyberGhost (1,99 €) i ExpressVPN (2,39 €) dostały po jednym punkcie więcej za cenę i mają teraz równo po 12 punktów. Przy równej liczbie punktów wyżej jest tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
+  <li><b>20.11.2026:</b> do rankingu i codziennego testu dochodzi PIA (Private Internet Access, konto testowe od dostawcy). Ma 12 punktów, tyle co CyberGhost i ExpressVPN, i jest przed nimi, bo ma tańszy plan. Dopisaliśmy regułę: 2 punkty za aplikacje na dwie z trzech platform telewizyjnych.</li>
   <li><b>20.11.2026:</b> do codziennego testu dochodzi CyberGhost (konto testowe od dostawcy, serwer w Polsce, połączenie OpenVPN).</li>
   <li><b>19.11.2026:</b> jednorazowy test kanałów na żywo w TVP VOD (TVP 1, TVP 2, TVP Info) z USA, bez VPN i przez NordVPN. Opis jest na stronie <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo za granicą</a>. Nie jest to część codziennego testu.</li>
   <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
@@ -2378,10 +2386,11 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK=" + json.dumps({"cybr": "https://www.cyberghostvpn.com", **AFF, "protonfree": AFF["proton"]}) + ";\n"
+        "  var LINK=" + json.dumps({"cybr": "https://www.cyberghostvpn.com", "pia": "https://www.privateinternetaccess.com", **AFF, "protonfree": AFF["proton"]}) + ";\n"
         "  var SHORT={nord:'NordVPN',proton:'Proton VPN Plus',protonfree:'Proton VPN, darmowy'};function nm(p){return SHORT[p.id]||p.name}\n"
         "  var ORD=['nord','proton','protonfree'];function ord(p){var i=ORD.indexOf(p.id);return i<0?9:i}\n"
-        "  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"sponsored nofollow noopener\" data-aff=\"'+a+'\">'+t+'</a>'}")
+        "  var AFFS=" + json.dumps(sorted(set(AFF) | {"protonfree"})) + ";\n"
+        "  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;if(AFFS.indexOf(p.id)<0)return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">'+t+'</a>';return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"sponsored nofollow noopener\" data-aff=\"'+a+'\">'+t+'</a>'}")
     rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td>'+offer(p,'Zobacz ofertę')+'</td></tr>'")
@@ -2422,7 +2431,7 @@ def build_js():
         "    render();\n  }")
     rep("get('data/latest.json'),get('data/history.json')", "get('/data/latest.json'),get('/data/history.json')")
     rep("proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn'",
-        "proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg'")
+        "proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',pia:'/logos/pia.svg'")
     rep("https://flagcdn.com/", "/flags/")
     for old in ["'logos/tvpvod.png'", "'logos/player.svg'", "'logos/polsat.svg'", "'logos/canal.svg'", "'logos/cyberghost-icon.png'"]:
         rep(old, "'/" + old[1:])
@@ -2546,7 +2555,7 @@ def snippets():
         "/tvp-sport-material-niedostepny": ("TVP Sport: materiał niedostępny za granicą? Test i wyjścia",
             f"{h['tvpsport']} Komunikat „materiał jest niedostępny w kraju, z którego się łączysz”: skąd się bierze i co zrobić przed meczem."),
         "/porownanie-vpn": ("Ranking VPN do polskiej telewizji 2026: test co rano",
-            f"5 VPN z serwerem w Polsce: ceny w zł, zwrot pieniędzy i jawne punkty. {rank_hook} Oferty Black Friday."),
+            f"6 VPN z serwerem w Polsce: ceny w zł, zwrot pieniędzy i jawne punkty. {rank_hook} Oferty Black Friday."),
         "/tvp-vod-za-granica": ("Jak oglądać TVP VOD za granicą: codzienny test VPN",
             f"Co w TVP VOD działa za granicą bez VPN, a co jest zablokowane. {h['tvpvod']} Reklamy, błędy i kroki."),
         "/tvp-sport-za-granica": ("Jak oglądać TVP Sport za granicą: test VPN i mecze",

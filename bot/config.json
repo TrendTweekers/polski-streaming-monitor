@@ -55,13 +55,13 @@
     },
     {
       "id": "pia",
-      "name": "Private Internet Access",
+      "name": "PIA",
       "plan": "plan płatny",
       "server": "PIA Warszawa",
       "secret_env": "PIA_PL_WG",
       "pia": true,
-      "enabled": false,
-      "note": "Turn on after PIA is added to the site (FACTS, PROFILE, POINTS in sitegen/build.py). Needs GitHub secrets PIA_USER and PIA_PASS."
+      "enabled": true,
+      "note": "WireGuard config built per run by bot/pia.py from PIA_USER/PIA_PASS."
     }
   ],
   "services": [

@@ -1,5 +1,5 @@
 (function(){
-  var LOGO={proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',cybr:'/logos/cyberghost-icon.png'};
+  var LOGO={proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',pia:'/logos/pia.svg',cybr:'/logos/cyberghost-icon.png'};
   var SLOGO={tvpvod:'/logos/tvpvod.png',player:'/logos/player.svg',polsat:'/logos/polsat.svg',canal:'/logos/canal.svg'};
   var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};
   var C={
@@ -26,10 +26,11 @@
   function addDays(d,n){var x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
   function dm(d){return d.slice(8,10)+'.'+d.slice(5,7)}
   var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};
-  var LINK={"cybr": "https://www.dpbolvw.net/click-101925411-17379867", "nord": "https://www.jdoqocy.com/click-101925411-13382109", "surf": "https://www.dpbolvw.net/click-101925411-15438560", "proton": "https://www.dpbolvw.net/click-101925411-15834536", "expr": "https://go.expressvpn.com/c/8234307/1636009/16063", "protonfree": "https://www.dpbolvw.net/click-101925411-15834536"};
+  var LINK={"cybr": "https://www.dpbolvw.net/click-101925411-17379867", "pia": "https://www.privateinternetaccess.com", "nord": "https://www.jdoqocy.com/click-101925411-13382109", "surf": "https://www.dpbolvw.net/click-101925411-15438560", "proton": "https://www.dpbolvw.net/click-101925411-15834536", "expr": "https://go.expressvpn.com/c/8234307/1636009/16063", "protonfree": "https://www.dpbolvw.net/click-101925411-15834536"};
   var SHORT={nord:'NordVPN',proton:'Proton VPN Plus',protonfree:'Proton VPN, darmowy'};function nm(p){return SHORT[p.id]||p.name}
   var ORD=['nord','proton','protonfree'];function ord(p){var i=ORD.indexOf(p.id);return i<0?9:i}
-  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;return '<a class="btn" href="'+LINK[p.id]+'" target="_blank" rel="sponsored nofollow noopener" data-aff="'+a+'">'+t+'</a>'}
+  var AFFS=["cybr", "expr", "nord", "proton", "protonfree", "surf"];
+  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;if(AFFS.indexOf(p.id)<0)return '<a class="btn" href="'+LINK[p.id]+'" target="_blank" rel="nofollow noopener">'+t+'</a>';return '<a class="btn" href="'+LINK[p.id]+'" target="_blank" rel="sponsored nofollow noopener" data-aff="'+a+'">'+t+'</a>'}
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
