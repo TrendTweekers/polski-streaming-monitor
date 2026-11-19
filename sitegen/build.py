@@ -452,7 +452,7 @@ AFF = {
     "nord": "https://www.jdoqocy.com/click-101925411-13382109",  # CJ link suggested by the NordVPN manager 2026-11-11 (lands on /special/, Polish page for visitors from Poland). Before: 15078184
     "surf": "https://www.dpbolvw.net/click-101925411-15438560",  # CJ advertiser 6282055, text link "Get Surfshark VPN right away" (home page)
     "proton": "https://www.dpbolvw.net/click-101925411-15834536",  # CJ advertiser 5227916, text link "Proton VPN - Special Offer" (Polish offer page)
-    "expr": "https://go.expressvpn.com/c/8234307/1462856/16063",  # Impact, approved 2026-11-19 (program 16063); page tag goes in subId1
+    "expr": "https://go.expressvpn.com/c/8234307/1636009/16063",  # Impact, link from Ana 2026-11-19, lands on the Polish page (program 16063); page tag goes in subId1
 }
 AFF_NAMES = {"surf": "Surfshark", "nord": "NordVPN", "proton": "Proton VPN", "cybr": "CyberGhost", "expr": "ExpressVPN"}
 
@@ -1707,7 +1707,7 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1462856/16063',cybr:'https://www.cyberghostvpn.com'};")
+        "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1636009/16063',cybr:'https://www.cyberghostvpn.com'};")
     rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")

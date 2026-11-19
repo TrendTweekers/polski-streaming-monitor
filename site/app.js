@@ -26,7 +26,7 @@
   function addDays(d,n){var x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)}
   function dm(d){return d.slice(8,10)+'.'+d.slice(5,7)}
   var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};
-  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1462856/16063',cybr:'https://www.cyberghostvpn.com'};
+  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1636009/16063',cybr:'https://www.cyberghostvpn.com'};
   var all=function(sel,fn){Array.prototype.forEach.call(document.querySelectorAll(sel),fn)};
   var cur='uk',sortBy='works',hp=null,hs=null,open=null,es=null,RUN=null,HIST={days:{}},SV=[],SVON=[];
 
