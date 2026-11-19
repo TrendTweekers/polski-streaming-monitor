@@ -764,6 +764,34 @@ def home_hero():
 <div class="pickw"><div class="wrap"><div class="pick"><b>Co chcesz oglądać?</b><div>{chips}</div></div></div></div>"""
 
 
+def how_home():
+    """Home: how it works as three steps plus a real before/after from our own tests."""
+    ic = lambda d: f'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{d}</svg>'
+    steps = [
+        (ic('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'), "Jesteś za granicą",
+         "Polski serwis sprawdza Twój adres IP. Widzi adres z Wielkiej Brytanii, Niemiec albo USA i blokuje film."),
+        (ic('<path d="M12 3 4 6v6c0 4.5 3.2 7.8 8 9 4.8-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/>'), "Łączysz się z serwerem VPN w Polsce",
+         "Aplikacja VPN szyfruje połączenie i wysyła je przez serwer w Warszawie. Dostajesz polski adres IP."),
+        (ic('<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="m10 8 5 2.5-5 2.5z"/>'), "Serwis widzi widza z Polski",
+         "Odświeżasz stronę i włączasz film. To, czy naprawdę ruszy, zależy od VPN i od dnia, dlatego testujemy to co rano."),
+    ]
+    lis = "".join(f'<li><span class="hwn">{i + 1}</span><span class="hwi">{svg}</span><div><h3>{h}</h3><p>{t}</p></div></li>' for i, (svg, h, t) in enumerate(steps))
+    return f"""<section class="hw"><div class="wrap">
+  <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
+  <div class="hwg">
+    <ol class="hws">{lis}</ol>
+    <div class="hwba">
+      <figure class="hwf bad"><span class="hwtag">Bez VPN</span><img src="/img/blok-tvpvod.webp" alt="TVP VOD bez VPN: komunikat, że materiał jest niedostępny w Twoim kraju" width="1200" height="750" loading="lazy">
+        <figcaption>TVP VOD z adresu w USA: materiał zablokowany. Nasz zrzut ekranu z 11.11.2026.</figcaption></figure>
+      <span class="hwarrow" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <figure class="hwf good"><span class="hwtag">Z VPN w Polsce</span><img src="/img/tvpvod-test.webp" alt="TVP VOD przez VPN z serwerem w Polsce: program gra" width="1440" height="900" loading="lazy">
+        <figcaption>Ten sam serwis przez serwer VPN w Polsce: „Jeden z dziesięciu” gra. Nasz test z 10.11.2026.</figcaption></figure>
+    </div>
+  </div>
+  <p class="after"><a href="/jak-testujemy">Jak dokładnie testujemy</a> · <a href="/wyniki-testow">Wyniki dzień po dniu</a></p>
+</div></section>"""
+
+
 def guides_grid():
     groups = [
         ("Serwisy", [("/tvp-vod-za-granica", "Jak oglądać TVP VOD za granicą", "Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach."),
@@ -994,10 +1022,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               + top3()
               + status_matrix()
               + guides_grid()
-              + f"""<section class="howflow"><div class="wrap narrowpad">
-  <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
-  {flow("Polski serwis", "")}
-</div></section>"""
+              + how_home()
               + faq([("Dlaczego polskie serwisy nie działają za granicą?", "Serwisy kupują prawa do filmów i transmisji tylko na Polskę. Sprawdzają Twój adres IP i blokują odtwarzanie spoza kraju."),
                      ("Czy wynik zależy od kraju, w którym mieszkam?", "Nie. Serwis widzi polski adres serwera VPN, a nie Twój adres. Od Twojego kraju zależy tylko prędkość połączenia."),
                      LEGAL_Q, FREE_Q, TV_Q,
@@ -2112,6 +2137,23 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .ggc{border-top:3px solid var(--accent)}.ggc.g1{border-top-color:var(--warn)}.ggc.g2{border-top-color:var(--ok)}
 .ggc h3{display:flex;gap:8px;align-items:center}.ggc h3 svg{color:var(--accent)}.ggc.g1 h3 svg{color:var(--warn)}.ggc.g2 h3 svg{color:var(--ok)}
 .guides{background:var(--surface)}.howflow{background:var(--cream)}
+.hw{background:var(--cream);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:56px;padding-bottom:52px}
+.hwg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
+.hws{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
+.hws:before{content:"";position:absolute;left:35px;top:36px;bottom:36px;border-left:2px dashed var(--ok);opacity:.55}
+.hws li{position:relative;display:grid;grid-template-columns:36px 44px minmax(0,1fr);gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px 18px 18px;box-shadow:0 1px 2px rgba(23,35,45,.05)}
+.hwn{width:36px;height:36px;border-radius:50%;background:var(--ok);color:#fff;font:700 16px var(--mono,monospace);display:grid;place-items:center;position:relative;z-index:1}
+.hwi{width:44px;height:44px;border-radius:10px;background:rgba(22,131,74,.1);color:var(--ok);display:grid;place-items:center}
+.hws h3{font-size:17px;margin:0 0 4px}.hws p{font-size:14px;color:var(--muted);margin:0;line-height:1.5}
+.hwba{display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);gap:12px;align-items:center}
+.hwf{margin:0;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -22px rgba(23,35,45,.55)}
+.hwf img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+.hwf figcaption{font-size:12px;color:var(--muted);padding:10px 14px;line-height:1.45}
+.hwtag{position:absolute;top:10px;left:10px;font-size:12px;font-weight:700;border-radius:999px;padding:4px 11px;color:#fff;background:var(--bad)}
+.hwf.good .hwtag{background:var(--ok)}.hwf.bad{border-color:rgba(194,59,59,.45)}.hwf.good{border-color:rgba(22,131,74,.55)}
+.hwarrow{width:40px;height:40px;border-radius:50%;background:var(--ok);color:#fff;display:grid;place-items:center}
+@media (max-width:1180px){.hwg{grid-template-columns:minmax(0,1fr);gap:28px}}
+@media (max-width:620px){.hwba{grid-template-columns:minmax(0,1fr)}.hwarrow{margin:0 auto;transform:rotate(90deg)}.hw .wrap{padding-top:40px;padding-bottom:40px}.hws li{grid-template-columns:32px minmax(0,1fr);padding:16px}.hwi{display:none}.hwn{width:32px;height:32px}.hws:before{left:31px}}
 .hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:40px;min-height:0;padding-bottom:34px}
 .hh .otext{padding:44px 0 30px}.hh h1{font-size:40px}
 .hhk{display:inline-flex;gap:7px;align-items:center;font-size:13px;font-weight:600;color:var(--ok);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-bottom:16px}
