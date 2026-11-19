@@ -197,6 +197,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 <meta property="og:image" content="{DOMAIN}/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="/fonts/ibm-plex-sans-400-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/style.css">
 <script>document.documentElement.className="js"</script>
 <script type="application/ld+json">{ld}</script>
@@ -2102,6 +2103,8 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
   .kv dt{border-bottom:0;padding-bottom:0}
 }
 /* ---- 19.11.2026 structure pass: narrower page, cards, home hero ---- */
+h1,h2,h3,.logo,.rrb b,.smn b,.deal h3,.todayh b,.brand h3{font-family:"Manrope",var(--sans);letter-spacing:-.015em}
+h1{font-weight:800;letter-spacing:-.012em;word-spacing:.04em}h2{font-weight:800;letter-spacing:-.008em}h3{font-weight:700;letter-spacing:0}
 .wrap{max-width:1480px}
 .disc{background:none;border:0;font-size:12px;color:var(--muted);margin:0 0 16px;max-width:86ch;padding:0}
 .results.soft{background:var(--bg)}
