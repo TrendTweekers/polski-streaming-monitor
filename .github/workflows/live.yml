@@ -1,0 +1,28 @@
+name: live-probe
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install bot
+        run: |
+          pip install -r bot/requirements.txt
+          python -m playwright install --with-deps chromium
+      - name: Open the TVP live channels without a VPN, then through NordVPN in Poland
+        env:
+          NORD_PL_WG: ${{ secrets.NORD_PL_WG }}
+        run: xvfb-run -a python bot/live_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live
+          path: out/live
+          retention-days: 7
