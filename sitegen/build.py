@@ -8,6 +8,7 @@ Content rules:
 - Provider facts come from the provider's own pages; each has a source and a check date.
 """
 import json
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -100,7 +101,7 @@ def tested_cta(service, lead):
         url = next(f[2] for f in FACTS if f[0] == pid)
         rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
                  f'<span><em>W teście z {service}</em>codziennie od {since}</span><span><em>Cena</em>{pr["price"]} {pr["unit"]}</span><span><em>Serwer w teście</em>{srv}</span>'
-                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}</span></div>')
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN, które testujemy z {service}</h2><p>{lead}</p></div>
   <p class="disc">Przyciski to linki partnerskie: przy zakupie dostajemy prowizję, a Ty płacisz tyle samo. Nie wpływa to na wynik testu.</p>
@@ -375,8 +376,8 @@ def provstrip(note=""):
         pr = PROFILE[pid]
         rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{RANK[pid]}. {name}</b>'
                  f'<span><em>Cena</em>{pr["price"]} {pr["unit"]}</span>'
-                 f'<span><em>Serwer w Polsce</em>{pl}</span><span><em>Zwrot pieniędzy</em>{refund}</span>'
-                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}</span></div>')
+                 f'<span><em>Nasz test {LAST[:10]}</em>{test_summary(pid)}</span><span><em>Serwer w Polsce</em>{pl}</span>'
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>VPN z serwerem w Polsce</h2><p>{note or 'Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu.'}</p></div>
   {DISCLOSE}
@@ -426,6 +427,7 @@ FACTS = [
 
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
+REFUND = {f[0]: re.match(r"\d+ dni", f[4]).group(0) for f in FACTS}
 POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 2, 1, 3, 3, 0), "expr": (1, 1, 3, 2, 3, 0)}
 WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
 MAXPTS = 19
@@ -474,10 +476,95 @@ def plink(pid, url):
 
 
 def aff_note(pid):
-    return '<small class="affn">Link partnerski</small>' if pid in AFF else ""
+    """Small line under a button: refund time, and the partner label when the link is a partner link."""
+    refund = REFUND.get(pid, "")
+    bits = ([f"{refund} na zwrot pieniędzy"] if refund else []) + (["Link partnerski"] if pid in AFF else [])
+    return f'<small class="affn">{" · ".join(bits)}</small>' if bits else ""
 
 
-DISCLOSE = ('<p class="disc">Przyciski NordVPN, Surfshark i Proton VPN to linki partnerskie. Gdy kupisz przez nie VPN, dostajemy prowizję, '
+SVC_INS = {"tvpvod": "TVP VOD", "player": "Playerem", "tvpsport": "TVP Sport"}  # after "z": z Playerem
+
+
+def join_pl(xs):
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " i " + xs[-1]
+
+
+def _works(p, sid):
+    return shown(p, p["services"].get(sid, {})) in ("ok", "okr")
+
+
+def pick(sid=None):
+    """The first paid partner VPN (ranking order) that played in the last bot run.
+    With sid: it must work with that service. Without: with every tested service, else the one with most."""
+    paid = sorted((p for p in tested() if p.get("plan") == "plan płatny" and p["id"] in AFF), key=lambda p: RANK.get(p["id"], 99))
+    sids = [sid] if sid else [x["id"] for x in SVON]
+    best = (None, [])
+    for p in paid:
+        ok = [x for x in sids if _works(p, x)]
+        if len(ok) == len(sids):
+            return p, ok
+        if len(ok) > len(best[1]):
+            best = (p, ok)
+    return best
+
+
+def test_summary(pid):
+    p = next((x for x in tested() if x["id"] == pid), None)
+    if not p:
+        return "Jeszcze nie testujemy"
+    n = sum(1 for x in SVON if _works(p, x["id"]))
+    return f"Działa: {n} z {len(SVON)} serwisów"
+
+
+def today_box(sid=None, kicker=""):
+    """Result of the last real test plus one button. Built from the bot data, so it never claims more than the test showed."""
+    p, ok = pick(sid)
+    if not p:
+        what = SVC_INS[sid] if sid else "polskimi serwisami"
+        return (f'<div class="today none"><p><b>W ostatnim teście ({LAST[:10]}) żaden płatny VPN nie zagrał z {what}.</b> '
+                f'Tak bywa: wynik zmienia się z dnia na dzień. <a href="/wyniki-testow#historia">Zobacz wyniki dzień po dniu</a>.</p></div>')
+    pid, name, pr = p["id"], p["name"], PROFILE[p["id"]]
+    url = next(f[2] for f in FACTS if f[0] == pid)
+    r = p["services"][ok[0]]
+    when = fmt_dt(r.get("tested_at")) if sid else LAST[:10]
+    shot = f' · <a href="/{r["shot"]}" target="_blank" rel="noopener">zrzut ekranu</a>' if sid and r.get("shot") else ' · <a href="/wyniki-testow">wyniki</a>'
+    k = f'<p class="todayk">{kicker}</p>' if kicker else ""
+    return (f'<div class="today">{k}<div class="todayh"><img src="{LOGOS[pid]}" alt="" width="34" height="34">'
+            f'<p><b>{name} działa z {join_pl([SVC_INS[x] for x in ok])}</b><span>Nasz test: {when}, serwer w Polsce{shot}</span></p></div>'
+            f'<div class="todayc"><a class="btn big" {plink(pid, url)}>Zobacz ofertę {name}</a>'
+            f'<small>{pr["price"]} {pr["unit"]} · {REFUND[pid]} na zwrot pieniędzy · Link partnerski</small></div></div>')
+
+
+def sticky_bar(sid=None):
+    """Small bar at the bottom of the phone screen, shown after some scrolling. Same data as today_box."""
+    p, ok = pick(sid)
+    if not p:
+        return ""
+    pid, name = p["id"], p["name"]
+    url = next(f[2] for f in FACTS if f[0] == pid)
+    what = SVC_INS[sid] if sid else "polską telewizją"
+    return (f'<div class="sbar" id="sbar"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span><b>{name} działa z {what}</b><small>Nasz test: {LAST[:10]} · Link partnerski</small></span>'
+            f'<a class="btn" {plink(pid, url)}>Zobacz ofertę</a><button type="button" aria-label="Zamknij">×</button></div>')
+
+
+TODAY = {"/tvp-vod-za-granica": "tvpvod", "/player-za-granica": "player", "/tvp-sport-za-granica": "tvpsport",
+         "/tvp-vod-material-niedostepny-w-twoim-kraju": "tvpvod", "/player-niedostepny-w-twojej-lokalizacji": "player", "/tvp-sport-material-niedostepny": "tvpsport",
+         "/polska-telewizja-w-uk": None, "/polska-telewizja-w-niemczech": None, "/darmowy-vpn-polska-telewizja": None}
+
+
+def with_today(path, body):
+    """Put the tested-VPN box right under the short answer, and add the phone bar."""
+    if path not in TODAY:
+        return body
+    sid = TODAY[path]
+    kick = "Gdy darmowy serwer nie zagra, płatny plan z naszego testu:" if path.startswith("/darmowy") else ""
+    i = body.find('<p class="answer">')
+    assert i >= 0, path
+    j = body.find("</p>", i) + 4
+    return body[:j] + today_box(sid, kick) + body[j:] + sticky_bar(sid)
+
+
+DISCLOSE = ('<p class="disc">Przyciski __PARTNERS__ to linki partnerskie. Gdy kupisz przez nie VPN, dostajemy prowizję, '
             'a Ty płacisz tyle samo. Prowizja nie daje punktów w rankingu i nie zmienia wyników testu.</p>')
 
 
@@ -520,16 +607,14 @@ TOP3_WHY = {
 def top3():
     """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
     ids = sorted(RANK, key=RANK.get)[:3]
-    daily = {p["id"] for p in tested()}
     rows = ""
     for pid in ids:
         name = AFF_NAMES[pid]
         url = next(f[2] for f in FACTS if f[0] == pid)
-        test = "testowany codziennie" if pid in daily else "bez naszego testu"
         rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{RANK[pid]}. {name}</b>'
-                 f'<span><em>Punkty</em>{sum(wpts(pid))} z {MAXPTS}</span><span><em>Mocna strona</em>{TOP3_WHY[pid]}</span>'
-                 f'<span><em>Test z TVP VOD, Playerem, TVP Sport</em>{test}</span>'
-                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>{PROFILE[pid]["price"]} / mies.</a>{aff_note(pid)}</span></div>')
+                 f'<span><em>Nasz test {LAST[:10]}</em>{test_summary(pid)}</span><span><em>Cena</em>{PROFILE[pid]["price"]} {PROFILE[pid]["unit"]}</span>'
+                 f'<span><em>{sum(wpts(pid))} z {MAXPTS} punktów</em>{TOP3_WHY[pid]}</span>'
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {CHECKED}.</p></div>
   <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
@@ -551,7 +636,7 @@ def featured():
       <li>{CHECK}<span>30 dni na zwrot pieniędzy</span></li>
     </ul>
     <div class="featcta"><b>9,39 zł</b><span>za miesiąc</span>
-      <a class="btn big" {plink("nord", "https://nordvpn.com")}>Przejdź do NordVPN</a>{aff_note("nord")}
+      <a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}
       <small>253,53 zł za pierwsze 27 miesięcy. Cena z {CHECKED}.</small></div>
   </div>
 </div></section>"""
@@ -588,7 +673,7 @@ def provblocks(full=True):
     <img src="{LOGOS[pid]}" alt="" width="48" height="48">
     <div><h3>{name}{top}{badge}</h3><p>{pr["tag"]}</p></div>
     <div class="pbprice"><b>{pr["price"]}</b><span>{pr["unit"]}</span></div>
-    <a class="btn big" {plink(pid, url)}>Przejdź do {name}</a>{aff_note(pid)}
+    <a class="btn big" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}
   </header>
   <div class="pbfacts">
     <div><span>Serwer w Polsce</span><b>{pl}</b></div>
@@ -707,7 +792,9 @@ PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Str
     "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
     band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
          f"Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Testujemy dziś: {tested_phrase()}.", WHEN)
-    + RESULTS + HISTORY + EVIDENCE)
+    + RESULTS.replace('<a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>',
+                      f'<div class="pcta"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}<a class="more" href="/porownanie-vpn">Zobacz ranking 5 VPN</a></div>')
+    + HISTORY + EVIDENCE)
 
 PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | Polski Streaming",
     "TVP VOD za granicą: co działa bez VPN, co jest zablokowane, wynik codziennego testu i komunikaty błędów z rozwiązaniami.",
@@ -1283,6 +1370,7 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
 <h3>3. VPN z serwerem w Polsce</h3>
 <!--flow:polsat-->
 <p>Inne serwisy opisują VPN jako sposób na Polsat Box Go. My tego nie sprawdziliśmy, więc nie podajemy, który VPN działa. Wyniki mamy dla <a href="/tvp-vod-za-granica">TVP VOD</a> i <a href="/player-za-granica">Playera</a>.</p>
+<p><a class="btn" href="/porownanie-vpn">Zobacz ranking VPN z serwerem w Polsce</a></p>
 """, "prosec", brief([("Konto", "Wymagane"), ("Darmowe treści bez konta", "Nie znaleźliśmy"), ("W Unii Europejskiej", "Działa na czasowym wyjeździe"), ("Nasz test", "Jeszcze nie testujemy")],
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go")])
@@ -1462,6 +1550,24 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
 EXTRA_CSS = """
+.today{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--ok);background:var(--surface);border-radius:6px;padding:18px 20px;margin:0 0 28px}
+.today.none{display:block;border-left-color:var(--warn)}.today.none p{margin:0}
+.todayk{grid-column:1/-1;margin:0!important;font-size:14px;color:var(--muted)}
+.todayh{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:center}
+.todayh p{margin:0!important;max-width:none}.todayh b{display:block;font-size:17px;line-height:1.3;color:var(--ok)}.todayh span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.todayc{text-align:center}.todayc small{display:block;font-size:12px;color:var(--muted);margin-top:7px}
+.pbh .affn{grid-column:-2/-1;margin-top:-14px}
+.freecta .pcta .more{display:block;margin-top:12px;font-size:14px;color:var(--navy-muted)}
+.mlist .affn{margin-top:6px}.mcta{padding:0 0 16px;border-bottom:1px solid var(--line)}.mlist .mcta .btn{margin-top:0}
+.sbar{display:none}
+@media (max-width:760px){
+  .today{grid-template-columns:minmax(0,1fr);padding:16px}.todayc .btn{display:block;text-align:center}
+  .pbh .affn{grid-column:1/-1;margin-top:-6px}
+  .sbar.on{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:10px;align-items:center;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -8px 20px -14px rgba(23,35,45,.55);padding:10px 8px calc(10px + env(safe-area-inset-bottom)) 12px}
+  .sbar span{flex:1;min-width:0;line-height:1.25}.sbar b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sbar small{display:block;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sbar .btn{padding:10px 12px}.sbar button{background:none;border:0;font-size:22px;line-height:1;color:var(--muted);padding:6px;cursor:pointer}
+  body.hasbar{padding-bottom:72px}
+}
 .affn{display:block;font-size:.72rem;color:var(--muted,#6b7280);margin-top:4px;text-align:center}
 .disc{font-size:.82rem;color:var(--muted,#6b7280);margin:0 0 14px;max-width:70ch}
 table.days td,table.days th{white-space:nowrap;text-align:left!important;padding-left:0}table.days th:first-child{font-weight:600}table.mini3.days{min-width:0;width:100%}@media (max-width:640px){table.days{font-size:12px}table.days td,table.days th{padding-right:6px}table.days .st svg{display:none}}
@@ -1707,15 +1813,33 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK={proton:'https://www.dpbolvw.net/click-101925411-15834536',protonfree:'https://www.dpbolvw.net/click-101925411-15834536',nord:'https://www.dpbolvw.net/click-101925411-15078184',surf:'https://www.dpbolvw.net/click-101925411-15438560',expr:'https://go.expressvpn.com/c/8234307/1636009/16063',cybr:'https://www.cyberghostvpn.com'};")
+        "  var LINK=" + json.dumps({**AFF, "protonfree": AFF["proton"], "cybr": "https://www.cyberghostvpn.com"}) + ";\n"
+        "  var SHORT={nord:'NordVPN',proton:'Proton VPN Plus',protonfree:'Proton VPN, darmowy'};function nm(p){return SHORT[p.id]||p.name}\n"
+        "  var ORD=['nord','proton','protonfree'];function ord(p){var i=ORD.indexOf(p.id);return i<0?9:i}\n"
+        "  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"sponsored nofollow noopener\" data-aff=\"'+a+'\">'+t+'</a>'}")
     rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
-        "'<td><a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona dostawcy</a></td></tr>'")
+        "'<td>'+offer(p,'Zobacz ofertę')+'</td></tr>'")
     rep("'<button class=\"btn\" type=\"button\" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>'",
-        "'<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">Strona '+esc(p.name)+'</a></details>'")
+        "'</details>'+(p.id==='protonfree'?'':'<div class=\"mcta\">'+offer(p,'Zobacz ofertę '+esc(nm(p)))+'<small class=\"affn\">Link partnerski</small></div>')")
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
-    rep("Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.'", "Płatnych serwisów jeszcze nie testujemy.'")
+    rep("$('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.';",
+        "$('scope').textContent='Każdego ranka sprawdzamy '+tested.length+' plany VPN z '+SVON.length+' serwisami: '+SVON.map(function(s){return s.name}).join(', ')+'. Polsat Box Go i Canal+ Online wymagają płatnego konta i nie są jeszcze w teście.';")
+    rep("'<span>'+esc(p.name)+'<small>'+sub+'</small></span></button></td>'", "'<span>'+esc(nm(p))+'<small>'+sub+'</small></span></button></td>'")
+    rep("'<b>'+esc(p.name)+'<small>'+sub+'</small></b><span", "'<b>'+esc(nm(p))+'<small>'+sub+'</small></b><span")
+    rep("return works(b)-works(a)||(b.speed_mbps||0)-(a.speed_mbps||0);", "return works(b)-works(a)||ord(a)-ord(b);")
+    rep("<button type=\"button\" data-hp=\"'+p.id+'\">'+esc(p.name)+'</button><div class=\"cells\" role=\"img\"", "<button type=\"button\" data-hp=\"'+p.id+'\">'+esc(nm(p))+'</button><div class=\"cells\" style=\"grid-template-columns:repeat('+N+',1fr)\" role=\"img\"")
+    rep("return '<button type=\"button\" data-hp=\"'+p.id+'\">'+esc(p.name)+'</button>'}).join('');", "return '<button type=\"button\" data-hp=\"'+p.id+'\">'+esc(nm(p))+'</button>'}).join('');")
+    # The chart shows only the days since the first test (10 to 30), so the line is not pushed off the phone screen.
+    rep("var days=[];for(var i=29;i>=0;i--)days.push(addDays(RUN.date,-i));",
+        "var first=Object.keys(HIST.days).sort()[0]||RUN.date,N=Math.min(30,Math.max(10,Math.round((new Date(RUN.date)-new Date(first))/864e5)+1));var days=[];for(var i=N-1;i>=0;i--)days.push(addDays(RUN.date,-i));")
+    rep("return L+pw*(i+.5)/30}", "return L+pw*(i+.5)/N}")
+    rep("[0,7,14,21,29].forEach(function(i){", "[0,Math.round((N-1)/3),Math.round((N-1)*2/3),N-1].forEach(function(i){")
+    rep("(x(i)-pw/60+2)", "(x(i)-pw/(2*N)+2)")
+    rep("width=\"'+(pw/30-4)+'\"", "width=\"'+(pw/N-4)+'\"")
+    rep("dm(days[15])", "dm(days[Math.floor(N/2)])")
+    rep("dm(days[29])", "dm(days[N-1])")
     rep("$('s1').textContent=tested.filter(function(p){return stat(p,'tvpvod')==='ok'}).length+'/'+tested.length;", "$('s1').textContent=tested.filter(function(p){var x=stat(p,'tvpvod');return x==='ok'||x==='okr'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';")
     rep("data=sorted(),tested=RUN.providers.filter(function(p){return p.tested});", "tested=RUN.providers.filter(function(p){return p.tested}),data=sorted().filter(function(p){return p.tested});")
     rep("    RUN.providers.forEach(function(p){\n      var o=0,t=0,cells='';", "    RUN.providers.filter(function(p){return p.tested}).forEach(function(p){\n      var o=0,t=0,cells='';")
@@ -1796,9 +1920,11 @@ def build_js():
 """
     s += """
 (function(){
+  var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
+  function tag(a){var k=a.href.indexOf('go.expressvpn.com')>=0?'subId1=':'sid=';if(a.href.indexOf(k)<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+k+sid}
   function hit(e){
     var a=e.target&&e.target.closest?e.target.closest('a[data-aff]'):null;
-    if(!a||!navigator.sendBeacon)return;
+    if(!a)return;tag(a);if(!navigator.sendBeacon)return;
     var r='';try{r=document.referrer?new URL(document.referrer).hostname:''}catch(x){}
     if(r===location.hostname)r='';
     navigator.sendBeacon('/api/click',new Blob([JSON.stringify({p:a.getAttribute('data-aff'),u:location.pathname,r:r})],{type:'application/json'}));
@@ -1817,11 +1943,15 @@ def build_js():
     }
   }catch(x){}
   // Tell CJ (sid) / Impact (subId1) which page the click came from (sid), so a sale shows its page.
-  var sid=(location.pathname.replace(/^[/]+|[/]+$/g,'').replace(/[^a-z0-9-]/gi,'-')||'home').slice(0,60);
-  Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),function(a){
-    var k=a.href.indexOf('go.expressvpn.com')>=0?'subId1=':'sid=';
-    if(a.href.indexOf(k)<0)a.href+=(a.href.indexOf('?')<0?'?':'&')+k+sid;
-  });
+  Array.prototype.forEach.call(document.querySelectorAll('a[data-aff]'),tag);
+  // Phone bar: shows after some scrolling, closes for the rest of the visit.
+  var sb=document.getElementById('sbar');
+  if(sb){
+    var off=false;try{off=sessionStorage.getItem('ps_sb')==='1'}catch(x){}
+    var upd=function(){var on=!off&&window.scrollY>700;sb.classList.toggle('on',on);document.body.classList.toggle('hasbar',on)};
+    window.addEventListener('scroll',upd,{passive:true});upd();
+    sb.querySelector('button').addEventListener('click',function(){off=true;try{sessionStorage.setItem('ps_sb','1')}catch(x){}upd()});
+  }
 })();
 """
     (SITE / "app.js").write_text(s)
@@ -1836,7 +1966,7 @@ def main():
         kind = page[3] if len(page) > 3 else "page"
         crumbs = page[4] if len(page) > 4 else None
         name = "index.html" if path == "/" else path.strip("/") + ".html"
-        (SITE / name).write_text(layout(path, title, desc, body, kind, crumbs).replace("__PARTNERS__", partners()))
+        (SITE / name).write_text(layout(path, title, desc, with_today(path, body), kind, crumbs).replace("__PARTNERS__", partners()))
         if path not in NOINDEX:
             listed.append((path, title.split(" | ")[0], desc))
     urls = "".join(f"<url><loc>{DOMAIN}{'' if p == '/' else p}</loc><lastmod>{MODIFIED}</lastmod></url>" for p, _, _ in listed)
