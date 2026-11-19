@@ -42,6 +42,11 @@ def probe(p, name, proxy):
             page.wait_for_timeout(40000)
             page.screenshot(path=str(OUT / f"{name}-{cid}-40s.png"))
             page.wait_for_timeout(140000)  # adverts before the live picture can take about 3 minutes
+            if proxy:  # through the VPN the advert block was longer: look again after 5 and 7 minutes
+                page.screenshot(path=str(OUT / f"{name}-{cid}-3min.png"))
+                page.wait_for_timeout(120000)
+                page.screenshot(path=str(OUT / f"{name}-{cid}-5min.png"))
+                page.wait_for_timeout(120000)
             a = bot.videos(page)
             page.wait_for_timeout(15000)
             b = bot.videos(page)

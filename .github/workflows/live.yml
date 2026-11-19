@@ -6,7 +6,7 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -19,7 +19,7 @@ jobs:
       - name: Open the TVP live channels without a VPN, then through NordVPN in Poland
         env:
           NORD_PL_WG: ${{ secrets.NORD_PL_WG }}
-        run: xvfb-run -a python bot/live_probe.py
+        run: xvfb-run -a python bot/live_probe.py --vpn-only
       - uses: actions/upload-artifact@v4
         if: always()
         with:
