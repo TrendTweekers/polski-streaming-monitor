@@ -2496,13 +2496,48 @@ def build_js():
     (SITE / "app.js").write_text(s)
 
 
+def test_hook(sid):
+    """Short, true result of the last run for a search snippet."""
+    p, ok = pick(sid)
+    if p and ok:
+        return f"Test {LAST[:10]}: {SVC_INS[sid] if sid != 'tvpsport' else 'wideo TVP Sport'} zagrało przez {p['name']} z serwerem w Polsce."
+    return f"Test {LAST[:10]}: wynik dzień po dniu i zrzuty ekranu."
+
+
+def snippets():
+    """Search titles and descriptions for the pages that already show on page 1. The test sentence follows the last bot run."""
+    h = {sid: test_hook(sid) for sid in ("tvpvod", "player", "tvpsport")}
+    h["tvpvod"] = h["tvpvod"].replace("TVP VOD zagrało", "TVP VOD zagrał")
+    h["player"] = h["player"].replace("Playerem zagrało", "Player zagrał")
+    p, _ = pick()
+    rank_hook = f"Test {LAST[:10]}: {p['name']} działa z TVP VOD, Playerem i TVP Sport." if p else f"Test {LAST[:10]}."
+    return {
+        "/player-niedostepny-w-twojej-lokalizacji": ("Player niedostępny w Twojej lokalizacji? Dwa wyjścia z testu",
+            f"„Ups… Player jest niedostępny w Twojej lokalizacji”: poza Unią serwis blokuje wszystko. {h['player']}"),
+        "/tvp-vod-material-niedostepny-w-twoim-kraju": ("TVP VOD: materiał niedostępny w Twoim kraju? Co działa",
+            f"„Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”: skąd ten komunikat i trzy wyjścia. {h['tvpvod']}"),
+        "/tvp-sport-material-niedostepny": ("TVP Sport: materiał niedostępny za granicą? Test i wyjścia",
+            f"„Materiał jest niedostępny w kraju, z którego się łączysz”: skąd ten komunikat i co zrobić przed meczem. {h['tvpsport']}"),
+        "/porownanie-vpn": ("Ranking VPN do polskiej telewizji 2026: test co rano",
+            f"5 VPN z serwerem w Polsce: ceny w zł, zwrot pieniędzy i jawne punkty. {rank_hook} Oferty Black Friday."),
+        "/tvp-vod-za-granica": ("Jak oglądać TVP VOD za granicą: codzienny test VPN",
+            f"Co w TVP VOD działa za granicą bez VPN, a co jest zablokowane. {h['tvpvod']} Reklamy, błędy i kroki."),
+        "/tvp-sport-za-granica": ("Jak oglądać TVP Sport za granicą: test VPN i mecze",
+            f"TVP Sport za granicą: wideo i transmisje na żywo. {h['tvpsport']} Jak przygotować się do meczu."),
+        "/player-za-granica": ("Player za granicą: Player International czy VPN?",
+            f"Player International: cena i co zawiera, albo VPN z serwerem w Polsce. Darmowe odcinki i typowe błędy. {h['player']}"),
+    }
+
 def main():
     write_badges()
     (SITE / "style.css").write_text((HERE / "fonts.css").read_text() + (HERE / "base.css").read_text() + EXTRA_CSS)
     build_js()
     listed = []
+    snip = snippets()
     for path, page in PAGES.items():
         title, desc, body = page[:3]
+        if path in snip:
+            title, desc = snip[path][0] + " | Polski Streaming", snip[path][1]
         kind = page[3] if len(page) > 3 else "page"
         crumbs = page[4] if len(page) > 4 else None
         name = "index.html" if path == "/" else path.strip("/") + ".html"
