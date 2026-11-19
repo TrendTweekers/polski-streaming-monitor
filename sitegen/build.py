@@ -778,33 +778,62 @@ def guides_grid():
                          ("/darmowy-vpn-polska-telewizja", "Darmowy VPN do polskiej telewizji", "Jak ustawić darmowy serwer w Polsce i co pokazał nasz test."),
                          ("/promocje-vpn", "Promocje VPN: Black Friday 2026", "Ceny z promocji, ceny bez promocji i ile płacisz z góry.")]),
     ]
-    cols = "".join(f'<div class="ggc"><h3>{g}</h3>' + "".join(f'<a href="{h}"><b>{t}</b><span>{d}</span></a>' for h, t, d in items) + "</div>" for g, items in groups)
+    ico = {"Serwisy": '<path d="M8 5v14l11-7z"/>', "Komunikaty błędów": '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+           "Kraje i VPN": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'}
+    cols = "".join(f'<div class="ggc g{n}"><h3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ico[g]}</svg>{g}</h3>' + "".join(f'<a href="{h}"><b>{t}</b><span>{d}</span></a>' for h, t, d in items) + "</div>" for n, (g, items) in enumerate(groups))
     return f"""<section class="guides"><div class="wrap">
   <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, komunikat albo kraj. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
   <div class="gg">{cols}</div>
 </div></section>"""
 
 
+def pill(status):
+    """Status as a filled pill for the dark status board."""
+    cls = "ok" if status in ("ok", "okr") else status
+    note = '<small>po odświeżeniu</small>' if status == "okr" else ""
+    label = {"ok": "Działa", "okr": "Działa", "blocked": "Nie działa", "unstable": "Niestabilny", "none": "Bez testu"}[status]
+    return (f'<span class="pill {cls}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" '
+            f'stroke-linejoin="round" aria-hidden="true">{ST_ICON[status]}</svg>{label}</span>{note}')
+
+
 def status_matrix():
-    """Home page: the last test as a status board (static copy of the bot data)."""
+    """Home page: the last test as a dark status board (static copy of the bot data)."""
     order = {"nord": 0, "proton": 1, "protonfree": 2}
     names = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "Proton VPN, darmowy"}
-    rows = ""
-    for p in sorted(tested(), key=lambda x: order.get(x["id"], 9)):
+    plans = {"nord": "plan płatny", "proton": "plan płatny", "protonfree": "plan darmowy"}
+    slogo = {"tvpvod": '<img src="/logos/tvpvod.png" alt="" height="16">', "player": '<img src="/logos/player.svg" alt="" height="14">'}
+    ps = sorted(tested(), key=lambda x: order.get(x["id"], 9))
+    if not ps:
+        return ""
+    head = "".join(f'<span class="smh">{slogo.get(x["id"], "")}{x["name"]}</span>' for x in SVON)
+    rows, tries, good = "", 0, 0
+    for p in ps:
         pid = p["id"]
-        cells = "".join(f'<span class="smc"><em>{x["name"]}</em>{st(shown(p, p["services"].get(x["id"], {})))}</span>' for x in SVON)
+        cells = ""
+        for x in SVON:
+            stt = shown(p, p["services"].get(x["id"], {}))
+            tries += stt != "none"
+            good += stt in ("ok", "okr")
+            cells += f'<span class="smc"><em>{x["name"]}</em>{pill(stt)}</span>'
         aid = "proton" if pid == "protonfree" else pid
         url = next(f[2] for f in FACTS if f[0] == aid)
         cta = (f'<a class="btn" {plink(aid, url)}>Zobacz ofertę</a>{aff_note(aid)}' if p.get("plan") == "plan płatny"
                else '<a class="smfree" href="/darmowy-vpn-polska-telewizja">Jak ustawić darmowy serwer</a>')
-        rows += (f'<div class="smrow"><div class="smn"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{names.get(pid, p["name"])}</b></div>'
+        rows += (f'<div class="smrow"><div class="smn"><img src="{LOGOS[pid]}" alt="" width="36" height="36"><div><b>{names.get(pid, p["name"])}</b><small>{plans.get(pid, "")}</small></div></div>'
                  f'{cells}<div class="smb">{day_bars(pid)}</div><div class="pcta">{cta}</div></div>')
-    if not rows:
-        return ""
-    return f"""<section class="results sm" id="status"><div class="wrap narrowpad">
-  <div class="shead"><h2>Wynik testu z {LAST[:10]}</h2><p>Każdego ranka bot łączy się przez serwer VPN w Polsce, włącza film i sprawdza, czy gra 60 sekund. Ostatni test: {LAST}.</p></div>
-  <div class="smx">{rows}</div>
-  <p class="after"><a href="/wyniki-testow">Wszystkie wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
+    return f"""<section class="sm" id="status"><div class="wrap">
+  <div class="smtop">
+    <div><span class="smlive"><i></i>Test automatyczny · codziennie rano</span>
+      <h2>Wynik testu z {LAST[:10]}</h2>
+      <p>Bot łączy się przez serwer VPN w Polsce, włącza film i sprawdza, czy gra 60 sekund. Zapisuje zrzut ekranu z każdej próby.</p></div>
+    <div class="smnums">
+      <div><b>{good}/{tries}</b><span>prób udanych w ostatnim teście</span></div>
+      <div><b>{len(SVON)}</b><span>serwisy: {", ".join(x["name"] for x in SVON)}</span></div>
+      <div><b>{len(HIST.get("days", {}))}</b><span>dni testów w historii</span></div>
+    </div>
+  </div>
+  <div class="smx"><div class="smrow smhead"><span>VPN w teście</span>{head}<span>Ostatnie dni</span><span></span></div>{rows}</div>
+  <p class="smafter">Ostatni test: {LAST}. <a href="/wyniki-testow">Wszystkie wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
 </div></section>"""
 
 
@@ -2048,7 +2077,7 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
   .kv dt{border-bottom:0;padding-bottom:0}
 }
 /* ---- 19.11.2026 structure pass: narrower page, cards, home hero ---- */
-.wrap{max-width:1240px}
+.wrap{max-width:1480px}
 .disc{background:none;border:0;font-size:12px;color:var(--muted);margin:0 0 16px;max-width:86ch;padding:0}
 .results.soft{background:var(--bg)}
 .rrs5{border-top:0;display:grid;gap:12px}
@@ -2056,8 +2085,33 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .rr:hover{box-shadow:0 10px 24px -16px rgba(23,35,45,.45);transform:translateY(-1px)}
 .rr.first{border:2px solid #E0A526;padding-top:26px}
 .rrib{position:absolute;top:-11px;left:20px;background:#E0A526;color:#17232D;font-size:12px;font-weight:700;border-radius:4px;padding:2px 10px}
-.smx{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:2px 22px;border-top:1px solid var(--line)}.smrow:last-child{border-bottom:0}
-.sm{background:var(--surface)}
+.sm{background:var(--navy,#17232D);color:var(--navy-ink,#EDF1F4);border-bottom:0}
+.sm .wrap{padding-top:56px;padding-bottom:52px}
+.smtop{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px 56px;align-items:end;margin-bottom:28px}
+.smtop h2{color:#fff;font-size:30px;margin:12px 0 8px}.smtop p{color:var(--navy-muted,#A0ADB8);max-width:62ch}
+.smlive{display:inline-flex;gap:9px;align-items:center;font:600 12px var(--mono,monospace);text-transform:uppercase;letter-spacing:.06em;color:#4CCB83}
+.smlive i{width:9px;height:9px;border-radius:50%;background:#4CCB83;box-shadow:0 0 0 0 rgba(76,203,131,.6);animation:smp 2s infinite}
+@keyframes smp{70%{box-shadow:0 0 0 9px rgba(76,203,131,0)}100%{box-shadow:0 0 0 0 rgba(76,203,131,0)}}
+@media (prefers-reduced-motion:reduce){.smlive i{animation:none}}
+.smnums{display:grid;grid-template-columns:repeat(3,minmax(0,150px));gap:12px}
+.smnums div{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px}
+.smnums b{display:block;font:600 26px var(--mono,monospace);color:#fff}.smnums span{display:block;font-size:12px;color:var(--navy-muted,#A0ADB8);margin-top:4px;line-height:1.35}
+.smx{border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.035);padding:0 24px}
+.sm .smrow{border-bottom:1px solid rgba(255,255,255,.1);padding:18px 0;grid-template-columns:minmax(210px,1.3fr) repeat(3,minmax(0,1fr)) minmax(150px,1.1fr) 240px}
+.sm .smrow:last-child{border-bottom:0}
+.smhead{padding:14px 0!important;font:600 12px var(--mono,monospace);text-transform:uppercase;letter-spacing:.05em;color:var(--navy-muted,#A0ADB8)}
+.smh{display:inline-flex;gap:8px;align-items:center}.smh img{display:block;width:auto;background:#fff;border-radius:4px;padding:3px 5px;box-sizing:content-box}
+.sm .smn b{color:#fff;font-size:17px;display:block}.sm .smn small{display:block;font-size:12px;color:var(--navy-muted,#A0ADB8)}
+.sm .smc em{display:none}.sm .smc small{display:block;font-size:11px;color:var(--navy-muted,#A0ADB8);margin-top:5px}
+.pill{display:inline-flex;gap:7px;align-items:center;font-size:14px;font-weight:600;border-radius:999px;padding:6px 13px 6px 10px;background:rgba(76,203,131,.16);color:#5FDD95}
+.pill.unstable{background:rgba(231,182,91,.16);color:#E7B65B}.pill.blocked{background:rgba(240,120,120,.16);color:#F07878}.pill.none{background:rgba(255,255,255,.07);color:#A0ADB8}
+.sm .dbars i{height:26px;max-width:12px;background:#4CCB83}.sm .dbars i.unstable{background:#E7B65B}.sm .dbars i.blocked{background:#F07878}.sm .dbars i.none{background:rgba(255,255,255,.14)}
+.sm .dbl,.sm .affn{color:var(--navy-muted,#A0ADB8)}.sm .pcta{text-align:right}.sm .pcta .btn{display:inline-block}.sm .affn{text-align:right}
+.sm .smfree{color:#9CC2FF;font-size:13px}
+.smafter{margin-top:18px;font-size:14px;color:var(--navy-muted,#A0ADB8)}.smafter a{color:#9CC2FF}
+.ggc{border-top:3px solid var(--accent)}.ggc.g1{border-top-color:var(--warn)}.ggc.g2{border-top-color:var(--ok)}
+.ggc h3{display:flex;gap:8px;align-items:center}.ggc h3 svg{color:var(--accent)}.ggc.g1 h3 svg{color:var(--warn)}.ggc.g2 h3 svg{color:var(--ok)}
+.guides{background:var(--surface)}.howflow{background:var(--cream)}
 .hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:40px;min-height:0;padding-bottom:34px}
 .hh .otext{padding:44px 0 30px}.hh h1{font-size:40px}
 .hhk{display:inline-flex;gap:7px;align-items:center;font-size:13px;font-weight:600;color:var(--ok);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-bottom:16px}
@@ -2075,7 +2129,9 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
 .ggc a b{display:block;font-size:15px;line-height:1.35}.ggc a span{display:block;font-size:13px;color:var(--muted);margin-top:3px}.ggc a:hover b{color:var(--accent);text-decoration:underline}
 .deal,.brand,.today{border-radius:10px}
 @media (max-width:1180px){.rr{grid-template-columns:38px minmax(0,1fr) auto!important}.gg{grid-template-columns:minmax(0,1fr)}.hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,420px)}}
-@media (max-width:820px){.hh .wrap{grid-template-columns:minmax(0,1fr);padding-bottom:20px}.hh h1{font-size:30px}.hh .otext{padding:26px 0 8px}.pick{margin:0 0 16px}.rr{padding:16px}.rr.first{padding-top:24px}.smx{padding:2px 14px}}
+@media (max-width:820px){.hh .wrap{grid-template-columns:minmax(0,1fr);padding-bottom:20px}.hh h1{font-size:30px}.hh .otext{padding:26px 0 8px}.pick{margin:0 0 16px}.rr{padding:16px}.rr.first{padding-top:24px}.smx{padding:0 14px}}
+@media (max-width:1180px){.smtop{grid-template-columns:minmax(0,1fr)}.smhead{display:none!important}.sm .smrow{grid-template-columns:repeat(3,minmax(0,1fr))}.sm .smc em{display:block;color:var(--navy-muted,#A0ADB8)}.sm .pcta,.sm .affn{text-align:center}.sm .pcta .btn{display:block}}
+@media (max-width:560px){.smnums{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.smnums div{padding:10px}.smnums b{font-size:20px}.smtop h2{font-size:24px}.pill{font-size:13px;padding:5px 10px 5px 8px}.sm .wrap{padding-top:40px;padding-bottom:40px}}
 """
 
 
