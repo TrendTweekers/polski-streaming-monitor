@@ -749,7 +749,7 @@ def rank_top():
   <div class="shead"><h2>Ranking w skrócie</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców. Obok oceny pokazujemy wynik naszego codziennego testu, jeśli dany VPN już testujemy.</p></div>
   <p class="note">{tested_since_line()}</p>
   {DISCLOSE}
-  {rank_rows(5)}
+  {rank_rows(len(RANK))}
   {SCORE_NOTE}
   {brand_slot()}
 </div></section>"""
