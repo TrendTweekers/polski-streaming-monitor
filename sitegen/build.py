@@ -798,6 +798,7 @@ def guides_grid():
         ("Serwisy", [("/tvp-vod-za-granica", "Jak oglądać TVP VOD za granicą", "Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach."),
                      ("/player-za-granica", "Jak oglądać Player za granicą", "Darmowe odcinki, pakiet Player International i test z VPN."),
                      ("/tvp-sport-za-granica", "Jak oglądać TVP Sport za granicą", "Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów."),
+                     ("/tvp-na-zywo-za-granica", "TVP 1 i TVP 2 na żywo za granicą", "Test z USA: co jest zablokowane, co gra bez VPN i dwie próby przez VPN."),
                      ("/polsat-box-go-za-granica", "Jak oglądać Polsat Box Go za granicą", "Co działa w Unii Europejskiej i pakiet dla widzów za granicą.")]),
         ("Komunikaty błędów", [("/tvp-vod-material-niedostepny-w-twoim-kraju", "TVP VOD: „materiał jest niedostępny w Twoim kraju”", "Jak wygląda komunikat, skąd się bierze i trzy wyjścia."),
                                ("/player-niedostepny-w-twojej-lokalizacji", "„Player jest niedostępny w Twojej lokalizacji”", "Blokada całego serwisu poza Unią i co da się zrobić."),
@@ -1053,7 +1054,7 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
 <h2>Co jest w TVP VOD</h2>
 <p>Lista z serwisu vod.tvp.pl, sprawdzona 10.11.2026:</p>
 <ul>
-  <li><b>Kanały na żywo:</b> TVP 1, TVP 2, TVP Info, TVP Kultura oraz kanały tematyczne, na przykład TVP Kryminały i TVP Klan.</li>
+  <li><b>Kanały na żywo:</b> TVP 1, TVP 2, TVP Info, TVP Kultura oraz kanały tematyczne, na przykład TVP Kryminały i TVP Klan. Osobno sprawdziliśmy <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo za granicą</a>.</li>
   <li><b>Seriale:</b> M jak miłość, Ojciec Mateusz, Na dobre i na złe, Klan, Barwy szczęścia, Komisarz Alex, Na sygnale.</li>
   <li><b>Programy:</b> Jeden z dziesięciu, The Voice of Poland, Rolnik szuka żony, Jaka to melodia?</li>
   <li><b>Filmy i klasyka:</b> Pan Tadeusz, Znachor, Pianista, Stawka większa niż życie, Czterdziestolatek.</li>
@@ -1471,6 +1472,81 @@ PAGES["/player-niedostepny-w-twojej-lokalizacji"] = ("„Player jest niedostępn
            ("Czy Player International to to samo co Player w Polsce?", "Nie. To osobny pakiet z własną zawartością. Część programów z polskiej oferty może w nim nie być.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/player-za-granica", "Player"), ("/player-niedostepny-w-twojej-lokalizacji", "Player niedostępny w Twojej lokalizacji")])
 
+def pfig(src, url, cap):
+    return f'<div class="pfig">{frame(src, url, cap)}</div>'
+
+
+def live_box():
+    """One-off test (not the daily bot run), so the box says so."""
+    pr = PROFILE["nord"]
+    return (f'<div class="today"><div class="todayh"><img src="{LOGOS["nord"]}" alt="" width="34" height="34">'
+            f'<p><b>NordVPN: TVP 1, TVP 2 i TVP Info zagrały na żywo</b><span>Nasz test: 19.11.2026, 12:20–12:45, serwer w Warszawie. To test jednorazowy, a nie codzienny.</span></p></div>'
+            f'<div class="todayc"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>'
+            f'<small>{pr["price"]} {pr["unit"]} · {REFUND["nord"]} na zwrot pieniędzy · Link partnerski</small></div></div>')
+
+
+PAGES["/tvp-na-zywo-za-granica"] = ("TVP 1 i TVP 2 na żywo za granicą: test z USA i przez VPN | Polski Streaming",
+    "TVP 1 i TVP 2 na żywo za granicą: w teście z USA pokazały „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”. TVP Info grało. Zrzuty ekranu bez VPN i przez VPN.",
+    band('<a href="/">Polska telewizja za granicą</a> / <a href="/tvp-vod-za-granica">TVP VOD</a> / Kanały na żywo', "TVP 1 i TVP 2 na żywo za granicą",
+         "Sprawdziliśmy kanały na żywo w TVP VOD z adresu w USA: najpierw bez VPN, potem przez serwer VPN w Polsce. Pokazujemy, co zobaczyliśmy, razem z próbą, która się nie udała.",
+         f'<div class="when mono">{BYLINE}<span>Test: <b>19.11.2026, z USA</b></span><span>Kanały: <b>TVP 1, TVP 2, TVP Info</b></span></div>',
+         figure=frame("/img/live-bez-vpn-tvp1.webp", "vod.tvp.pl/live", "TVP 1 na żywo bez VPN, adres IP z USA. Nasz zrzut ekranu z 19.11.2026."))
+    + prose("""
+<p class="answer"><b>Krótka odpowiedź.</b> W naszym teście z USA TVP 1 i TVP 2 na żywo były zablokowane, a TVP Info grało bez VPN. Przez serwer VPN w Polsce zagrały wszystkie trzy kanały w jakości 1920 × 1080, ale dopiero w drugiej próbie. Przed obrazem na żywo są reklamy, u nas do około trzech minut.</p>
+""" + live_box() + """
+<h2>Co pokazuje TVP 1 i TVP 2 za granicą</h2>
+<p>19 listopada 2026 otworzyliśmy z komputera w USA, bez VPN, stronę kanału TVP 1 w serwisie vod.tvp.pl. W programie był akurat serial „Ojciec Mateusz”. Strona kanału załadowała się normalnie: tytuł, godziny emisji i czerwony przycisk „Na żywo”. Po kliknięciu przycisku zamiast obrazu pojawiła się czarna plansza z napisem:</p>
+<blockquote>Z powodów licencyjnych materiał jest niedostępny w Twoim kraju.</blockquote>
+<p>Pod spodem jest mniejszy dopisek: „Przepisy UE pozwalają abonentom, którzy w kraju zamieszkania (w tym przypadku w PL) zakupili pakiet TVP +, utrzymać dostęp do materiałów wchodzących w skład pakietu, w czasie wizyty w innym kraju UE.” Jedyny przycisk to „Zamknij”.</p>
+<p>TVP 2 zachowało się tak samo. W programie był magazyn „Jedzenie ma znaczenie”, a po kliknięciu „Na żywo” zobaczyliśmy tę samą planszę.</p>
+
+<h2>TVP Info grało bez VPN</h2>
+<p>Trzeci kanał z testu, TVP Info, ruszył z adresu w USA bez żadnej blokady. Po reklamach zobaczyliśmy program „Za pięć dwunasta” w jakości 1920 × 1080.</p>
+""" + pfig("/img/live-bez-vpn-tvpinfo.webp", "vod.tvp.pl/live", "TVP Info na żywo bez VPN, adres IP z USA, 19.11.2026.") + """
+<p>Blokada nie obejmuje więc całego działu „Na żywo”. Zależy od kanału, a komunikat mówi o licencjach, więc może też zależeć od programu. Sprawdziliśmy po jednym programie na każdym kanale.</p>
+
+<h2>Wynik testu kanał po kanale</h2>
+<div class="scrollx keep"><table class="mini3"><thead><tr><th>Kanał</th><th>Bez VPN, z USA</th><th>VPN, próba 1 (ok. 12:08)</th><th>VPN, próba 2 (ok. 12:20)</th></tr></thead><tbody>
+<tr><td><b>TVP 1</b></td><td>Plansza „Z powodów licencyjnych…”</td><td>Reklamy ruszyły, obraz na żywo nie pojawił się w 3,5 minuty</td><td>Gra, 1920 × 1080</td></tr>
+<tr><td><b>TVP 2</b></td><td>Plansza „Z powodów licencyjnych…”</td><td>Reklamy ruszyły, obraz na żywo nie pojawił się w 3,5 minuty</td><td>Gra, 1920 × 1080</td></tr>
+<tr><td><b>TVP Info</b></td><td>Gra, 1920 × 1080</td><td>Obraz na żywo nie pojawił się w 3,5 minuty</td><td>Gra, 1920 × 1080</td></tr>
+</tbody></table></div>
+<p class="muted small">Test z 19.11.2026. Komputer w USA, przeglądarka Chrome. VPN: NordVPN, serwer w Warszawie. Jedna próba na kanał w każdej kolumnie.</p>
+
+<h2>Przez VPN: pierwsza próba się nie udała</h2>
+<p>Po połączeniu z serwerem NordVPN w Warszawie plansza o licencjach zniknęła na wszystkich trzech kanałach. Odtwarzacz zaczął od reklam, licznik pokazywał „2/6”. Po 3,5 minuty w oknie odtwarzacza był jednak tylko czarny ekran z kółkiem ładowania. Tę próbę zapisaliśmy jako nieudaną.</p>
+""" + pfig("/img/live-nord-czarny-ekran.webp", "vod.tvp.pl/live", "Próba 1 przez VPN: po reklamach czarny ekran z kółkiem ładowania. TVP 1, 19.11.2026.") + """
+<p>Kilkanaście minut później powtórzyliśmy test. Tym razem bot czekał do siedmiu minut i sprawdzał obraz po trzech, pięciu i siedmiu minutach. Reklam było siedem. Po trzech minutach na TVP 1 leciał już „Agrobiznes” na żywo, potem zagrały TVP 2 i TVP Info.</p>
+""" + pfig("/img/live-nord-tvp1.webp", "vod.tvp.pl/live", "Próba 2 przez VPN: TVP 1 na żywo, program „Agrobiznes”. Serwer w Warszawie, 19.11.2026.") + """
+<p>Nie wiemy, dlaczego pierwsza próba się nie udała. W obu próbach serwer VPN był w Warszawie, ale miał inny adres IP. Wniosek praktyczny: jeśli po reklamach widzisz czarny ekran, odśwież stronę albo zmień serwer na inny polski.</p>
+
+<h2>Co możesz zrobić</h2>
+<h3>1. Sprawdź, czy Twój kanał gra bez VPN</h3>
+<p>Otwórz <a href="https://vod.tvp.pl/na-zywo" target="_blank" rel="nofollow noopener">vod.tvp.pl/na-zywo</a> i kliknij kanał. U nas TVP Info grało bez niczego. Kanałów tematycznych, na przykład TVP Kultura, nie sprawdzaliśmy.</p>
+<h3>2. Masz pakiet TVP + i jesteś na wyjeździe w Unii</h3>
+<p>Komunikat TVP mówi, że abonenci pakietu TVP +, którzy mieszkają w Polsce, zachowują dostęp podczas wizyty w innym kraju Unii. Tego nie testowaliśmy, bo nie mamy pakietu, a test był z USA. Wielka Brytania i USA nie należą do Unii, więc ta zasada ich nie obejmuje.</p>
+<h3>3. VPN z serwerem w Polsce</h3>
+<p>Z polskim adresem IP TVP 1 i TVP 2 zagrały w naszej drugiej próbie. Kolejność ma znaczenie:</p>
+<ol>
+  <li>Połącz VPN z serwerem w Polsce, zanim otworzysz stronę.</li>
+  <li>Wejdź na stronę kanału i kliknij czerwony przycisk „Na żywo”.</li>
+  <li>Poczekaj na koniec reklam. U nas trwały do około trzech minut. Nie odświeżaj strony w czasie reklam, bo zaczną się od nowa.</li>
+  <li>Czarny ekran po reklamach? Odśwież stronę. Jeśli to nie pomoże, zmień serwer na inny polski.</li>
+</ol>
+<p>Przed meczem albo ważnym programem zrób próbę kilkanaście minut wcześniej. Same reklamy zabierają trzy minuty.</p>
+
+<h2>Inny komunikat: „Wybrana audycja została czasowo zablokowana…”</h2>
+<p>Część widzów szuka komunikatu „Wybrana audycja została czasowo zablokowana z powodów licencyjnych”. W naszym teście z 19.11.2026 go nie zobaczyliśmy: TVP VOD pokazał planszę opisaną wyżej. Jeśli widzisz ten drugi napis, powód jest ten sam, czyli licencja na dany program, i sprawdzasz to samo: adres IP i kanał.</p>
+""", "prosec", brief([("Rodzaj błędu", "Blokada licencyjna kanału"), ("Zablokowane w teście", "TVP 1, TVP 2"), ("Grało bez VPN", "TVP Info"), ("Przez VPN w Polsce", "3 z 3 w drugiej próbie"), ("Reklamy przed obrazem", "Do około 3 minut"), ("Nasz test", "USA, 19.11.2026")],
+                     [("/tvp-vod-za-granica", "Poradnik: TVP VOD za granicą"), ("/tvp-vod-material-niedostepny-w-twoim-kraju", "Ten sam komunikat przy filmach i serialach"), ("/tvp-sport-za-granica", "TVP Sport za granicą"), ("/porownanie-vpn", "Ranking VPN")]))
+    + provstrip("Pięciu dostawców z serwerem w Polsce, w kolejności z naszego rankingu. Kanały na żywo sprawdziliśmy tylko przez NordVPN.")
+    + faq([("Czy TVP 1 działa za granicą bez VPN?", "W naszym teście z USA z 19.11.2026 nie: po kliknięciu „Na żywo” pojawiła się plansza „Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”. Z krajów Unii nie sprawdzaliśmy."),
+           ("Czy TVP Info działa za granicą?", "W naszym teście tak. TVP Info grało z adresu w USA bez VPN, w jakości 1920 × 1080."),
+           ("Ile trwają reklamy przed kanałem na żywo?", "W naszym teście przed obrazem na żywo było sześć albo siedem reklam. Po trzech minutach kanał już grał."),
+           ("Czy testujecie kanały na żywo codziennie?", "Jeszcze nie. Codziennie testujemy filmy i programy z TVP VOD, Playera i TVP Sport. Kanały na żywo sprawdziliśmy jednorazowo 19.11.2026 i opisaliśmy obie próby, także nieudaną."),
+           ("Czy to samo dotyczy meczów w TVP 1 i TVP 2?", "Nie mamy wyniku dla meczu. Testowaliśmy zwykłe programy. Transmisje sportowe mają osobne licencje, więc przed meczem zrób próbę i miej drugi polski serwer w zapasie.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/tvp-vod-za-granica", "TVP VOD"), ("/tvp-na-zywo-za-granica", "Kanały na żywo")])
+
 PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedostępny w kraju, z którego się łączysz” | Polski Streaming",
     "TVP Sport za granicą pokazuje „Przepraszamy. Z uwagi na ograniczenia licencyjne materiał jest niedostępny”. Zrzut ekranu z testu, przyczyna i wyjścia przed meczem.",
     band('<a href="/">Polska telewizja za granicą</a> / <a href="/tvp-sport-za-granica">TVP Sport</a> / Komunikat', "TVP Sport: „materiał jest niedostępny w kraju, z którego się łączysz”",
@@ -1500,7 +1576,7 @@ PAGES["/tvp-sport-material-niedostepny"] = ("TVP Sport: „materiał jest niedos
 <h3>1. Sprawdź nadawcę w kraju, w którym mieszkasz</h3>
 <p>Duże wydarzenia są zwykle w lokalnej telewizji, czasem bezpłatnie. Skoki narciarskie w sezonie 2026/27 pokazują w Niemczech ARD, ZDF i Eurosport. Komentarz jest wtedy w języku danego kraju. Więcej w poradniku <a href="/polska-telewizja-w-niemczech">Polska telewizja w Niemczech</a>.</p>
 <h3>2. VPN z serwerem w Polsce</h3>
-<p>Z polskim adresem IP odtwarzacz działa jak w kraju, z polskim komentarzem. W naszych codziennych testach materiały z działu „Wideo” grały przez VPN z serwerem w Polsce. Transmisji na żywo jeszcze nie testujemy.</p>
+<p>Z polskim adresem IP odtwarzacz działa jak w kraju, z polskim komentarzem. W naszych codziennych testach materiały z działu „Wideo” grały przez VPN z serwerem w Polsce. Transmisji sportowych na żywo jeszcze nie testujemy. Kanały <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo</a> sprawdziliśmy 19.11.2026.</p>
 <h3>3. Przed meczem zrób próbę</h3>
 <ul>
   <li>Połącz VPN kilkanaście minut przed startem i włącz dowolny materiał z działu „Wideo”.</li>
@@ -1759,6 +1835,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <h2>Dziennik zmian</h2>
 <ul>
   <li><b>19.11.2026:</b> nowe ceny Black Friday. CyberGhost (1,99 €) i ExpressVPN (2,39 €) dostały po jednym punkcie więcej za cenę i mają teraz równo po 12 punktów. Przy równej liczbie punktów wyżej jest tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
+  <li><b>19.11.2026:</b> jednorazowy test kanałów na żywo w TVP VOD (TVP 1, TVP 2, TVP Info) z USA, bez VPN i przez NordVPN. Opis jest na stronie <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo za granicą</a>. Nie jest to część codziennego testu.</li>
   <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
   <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
@@ -2140,6 +2217,7 @@ h1{font-weight:800;letter-spacing:-.012em;word-spacing:.04em}h2{font-weight:800;
 .ggc{border-top:3px solid var(--accent)}.ggc.g1{border-top-color:var(--warn)}.ggc.g2{border-top-color:var(--ok)}
 .ggc h3{display:flex;gap:8px;align-items:center}.ggc h3 svg{color:var(--accent)}.ggc.g1 h3 svg{color:var(--warn)}.ggc.g2 h3 svg{color:var(--ok)}
 .guides{background:var(--surface)}.howflow{background:var(--cream)}
+.pfig{max-width:760px;margin:22px 0}.pfig .bframe{margin:0}
 .hw{background:var(--cream);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:56px;padding-bottom:52px}
 .hwg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
 .hws{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}

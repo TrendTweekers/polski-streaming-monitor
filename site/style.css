@@ -682,6 +682,7 @@ h1{font-weight:800;letter-spacing:-.012em;word-spacing:.04em}h2{font-weight:800;
 .ggc{border-top:3px solid var(--accent)}.ggc.g1{border-top-color:var(--warn)}.ggc.g2{border-top-color:var(--ok)}
 .ggc h3{display:flex;gap:8px;align-items:center}.ggc h3 svg{color:var(--accent)}.ggc.g1 h3 svg{color:var(--warn)}.ggc.g2 h3 svg{color:var(--ok)}
 .guides{background:var(--surface)}.howflow{background:var(--cream)}
+.pfig{max-width:760px;margin:22px 0}.pfig .bframe{margin:0}
 .hw{background:var(--cream);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:56px;padding-bottom:52px}
 .hwg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
 .hws{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
