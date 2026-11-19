@@ -21,7 +21,7 @@ PUBLISHED = "2026-11-10"
 MODIFIED = "2026-11-10"
 INDEXABLE = True  # set True when the owner opens the site to search engines
 # Pages kept out of search until they have enough substance of their own.
-NOINDEX = {"/polsat-box-go-za-granica", "/wyniki-testow", "/prywatnosc"}
+NOINDEX = {"/polsat-box-go-za-granica", "/wyniki-testow", "/prywatnosc", "/odznaka"}
 _latest = SITE / "data" / "latest.json"
 RUN = json.loads(_latest.read_text()) if _latest.exists() else {"providers": [], "services": []}
 SVON = [x for x in RUN.get("services", []) if x.get("enabled")]
@@ -212,7 +212,7 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 </main>
 <footer><div class="wrap">
   <div><b>Polski Streaming</b><br>Niezależne testy VPN z polskimi serwisami streamingowymi.</div>
-  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Wyniki testów</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
+  <nav><a href="/polsat-box-go-za-granica">Polsat Box Go</a><a href="/wyniki-testow">Wyniki testów</a><a href="/odznaka">Odznaka dla Twojej strony</a><a href="/o-nas">O nas</a><a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a><a href="/jak-testujemy">Jak testujemy</a><a href="/jak-testujemy#linki">Linki partnerskie</a><a href="/prywatnosc">Prywatność</a></nav>
 </div></footer>
 <script src="/app.js" defer></script>
 <script>window.va=window.va||function(){{(window.vaq=window.vaq||[]).push(arguments)}};</script>
@@ -1724,6 +1724,85 @@ PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " 
            ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Prowizja nie zmienia kolejności ani cen na tej stronie.")]),
     "article", [("/", "Polska telewizja za granicą"), ("/promocje-vpn", "Promocje VPN")])
 
+BADGE_SVC = [("tvpvod", "TVP VOD"), ("player", "Player"), ("tvpsport", "TVP Sport")]
+
+
+def badge_state(sid):
+    """(ok, text) for one service, from the best paid VPN in the last run."""
+    p, ok = pick(sid)
+    if p and ok:
+        return True, f"działa przez {p['name']}"
+    return False, "nie zagrał w ostatnim teście"
+
+
+def badge_svg(sids, w=320):
+    """Small status badge that other sites can embed. Plain SVG, system fonts, no scripts."""
+    esc = lambda t: t.replace("&", "&amp;").replace("<", "&lt;")
+    rows = [(n,) + badge_state(sid) for sid, n in BADGE_SVC if sid in sids]
+    rh, top = 24, 34
+    h = top + rh * len(rows) + 26
+    body = ""
+    for i, (name, ok, txt) in enumerate(rows):
+        y = top + i * rh
+        col = "#16834A" if ok else "#B7791F"
+        mark = (f'<path d="M14 {y + 9} l4 4 l8 -8" fill="none" stroke="{col}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' if ok
+                else f'<path d="M20 {y + 4} v6 M20 {y + 14} v0.5" stroke="{col}" stroke-width="2.4" stroke-linecap="round"/>')
+        body += (f'{mark}<text x="34" y="{y + 13}" font-size="13" font-weight="700" fill="#17232D">{esc(name)}</text>'
+                 f'<text x="112" y="{y + 13}" font-size="13" fill="{col}">{esc(txt)}</text>')
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="Polska telewizja przez VPN: wynik testu z {LAST[:10]}">'
+            f'<rect x="0.5" y="0.5" width="{w - 1}" height="{h - 1}" rx="8" fill="#FFFFFF" stroke="#E1E5E8"/>'
+            f'<g font-family="Segoe UI,Helvetica,Arial,sans-serif">'
+            f'<rect x="12" y="10" width="16" height="16" rx="3" fill="#17232D"/><path d="M18 14 l6 4 l-6 4z" fill="#fff"/>'
+            f'<text x="34" y="23" font-size="13" font-weight="700" fill="#17232D">Polska TV przez VPN · test {LAST[:10]}</text>'
+            f'{body}<text x="12" y="{h - 10}" font-size="11" fill="#65717C">polskistreaming.pl · test co rano, serwer VPN w Polsce</text></g></svg>')
+
+
+def write_badges():
+    d = SITE / "odznaka"
+    d.mkdir(exist_ok=True)
+    (d / "polska-telewizja.svg").write_text(badge_svg([x for x, _ in BADGE_SVC]))
+    for sid, _ in BADGE_SVC:
+        (d / f"{sid}.svg").write_text(badge_svg([sid]))
+
+
+def badge_code(file, target, alt):
+    import html as _h
+    code = (f'<a href="{DOMAIN}{target}"><img src="{DOMAIN}/odznaka/{file}.svg" '
+            f'alt="{alt}" loading="lazy"></a>')
+    return f'<textarea class="bcode" readonly rows="3" onclick="this.select()">{_h.escape(code)}</textarea>'
+
+
+def badge_page_body():
+    items = [("polska-telewizja", "/wyniki-testow", "Wszystkie trzy serwisy", "Polska telewizja przez VPN: wynik testu, Polski Streaming"),
+             ("tvpvod", "/tvp-vod-za-granica", "TVP VOD", "TVP VOD przez VPN: wynik testu, Polski Streaming"),
+             ("player", "/player-za-granica", "Player", "Player przez VPN: wynik testu, Polski Streaming"),
+             ("tvpsport", "/tvp-sport-za-granica", "TVP Sport", "TVP Sport przez VPN: wynik testu, Polski Streaming")]
+    cards = "".join(f'<div class="bcard"><h3>{t}</h3><img src="/odznaka/{f}.svg" alt="{a}"><p>Kod do wklejenia:</p>{badge_code(f, tg, a)}</div>' for f, tg, t, a in items)
+    return f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Wybierz odznakę</h2><p>Odznaka pokazuje wynik naszego ostatniego testu: czy film z danego serwisu zagrał przez VPN z serwerem w Polsce. Bot sprawdza to co rano, a odznaka zmienia się sama.</p></div>
+  <div class="bgrid">{cards}</div>
+</div></section>""" + prose("""
+<h2>Jak wkleić odznakę</h2>
+<ol>
+  <li>Kliknij w pole z kodem pod wybraną odznaką. Kod zaznaczy się cały.</li>
+  <li>Skopiuj go i wklej w miejscu, w którym ma być odznaka: na stronie, w artykule albo w stopce forum, które pozwala na HTML.</li>
+  <li>Gotowe. Nie trzeba się rejestrować ani nic aktualizować.</li>
+</ol>
+<h2>Co pokazuje odznaka</h2>
+<p>Dla każdego serwisu odznaka pokazuje, czy w ostatnim teście film zagrał przez płatny VPN z naszego testu, i przez który. Jeśli w danym dniu żaden nie zagrał, odznaka pokaże to uczciwie. Szczegóły testu są na stronie <a href="/jak-testujemy">Jak testujemy</a>.</p>
+<h2>Prywatność</h2>
+<p>Odznaka to zwykły obrazek SVG z naszego serwera. Nie ma w niej skryptów ani ciasteczek. Nasz serwer widzi tylko zwykłe żądanie obrazka, tak jak przy każdym obrazku w internecie.</p>
+<p>Pytania: <a href="mailto:kontakt@polskistreaming.pl">kontakt@polskistreaming.pl</a></p>
+""", "prosec")
+
+
+PAGES["/odznaka"] = ("Odznaka z wynikiem testu VPN dla Twojej strony | Polski Streaming",
+    "Darmowa odznaka na stronę lub forum: pokazuje, czy TVP VOD, Player i TVP Sport grają dziś przez VPN z serwerem w Polsce. Aktualizuje się sama co rano.",
+    band('<a href="/">Polska telewizja za granicą</a> / Odznaka', "Odznaka z wynikiem testu dla Twojej strony",
+         "Prowadzisz stronę, blog albo forum dla Polaków za granicą? Wklej odznakę, a Twoi czytelnicy zobaczą codzienny wynik naszego testu: czy polska telewizja gra dziś przez VPN.",
+         f'<div class="when mono"><span>Ostatni test: <b>{LAST}</b></span><span>Bez rejestracji, za darmo</span></div>')
+    + badge_page_body())
+
 PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
@@ -2217,6 +2296,10 @@ h1{font-weight:800;letter-spacing:-.012em;word-spacing:.04em}h2{font-weight:800;
 .ggc{border-top:3px solid var(--accent)}.ggc.g1{border-top-color:var(--warn)}.ggc.g2{border-top-color:var(--ok)}
 .ggc h3{display:flex;gap:8px;align-items:center}.ggc h3 svg{color:var(--accent)}.ggc.g1 h3 svg{color:var(--warn)}.ggc.g2 h3 svg{color:var(--ok)}
 .guides{background:var(--surface)}.howflow{background:var(--cream)}
+.bgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.bcard{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.bcard h3{margin:0 0 12px;font-size:17px}.bcard img{display:block;max-width:100%;height:auto;margin-bottom:12px}.bcard p{margin:0 0 6px;font-size:13px;color:var(--muted)}
+.bcode{width:100%;box-sizing:border-box;font:12px var(--mono,monospace);border:1px solid var(--line);border-radius:6px;padding:8px;background:var(--bg);color:var(--ink);resize:none}
+@media (max-width:820px){.bgrid{grid-template-columns:minmax(0,1fr)}}
 .pfig{max-width:760px;margin:22px 0}.pfig .bframe{margin:0}
 .hw{background:var(--cream);border-bottom:1px solid var(--line)}.hw .wrap{padding-top:56px;padding-bottom:52px}
 .hwg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center}
@@ -2414,6 +2497,7 @@ def build_js():
 
 
 def main():
+    write_badges()
     (SITE / "style.css").write_text((HERE / "fonts.css").read_text() + (HERE / "base.css").read_text() + EXTRA_CSS)
     build_js()
     listed = []

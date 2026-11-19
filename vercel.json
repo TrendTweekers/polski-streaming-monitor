@@ -25,5 +25,20 @@
       "path": "/api/kick",
       "schedule": "5 5 * * *"
     }
+  ],
+  "headers": [
+    {
+      "source": "/odznaka/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=1800, s-maxage=1800"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
   ]
 }
