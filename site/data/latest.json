@@ -1,6 +1,6 @@
 {
  "date": "2026-11-19",
- "started_at": "2026-11-19T06:39:55+01:00",
+ "started_at": "2026-11-19T18:44:02+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,44 +16,66 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T06:40:12+01:00",
+     "tested_at": "2026-11-19T18:44:22+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
-     "played_seconds": 61.0,
-     "wait_seconds": 167,
+     "played_seconds": 60.7,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
+     "kind": null,
      "shot": "data/shots/2026-11-19/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T06:44:12+01:00",
+     "tested_at": "2026-11-19T18:48:42+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 61.0,
+     "played_seconds": 60.7,
      "wait_seconds": 30,
      "resolution": "640x360",
      "drm": true,
+     "kind": null,
      "shot": "data/shots/2026-11-19/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T06:45:57+01:00",
-     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
-     "played_seconds": 60.9,
+     "tested_at": "2026-11-19T18:50:27+01:00",
+     "url": "https://sport.tvp.pl/96565037/michal-pasiut-nominowany-w-92-plebiscycie-przegladu-sportowego-to-wymagalo-wielu-lez-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
+     "kind": null,
      "shot": "data/shots/2026-11-19/nord-tvpsport.webp"
     }
    },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T19:02:26+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-19/nord-wppilot.webp"
+    },
+    "polsat": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T19:02:40+01:00",
+     "country": "PL",
+     "vpn_flag": true,
+     "shot": "data/shots/2026-11-19/nord-polsat.webp"
+    }
+   },
    "exit": {
-    "ip": "187.15.161.x",
+    "ip": "187.15.162.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS212238 Datacamp Limited"
+    "org": "AS137409 GSL Networks Pty LTD"
    },
-   "speed_mbps": 52.1
+   "speed_mbps": 51.1
   },
   {
    "id": "proton",
@@ -65,10 +87,12 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T06:50:37+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
-     "played_seconds": 60.9,
-     "wait_seconds": 186,
+     "tested_at": "2026-11-19T19:03:17+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.7,
+     "wait_seconds": 196,
      "resolution": "1920x1080",
      "drm": false,
      "shot": "data/shots/2026-11-19/proton-tvpvod.webp"
@@ -76,25 +100,46 @@
     "player": {
      "status": "unstable",
      "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-19T07:01:13+01:00",
+     "tested_at": "2026-11-19T19:17:50+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
+     "played_seconds": 59.0,
      "wait_seconds": 30,
-     "resolution": "960x540",
+     "resolution": "512x288",
      "drm": true,
+     "kind": null,
      "shot": "data/shots/2026-11-19/proton-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T07:03:12+01:00",
-     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 55,
+     "tested_at": "2026-11-19T19:19:49+01:00",
+     "url": "https://sport.tvp.pl/96567894/tadeusz-pietrzykowski-i-jego-niezwykla-historia-kulisy-powstania-filmu-teddy-byc-to-byc-najlepszym-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 105,
      "resolution": "1920x1080",
      "drm": false,
+     "kind": null,
      "shot": "data/shots/2026-11-19/proton-tvpsport.webp"
+    }
+   },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T19:32:49+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-19/proton-wppilot.webp"
+    },
+    "polsat": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T19:33:04+01:00",
+     "country": "PL",
+     "vpn_flag": true,
+     "shot": "data/shots/2026-11-19/proton-polsat.webp"
     }
    },
    "exit": {
@@ -103,56 +148,17 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 62.0
+   "speed_mbps": 54.4
   },
   {
    "id": "protonfree",
    "name": "Proton VPN",
    "plan": "plan darmowy",
    "server": "PL-FREE#1",
-   "tested": true,
-   "services": {
-    "tvpvod": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-19T07:08:49+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
-     "played_seconds": 61.0,
-     "wait_seconds": 181,
-     "resolution": "1920x1080",
-     "drm": false,
-     "shot": "data/shots/2026-11-19/protonfree-tvpvod.webp"
-    },
-    "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-19T07:13:05+01:00",
-     "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 37,
-     "resolution": "640x360",
-     "drm": true,
-     "shot": "data/shots/2026-11-19/protonfree-player.webp"
-    },
-    "tvpsport": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-19T07:14:56+01:00",
-     "url": "https://sport.tvp.pl/96547899/stale-fragmenty-zmora-reprezentacji-polski-ten-trener-powinien-wzmocnic-sztab-lepszego-specjalisty-nie-ma-wideo",
-     "played_seconds": 60.9,
-     "wait_seconds": 50,
-     "resolution": "1920x1080",
-     "drm": false,
-     "shot": "data/shots/2026-11-19/protonfree-tvpsport.webp"
-    }
-   },
-   "exit": {
-    "ip": "149.102.244.x",
-    "city": "Warsaw",
-    "country": "PL",
-    "org": "AS212238 Datacamp Limited"
-   },
-   "speed_mbps": 62.2
+   "tested": false,
+   "services": {},
+   "checks": {},
+   "note": "Adres IP serwera VPN nie jest polski"
   },
   {
    "id": "surf",
@@ -160,7 +166,8 @@
    "plan": null,
    "server": null,
    "tested": false,
-   "services": {}
+   "services": {},
+   "checks": {}
   },
   {
    "id": "expr",
@@ -168,15 +175,147 @@
    "plan": null,
    "server": null,
    "tested": false,
-   "services": {}
+   "services": {},
+   "checks": {}
   },
   {
    "id": "cybr",
    "name": "CyberGhost",
-   "plan": null,
-   "server": null,
-   "tested": false,
-   "services": {}
+   "plan": "plan płatny",
+   "server": "87-1-PL (Polska)",
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-19T19:34:15+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.9,
+     "wait_seconds": 96,
+     "resolution": "1920x1080",
+     "drm": false,
+     "shot": "data/shots/2026-11-19/cybr-tvpvod.webp"
+    },
+    "player": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-19T19:40:24+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "played_seconds": 60.7,
+     "wait_seconds": 50,
+     "resolution": "640x360",
+     "drm": true,
+     "kind": null,
+     "shot": "data/shots/2026-11-19/cybr-player.webp"
+    },
+    "tvpsport": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-19T19:42:35+01:00",
+     "url": "https://sport.tvp.pl/96568243/jasmina-zapotoczna-powalczy-o-cztery-pasy-mistrzowskie-cala-kariere-czekalam-na-ten-moment-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 5,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-19/cybr-tvpsport.webp"
+    }
+   },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T19:50:12+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-19/cybr-wppilot.webp"
+    },
+    "polsat": {
+     "status": "none",
+     "reason": "Serwis nie podał lokalizacji",
+     "kind": "bot",
+     "tested_at": "2026-11-19T19:50:52+01:00",
+     "shot": "data/shots/2026-11-19/cybr-polsat.webp",
+     "attempts": 2
+    }
+   },
+   "exit": {
+    "ip": "138.199.59.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS212238 Datacamp Limited"
+   },
+   "speed_mbps": 68.1
+  },
+  {
+   "id": "pia",
+   "name": "PIA",
+   "plan": "plan płatny",
+   "server": "PIA Warszawa",
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-19T19:51:32+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "played_seconds": 60.6,
+     "wait_seconds": 45,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-19/pia-tvpvod.webp"
+    },
+    "player": {
+     "status": "blocked",
+     "reason": "Film nie ruszył w ciągu 330 s",
+     "tested_at": "2026-11-19T19:59:15+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "kind": "timeout",
+     "shot": "data/shots/2026-11-19/pia-player.webp",
+     "attempts": 2
+    },
+    "tvpsport": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-19T20:05:00+01:00",
+     "url": "https://sport.tvp.pl/96568243/jasmina-zapotoczna-powalczy-o-cztery-pasy-mistrzowskie-cala-kariere-czekalam-na-ten-moment-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 5,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-19/pia-tvpsport.webp"
+    }
+   },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T20:16:29+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-19/pia-wppilot.webp"
+    },
+    "polsat": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-19T20:16:44+01:00",
+     "country": "PL",
+     "vpn_flag": true,
+     "shot": "data/shots/2026-11-19/pia-polsat.webp"
+    }
+   },
+   "exit": {
+    "ip": "85.237.212.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS206092 F.N.S. HOLDINGS LIMITED"
+   },
+   "speed_mbps": 49.5
   }
  ],
  "services": [
@@ -196,15 +335,20 @@
    "enabled": true
   },
   {
-   "id": "polsat",
-   "name": "Polsat Box Go",
-   "enabled": false
-  },
-  {
    "id": "canal",
    "name": "Canal+ Online",
    "enabled": false
   }
  ],
- "finished_at": "2026-11-19T07:19:32+01:00"
+ "checks": [
+  {
+   "id": "wppilot",
+   "name": "WP Pilot"
+  },
+  {
+   "id": "polsat",
+   "name": "Polsat Box Go"
+  }
+ ],
+ "finished_at": "2026-11-19T20:17:06+01:00"
 }

@@ -130,14 +130,39 @@
     "tvpsport": "ok"
    },
    "proton": {
-    "tvpvod": "ok",
+    "tvpvod": "okr",
     "player": "okr",
     "tvpsport": "ok"
    },
-   "protonfree": {
-    "tvpvod": "ok",
+   "cybr": {
+    "tvpvod": "okr",
     "player": "ok",
     "tvpsport": "ok"
+   },
+   "pia": {
+    "tvpvod": "ok",
+    "player": "blocked",
+    "tvpsport": "ok"
+   }
+  }
+ },
+ "checks": {
+  "2026-11-19": {
+   "nord": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "proton": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "cybr": {
+    "wppilot": "ok",
+    "polsat": "none"
+   },
+   "pia": {
+    "wppilot": "ok",
+    "polsat": "ok"
    }
   }
  }
