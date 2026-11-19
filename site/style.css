@@ -356,6 +356,8 @@ footer a{color:var(--navy-muted)}
 .freecta .pcta .more{display:block;margin-top:12px;font-size:14px;color:var(--navy-muted)}
 .mlist .affn{margin-top:6px}.mcta{padding:0 0 16px;border-bottom:1px solid var(--line)}.mlist .mcta .btn{margin-top:0}
 .sbar{display:none}
+.bfbar{background:var(--navy,#17232D);color:#fff}.bfbar .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding-top:14px;padding-bottom:14px;font-size:15px}
+.bfbar b{background:#ffd77a;color:#17232D;padding:3px 9px;border-radius:4px;font-size:13px}.bfbar span{flex:1;min-width:220px;color:#dfe5ea}.bfbar a{color:#ffd77a;font-weight:600}
 @media (max-width:760px){
   .today{grid-template-columns:minmax(0,1fr);padding:16px}.todayc .btn{display:block;text-align:center}
   .pbh .affn{grid-column:1/-1;margin-top:-6px}

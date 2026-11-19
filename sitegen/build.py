@@ -16,6 +16,7 @@ SITE = HERE.parent / "site"
 DOMAIN = "https://polskistreaming.pl"
 UPDATED = "10 listopada 2026"
 CHECKED = "16.11.2026"
+PRICED = "19.11.2026"  # prices and Black Friday offers read from the provider pages (out/bf.py)
 PUBLISHED = "2026-11-10"
 MODIFIED = "2026-11-10"
 INDEXABLE = True  # set True when the owner opens the site to search engines
@@ -428,7 +429,7 @@ FACTS = [
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
 REFUND = {f[0]: re.match(r"\d+ dni", f[4]).group(0) for f in FACTS}
-POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 2, 1, 3, 3, 0), "expr": (1, 1, 3, 2, 3, 0)}
+POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 3, 1, 3, 3, 0), "expr": (1, 2, 3, 2, 3, 0)}  # 19.11.2026: Black Friday prices moved both one price step up
 WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
 MAXPTS = 19
 
@@ -581,12 +582,12 @@ PROFILE = {
                  terms="242,73 zł za pierwsze 27 miesięcy, plus VAT, jeśli dotyczy.",
                  pros=["Bez limitu urządzeń", "8,99 zł za miesiąc w planie na 27 miesięcy", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Do ceny może dojść VAT"]),
-    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="ok. 10,93 zł", unit="za miesiąc (2,49 €)",
-                 terms="69,72 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
+    "expr": dict(tag="Najwięcej urządzeń z limitem: 14", badge="", price="ok. 10,49 zł", unit="za miesiąc (2,39 €)",
+                 terms="66,92 € za pierwsze 28 miesięcy, potem 79,95 € za rok. Cena z oferty Black Friday, sprawdzona 19.11.2026. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["Do 14 urządzeń jednocześnie", "Serwer w Warszawie", "Aplikacje na Android TV, Apple TV i Fire TV"],
                  cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów"]),
-    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="ok. 9,61 zł", unit="za miesiąc (2,19 €)",
-                 terms="61,32 € za pierwsze 28 miesięcy. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
+    "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="ok. 8,74 zł", unit="za miesiąc (1,99 €)",
+                 terms="55,72 € za pierwsze 28 miesięcy. Cena z oferty Black Friday, sprawdzona 19.11.2026. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
                  cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
 }
@@ -595,6 +596,42 @@ PRICE_SRC = {"proton": ("https://protonvpn.com/pl/l/bf-vpn-offers-2026", "proton
              "cybr": ("https://www.cyberghostvpn.com/pl/buy/cyberghost-vpn-3", "cyberghostvpn.com")}
 CHECK = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
 MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>'
+
+
+BF_ON = True  # switch off when the Black Friday offers end
+BF = {  # as shown on each provider's Polish pricing page on PRICED
+    "nord": ("−75% i 3 miesiące ekstra", "253,53 zł za pierwsze 27 miesięcy"),
+    "surf": ("−90% i 3 miesiące ekstra", "242,73 zł za pierwsze 27 miesięcy, plus VAT"),
+    "proton": ("−75% w planie na 2 lata", "150,96 zł za pierwsze 24 miesiące"),
+    "cybr": ("−83%, 2 lata i 4 miesiące", "55,72 € za pierwsze 28 miesięcy"),
+    "expr": ("−81%, 2 lata i 4 miesiące", "66,92 € za pierwsze 28 miesięcy"),
+}
+
+
+def bf_box():
+    if not BF_ON:
+        return ""
+    rows = ""
+    for pid in sorted(RANK, key=RANK.get):
+        name, pr = AFF_NAMES[pid], PROFILE[pid]
+        url = next(f[2] for f in FACTS if f[0] == pid)
+        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{name}</b>'
+                 f'<span><em>Rabat według dostawcy</em>{BF[pid][0]}</span><span><em>Cena</em>{pr["price"]} {pr["unit"]}</span>'
+                 f'<span><em>Płacisz z góry</em>{BF[pid][1]}</span>'
+                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
+    return f"""<section class="results bf" id="black-friday"><div class="wrap narrowpad">
+  <div class="shead"><h2>Black Friday 2026: oferty VPN z serwerem w Polsce</h2><p>Ceny i rabaty odczytaliśmy ze stron dostawców {PRICED}. Dostawcy nie podają daty końca promocji, więc oferta może się zmienić z dnia na dzień. Kolejność jak w rankingu.</p></div>
+  <div class="pstrip">{rows}</div>
+  <p class="after">Rabat liczy dostawca, zwykle od ceny planu miesięcznego. Po pierwszym okresie plan odnawia się drożej.</p>
+</div></section>"""
+
+
+def bf_bar():
+    if not BF_ON:
+        return ""
+    top = " · ".join(f"{AFF_NAMES[pid]} {BF[pid][0].split(' ')[0].rstrip(',')}" for pid in sorted(RANK, key=RANK.get)[:3])
+    return (f'<section class="bfbar"><div class="wrap"><b>Black Friday 2026</b><span>{top}. Ceny z {PRICED}.</span>'
+            f'<a href="/porownanie-vpn#black-friday">Zobacz wszystkie oferty</a></div></section>')
 
 
 TOP3_WHY = {
@@ -616,7 +653,7 @@ def top3():
                  f'<span><em>{sum(wpts(pid))} z {MAXPTS} punktów</em>{TOP3_WHY[pid]}</span>'
                  f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
     return f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {CHECKED}.</p></div>
+  <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {PRICED}.</p></div>
   <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
   <div class="pstrip">{rows}</div>
   <p class="after"><a href="/porownanie-vpn">Pełny ranking 5 VPN z cenami, wadami i zasadami punktów</a></p>
@@ -637,7 +674,7 @@ def featured():
     </ul>
     <div class="featcta"><b>9,39 zł</b><span>za miesiąc</span>
       <a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}
-      <small>253,53 zł za pierwsze 27 miesięcy. Cena z {CHECKED}.</small></div>
+      <small>253,53 zł za pierwsze 27 miesięcy. Cena z {PRICED}.</small></div>
   </div>
 </div></section>"""
 
@@ -665,7 +702,7 @@ def provblocks(full=True):
     <div><h4>Zalety</h4><ul class="pros">{pros}</ul></div>
     <div><h4>Wady</h4><ul class="cons">{cons}</ul></div>
     <div><h4>Cena i aplikacje</h4><p>{pr["terms"]}</p><p class="apps">{apps}</p>
-      <p class="src">Źródła: <a href="{src}" target="_blank" rel="nofollow noopener">{srcname}</a>, <a href="{ps}" target="_blank" rel="nofollow noopener">{pn}</a>. Sprawdzone {CHECKED}.</p></div>
+      <p class="src">Źródła: <a href="{src}" target="_blank" rel="nofollow noopener">{srcname}</a>, <a href="{ps}" target="_blank" rel="nofollow noopener">{pn}</a>. Dane sprawdzone {CHECKED}, cena {PRICED}.</p></div>
   </div>""" if full else ""
         out += f"""<article class="pb" id="{pid}">
   <header class="pbh">
@@ -763,6 +800,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
   <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
 </div></section>"""
+              + bf_bar()
               + top3()
               + """<section class="guides"><div class="wrap">
   <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, który chcesz oglądać. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
@@ -1379,8 +1417,9 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
          "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. Dwóch z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
-         f'<div class="when mono">{BYLINE}<span>Ceny i dane sprawdzone: <b>{CHECKED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
+         f'<div class="when mono">{BYLINE}<span>Ceny sprawdzone: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
     + featured()
+    + bf_box()
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców.</p></div>
   {highlights()}
@@ -1391,7 +1430,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
   <p class="note">{tested_since_line()}</p>
   {DISCLOSE}
   <div class="pblist">{provblocks()}</div>
-  <p class="after">Ceny odczytaliśmy ze stron dostawców {CHECKED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
+  <p class="after">Ceny odczytaliśmy ze stron dostawców {PRICED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
 </div></section>"""
     + f"""<section class="results"><div class="wrap narrowpad">
   <div class="shead"><h2>Tabela porównawcza</h2><p>Dane ze stron dostawców, sprawdzone {CHECKED}.</p></div>
@@ -1489,6 +1528,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 
 <h2>Dziennik zmian</h2>
 <ul>
+  <li><b>19.11.2026:</b> nowe ceny Black Friday. CyberGhost (1,99 €) i ExpressVPN (2,39 €) dostały po jednym punkcie więcej za cenę i mają teraz równo po 12 punktów. Przy równej liczbie punktów wyżej jest tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
   <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
   <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>
   <li><b>10.11.2026:</b> pierwszy test (Proton VPN, TVP VOD, Player).</li>
@@ -1560,6 +1600,8 @@ EXTRA_CSS = """
 .freecta .pcta .more{display:block;margin-top:12px;font-size:14px;color:var(--navy-muted)}
 .mlist .affn{margin-top:6px}.mcta{padding:0 0 16px;border-bottom:1px solid var(--line)}.mlist .mcta .btn{margin-top:0}
 .sbar{display:none}
+.bfbar{background:var(--navy,#17232D);color:#fff}.bfbar .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding-top:14px;padding-bottom:14px;font-size:15px}
+.bfbar b{background:#ffd77a;color:#17232D;padding:3px 9px;border-radius:4px;font-size:13px}.bfbar span{flex:1;min-width:220px;color:#dfe5ea}.bfbar a{color:#ffd77a;font-weight:600}
 @media (max-width:760px){
   .today{grid-template-columns:minmax(0,1fr);padding:16px}.todayc .btn{display:block;text-align:center}
   .pbh .affn{grid-column:1/-1;margin-top:-6px}
