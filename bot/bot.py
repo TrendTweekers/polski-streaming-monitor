@@ -579,10 +579,11 @@ def main():
     (DATA / "latest.json").write_text(json.dumps(run, ensure_ascii=False, indent=1))
     hist_f = DATA / "history.json"
     hist = json.loads(hist_f.read_text()) if hist_f.exists() else {"days": {}}
-    hist["days"][day] = {e["id"]: {k: hist_status(e, v) for k, v in e["services"].items()} for e in tested}
+    # a second run on the same day updates the VPNs it tested and keeps the others' earlier results
+    hist["days"][day] = {**hist["days"].get(day, {}), **{e["id"]: {k: hist_status(e, v) for k, v in e["services"].items()} for e in tested}}
     hist["days"] = dict(sorted(hist["days"].items())[-90:])
     # access checks (no playback) live apart from the playback history, so playback counts stay the same
-    hist.setdefault("checks", {})[day] = {e["id"]: {k: v["status"] for k, v in e.get("checks", {}).items()} for e in tested if e.get("checks")}
+    hist.setdefault("checks", {})[day] = {**hist["checks"].get(day, {}), **{e["id"]: {k: v["status"] for k, v in e.get("checks", {}).items()} for e in tested if e.get("checks")}}
     hist["checks"] = dict(sorted(hist["checks"].items())[-90:])
     hist_f.write_text(json.dumps(hist, ensure_ascii=False, indent=1))
     # keep screenshots for 30 days

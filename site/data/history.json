@@ -143,6 +143,11 @@
     "tvpvod": "ok",
     "player": "blocked",
     "tvpsport": "ok"
+   },
+   "protonfree": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
    }
   }
  },
