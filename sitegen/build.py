@@ -2517,7 +2517,7 @@ def snippets():
         "/tvp-vod-material-niedostepny-w-twoim-kraju": ("TVP VOD: materiał niedostępny w Twoim kraju? Co działa",
             f"„Z powodów licencyjnych materiał jest niedostępny w Twoim kraju”: skąd ten komunikat i trzy wyjścia. {h['tvpvod']}"),
         "/tvp-sport-material-niedostepny": ("TVP Sport: materiał niedostępny za granicą? Test i wyjścia",
-            f"„Materiał jest niedostępny w kraju, z którego się łączysz”: skąd ten komunikat i co zrobić przed meczem. {h['tvpsport']}"),
+            f"{h['tvpsport']} Komunikat „materiał jest niedostępny w kraju, z którego się łączysz”: skąd się bierze i co zrobić przed meczem."),
         "/porownanie-vpn": ("Ranking VPN do polskiej telewizji 2026: test co rano",
             f"5 VPN z serwerem w Polsce: ceny w zł, zwrot pieniędzy i jawne punkty. {rank_hook} Oferty Black Friday."),
         "/tvp-vod-za-granica": ("Jak oglądać TVP VOD za granicą: codzienny test VPN",
@@ -2525,7 +2525,7 @@ def snippets():
         "/tvp-sport-za-granica": ("Jak oglądać TVP Sport za granicą: test VPN i mecze",
             f"TVP Sport za granicą: wideo i transmisje na żywo. {h['tvpsport']} Jak przygotować się do meczu."),
         "/player-za-granica": ("Player za granicą: Player International czy VPN?",
-            f"Player International: cena i co zawiera, albo VPN z serwerem w Polsce. Darmowe odcinki i typowe błędy. {h['player']}"),
+            f"Player International: cena i co zawiera, albo VPN z serwerem w Polsce. {h['player']}"),
     }
 
 def main():
