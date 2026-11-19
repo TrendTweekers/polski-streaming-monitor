@@ -91,7 +91,7 @@
     var top=best(),r=top.services&&top.services[es],s=SVON.filter(function(x){return x.id===es})[0]||{},t='';
     SVON.forEach(function(x){var rr=top.services[x.id]||{};t+='<button type="button" data-es="'+x.id+'" aria-pressed="'+(x.id===es)+'">'+(rr.shot?'<img class="t" src="/'+esc(rr.shot)+'" alt="" loading="lazy">':'<div class="t"></div>')+slogo(x)+st(rr.status||'none')+'</button>'});
     $('thumbs').innerHTML=t;
-    $('shot').innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu: '+esc(s.name)+' przez '+esc(top.name)+'" width="1440" height="900"></a>':'<div class="slot"><span><b>Brak zrzutu ekranu</b>Dla tego testu nie ma jeszcze zrzutu.</span></div>';
+    $('shot').innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu: '+esc(s.name)+' przez '+esc(top.name)+'" width="1440" height="900"><span class="stamp">Zweryfikowano: '+fmtDT(r.tested_at)+' · '+esc(nm(top))+', serwer w Polsce</span></a>':'<div class="slot"><span><b>Brak zrzutu ekranu</b>Dla tego testu nie ma jeszcze zrzutu.</span></div>';
     $('e0').textContent=s.name||'—';$('e1').textContent=top.name+(top.plan?' ('+top.plan+')':'');
     $('e2').textContent=top.exit?top.exit.city+', Polska ('+(top.exit.ip||'')+')':'—';$('e2b').textContent=top.server||'—';
     $('e4').textContent=r?fmtDT(r.tested_at).slice(0,10):'—';$('e5').textContent=r?fmtT(r.tested_at):'—';
@@ -148,7 +148,7 @@
     all('[data-svc]',function(el){var sid=el.dataset.svc,h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){var r=p.services[sid];if(!r)return;h+='<div class="svcrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b>'+st(stat(p,sid))+'<span class="muted">Test: '+fmtDT(r.tested_at)+(r.reason&&stat(p,sid)!=='okr'?'. '+esc(r.reason):'')+'</span>'+(r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener">zrzut ekranu</a>':'<span></span>')+'</div>'});el.innerHTML=h||'<p class="muted" style="padding:14px 0">Tego serwisu jeszcze nie testujemy.</p>'});
     all('[data-prov-status]',function(el){var p=RUN.providers.filter(function(x){return x.id===el.dataset.provStatus})[0];el.innerHTML=p&&p.tested?SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join(''):st('none')});
     all('[data-last]',function(el){var h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){h+='<div class="lastrow">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b><span>'+SVON.map(function(s){return '<span class="pst">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join('')+'</span><span class="muted">Test: '+fmtDT(RUN.finished_at)+'</span></div>'});el.innerHTML=h});
-    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu" loading="lazy" width="1440" height="900"></a>':''});
+    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href="/'+esc(r.shot)+'" target="_blank" rel="noopener"><img src="/'+esc(r.shot)+'" alt="Zrzut ekranu z testu" loading="lazy" width="1440" height="900"><span class="stamp">Zweryfikowano: '+fmtDT(r.tested_at)+' · '+esc(nm(p))+', serwer w Polsce</span></a>':''});
     render();
   }
 

@@ -599,12 +599,12 @@ MINUS = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="cur
 
 
 BF_ON = True  # switch off when the Black Friday offers end
-BF = {  # as shown on each provider's Polish pricing page on PRICED
-    "nord": ("−75% i 3 miesiące ekstra", "253,53 zł za pierwsze 27 miesięcy"),
-    "surf": ("−90% i 3 miesiące ekstra", "242,73 zł za pierwsze 27 miesięcy, plus VAT"),
-    "proton": ("−75% w planie na 2 lata", "150,96 zł za pierwsze 24 miesiące"),
-    "cybr": ("−83%, 2 lata i 4 miesiące", "55,72 € za pierwsze 28 miesięcy"),
-    "expr": ("−81%, 2 lata i 4 miesiące", "66,92 € za pierwsze 28 miesięcy"),
+BF = {  # as shown on each provider's Polish pricing page on PRICED: (discount, paid up front, price without the offer, after the first period)
+    "nord": ("−75% i 3 miesiące ekstra", "253,53 zł za pierwsze 27 miesięcy", "37,59 zł za miesiąc", "Dostawca podaje cenę odnowienia przy zamówieniu"),
+    "surf": ("−90% i 3 miesiące ekstra", "242,73 zł za pierwsze 27 miesięcy, plus VAT", "33,18 zł za miesiąc", "Dostawca podaje cenę odnowienia przy zamówieniu"),
+    "proton": ("−75% w planie na 2 lata", "150,96 zł za pierwsze 24 miesiące", "24,99 zł za miesiąc", "209,88 zł co 12 miesięcy"),
+    "cybr": ("−83%, 2 lata i 4 miesiące", "55,72 € za pierwsze 28 miesięcy", "11,99 € za miesiąc (plan miesięczny)", "55,72 € za rok"),
+    "expr": ("−81%, 2 lata i 4 miesiące", "66,92 € za pierwsze 28 miesięcy", "12,99 € za miesiąc", "79,95 € za rok"),
 }
 
 
@@ -622,7 +622,7 @@ def bf_box():
     return f"""<section class="results bf" id="black-friday"><div class="wrap narrowpad">
   <div class="shead"><h2>Black Friday 2026: oferty VPN z serwerem w Polsce</h2><p>Ceny i rabaty odczytaliśmy ze stron dostawców {PRICED}. Dostawcy nie podają daty końca promocji, więc oferta może się zmienić z dnia na dzień. Kolejność jak w rankingu.</p></div>
   <div class="pstrip">{rows}</div>
-  <p class="after">Rabat liczy dostawca, zwykle od ceny planu miesięcznego. Po pierwszym okresie plan odnawia się drożej.</p>
+  <p class="after">Rabat liczy dostawca, zwykle od ceny planu miesięcznego. Po pierwszym okresie plan odnawia się drożej. <a href="/promocje-vpn">Ceny bez promocji i ceny odnowienia</a></p>
 </div></section>"""
 
 
@@ -631,7 +631,7 @@ def bf_bar():
         return ""
     top = " · ".join(f"{AFF_NAMES[pid]} {BF[pid][0].split(' ')[0].rstrip(',')}" for pid in sorted(RANK, key=RANK.get)[:3])
     return (f'<section class="bfbar"><div class="wrap"><b>Black Friday 2026</b><span>{top}. Ceny z {PRICED}.</span>'
-            f'<a href="/porownanie-vpn#black-friday">Zobacz wszystkie oferty</a></div></section>')
+            f'<a href="/promocje-vpn">Zobacz wszystkie oferty</a></div></section>')
 
 
 TOP3_WHY = {
@@ -641,23 +641,149 @@ TOP3_WHY = {
 }
 
 
+def score10(pid):
+    """Ranking points on a 10 scale (16 of 19 points = 8,4). The same public points, only easier to read."""
+    return f"{sum(wpts(pid)) / MAXPTS * 10:.1f}".replace(".", ",")
+
+
+def day_bars(pid, n=14):
+    """One small bar per test day, oldest first: green = every tested service played, red = none, amber = some."""
+    days = sorted(HIST.get("days", {}))[-n:]
+    cells, good, done = "", 0, 0
+    for d in days:
+        v = list(HIST["days"][d].get(pid, {}).values())
+        if not v:
+            c, t = "none", "bez testu"
+        else:
+            ok = sum(1 for x in v if x in ("ok", "okr"))
+            done += 1
+            if ok == len(v):
+                c, t = "ok", "działa"; good += 1
+            elif ok == 0:
+                c, t = "blocked", "nie działa"
+            else:
+                c, t = "unstable", f"działa {ok} z {len(v)}"
+        cells += f'<i class="{c}" title="{d[8:10]}.{d[5:7]}: {t}"></i>'
+    if not done:
+        return ""
+    return (f'<span class="dbars" role="img" aria-label="Dni testów: {done}, w pełni udane: {good}">{cells}</span>'
+            f'<small class="dbl">{good} z {done} dni testów bez błędu</small>')
+
+
+def rank_rows(n=5):
+    """Compact ranking rows: place, score, proof from our test, price, button."""
+    daily = {p["id"] for p in tested() if p.get("plan") == "plan płatny"}
+    out = ""
+    for pid in sorted(RANK, key=RANK.get)[:n]:
+        name, pr = AFF_NAMES[pid], PROFILE[pid]
+        url = next(f[2] for f in FACTS if f[0] == pid)
+        pros = "".join(f"<li>{CHECK}<span>{x}</span></li>" for x in pr["pros"][:3])
+        if pid in daily:
+            p = next(x for x in tested() if x["id"] == pid)
+            nok = sum(1 for x in SVON if _works(p, x["id"]))
+            cls = "ok" if nok == len(SVON) else ("blocked" if nok == 0 else "unstable")
+            test = f'<b class="rrt {cls}">Test {LAST[:5]}: działa {nok} z {len(SVON)}</b>{day_bars(pid)}'
+        else:
+            test = '<b class="rrt none">Jeszcze nie testujemy</b><small class="dbl">Miejsce wynika z danych ze strony dostawcy</small>'
+        deal = f'<em>{BF[pid][0]}</em>' if BF_ON else ""
+        out += f"""<article class="rr">
+  <span class="rrn" aria-label="Miejsce {RANK[pid]}">#{RANK[pid]}</span>
+  <div class="rrb"><img src="{LOGOS[pid]}" alt="" width="44" height="44"><div><b>{name}</b><span class="rrtag">{pr["tag"]}</span></div></div>
+  <div class="rrs"><b>{score10(pid)}</b><span>/10</span><small>{sum(wpts(pid))} z {MAXPTS} pkt</small></div>
+  <ul class="rrp">{pros}</ul>
+  <div class="rrtest">{test}</div>
+  <div class="rrpr"><b>{pr["price"]}</b><span>{pr["unit"]}</span>{deal}</div>
+  <div class="pcta"><a class="btn big" {plink(pid, url)}>Zobacz ofertę</a>{aff_note(pid)}<a class="rrmore" href="/porownanie-vpn#{pid}">Szczegóły</a></div>
+</article>"""
+    return f'<div class="rrs5">{out}</div>'
+
+
+SCORE_NOTE = (f'<p class="after">Ocena to punkty z naszego rankingu przeliczone na skalę 10, na przykład 16 z {MAXPTS} punktów daje 8,4. '
+              'Punkty są za fakty ze stron dostawców, nie za prowizję. <a href="/porownanie-vpn#ranking">Zasady punktacji</a></p>')
+
+
 def top3():
     """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
-    ids = sorted(RANK, key=RANK.get)[:3]
-    rows = ""
-    for pid in ids:
-        name = AFF_NAMES[pid]
-        url = next(f[2] for f in FACTS if f[0] == pid)
-        rows += (f'<div class="prow"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{RANK[pid]}. {name}</b>'
-                 f'<span><em>Nasz test {LAST[:10]}</em>{test_summary(pid)}</span><span><em>Cena</em>{PROFILE[pid]["price"]} {PROFILE[pid]["unit"]}</span>'
-                 f'<span><em>{sum(wpts(pid))} z {MAXPTS} punktów</em>{TOP3_WHY[pid]}</span>'
-                 f'<span class="pcta"><a class="btn" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</span></div>')
-    return f"""<section class="results"><div class="wrap narrowpad">
+    return f"""<section class="results"><div class="wrap">
   <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {PRICED}.</p></div>
   <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
-  <div class="pstrip">{rows}</div>
+  {rank_rows(3)}
+  {SCORE_NOTE}
   <p class="after"><a href="/porownanie-vpn">Pełny ranking 5 VPN z cenami, wadami i zasadami punktów</a></p>
 </div></section>"""
+
+
+def rank_top():
+    """Top of the ranking page: all five rows, then the labelled brand highlight."""
+    return f"""<section class="results"><div class="wrap">
+  <div class="shead"><h2>Ranking w skrócie</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców. Obok oceny pokazujemy wynik naszego codziennego testu, jeśli dany VPN już testujemy.</p></div>
+  <p class="note">{tested_since_line()}</p>
+  {DISCLOSE}
+  {rank_rows(5)}
+  {SCORE_NOTE}
+  {brand_slot()}
+</div></section>"""
+
+
+def brand_slot():
+    """A highlight that is clearly not a ranking place. ExpressVPN: best-known premium brand, place 5 by points."""
+    pid = "expr"
+    if pid not in AFF:
+        return ""
+    pr = PROFILE[pid]
+    url = next(f[2] for f in FACTS if f[0] == pid)
+    deal = f" W ofercie Black Friday: {BF[pid][0]}, {BF[pid][1]}." if BF_ON else ""
+    return f"""<aside class="brand">
+  <div><span class="brandk">Wyróżnienie redakcji · to nie jest miejsce w rankingu</span>
+    <h3><img src="{LOGOS[pid]}" alt="" width="34" height="34">Znana marka premium: ExpressVPN</h3>
+    <p>ExpressVPN to jedna z najbardziej znanych marek VPN na świecie. Ma serwer w Warszawie, aplikacje na Android TV, Apple TV i Fire TV oraz do 14 urządzeń w najwyższym planie.{deal} W naszym rankingu punktowym ma miejsce {RANK[pid]}, bo płaci się w euro i ma mniej serwerów w Polsce niż NordVPN. Jeszcze go nie testujemy z polskimi serwisami.</p></div>
+  <div class="pcta"><b>{pr["price"]}</b><span>{pr["unit"]}</span><a class="btn big" {plink(pid, url)}>Zobacz ofertę ExpressVPN</a>{aff_note(pid)}</div>
+</aside>"""
+
+
+def status_matrix():
+    """Home page: the last test as a status board (static copy of the bot data)."""
+    order = {"nord": 0, "proton": 1, "protonfree": 2}
+    names = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "Proton VPN, darmowy"}
+    rows = ""
+    for p in sorted(tested(), key=lambda x: order.get(x["id"], 9)):
+        pid = p["id"]
+        cells = "".join(f'<span class="smc"><em>{x["name"]}</em>{st(shown(p, p["services"].get(x["id"], {})))}</span>' for x in SVON)
+        aid = "proton" if pid == "protonfree" else pid
+        url = next(f[2] for f in FACTS if f[0] == aid)
+        cta = (f'<a class="btn" {plink(aid, url)}>Zobacz ofertę</a>{aff_note(aid)}' if p.get("plan") == "plan płatny"
+               else '<a class="smfree" href="/darmowy-vpn-polska-telewizja">Jak ustawić darmowy serwer</a>')
+        rows += (f'<div class="smrow"><div class="smn"><img src="{LOGOS[pid]}" alt="" width="34" height="34"><b>{names.get(pid, p["name"])}</b></div>'
+                 f'{cells}<div class="smb">{day_bars(pid)}</div><div class="pcta">{cta}</div></div>')
+    if not rows:
+        return ""
+    return f"""<section class="results sm" id="status"><div class="wrap">
+  <div class="shead"><h2>Wynik testu z {LAST[:10]}</h2><p>Każdego ranka bot łączy się przez serwer VPN w Polsce, włącza film i sprawdza, czy gra 60 sekund. Ostatni test: {LAST}.</p></div>
+  <div class="smx">{rows}</div>
+  <p class="after"><a href="/wyniki-testow">Wszystkie wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
+</div></section>"""
+
+
+def deals_page():
+    trs = ""
+    for pid in sorted(RANK, key=RANK.get):
+        name, pr = AFF_NAMES[pid], PROFILE[pid]
+        url = next(f[2] for f in FACTS if f[0] == pid)
+        ps, pn = PRICE_SRC[pid]
+        trs += f"""<article class="deal" id="{pid}">
+  <header><img src="{LOGOS[pid]}" alt="" width="44" height="44"><div><h3>{name}</h3><span class="rrtag">{BF[pid][0]}</span></div>
+    <div class="rrpr"><b>{pr["price"]}</b><span>{pr["unit"]}</span></div></header>
+  <dl>
+    <dt>Cena bez promocji (według dostawcy)</dt><dd>{BF[pid][2]}</dd>
+    <dt>Płacisz z góry</dt><dd>{BF[pid][1]}</dd>
+    <dt>Po pierwszym okresie</dt><dd>{BF[pid][3]}</dd>
+    <dt>Zwrot pieniędzy</dt><dd>{next(f[4] for f in FACTS if f[0] == pid)}</dd>
+    <dt>Nasz test z polskimi serwisami ({LAST[:10]})</dt><dd>{test_summary(pid)}</dd>
+    <dt>Źródło ceny</dt><dd><a href="{ps}" target="_blank" rel="nofollow noopener">{pn}</a>, odczyt {PRICED}</dd>
+  </dl>
+  <div class="pcta"><a class="btn big" {plink(pid, url)}>Zobacz ofertę {name}</a>{aff_note(pid)}</div>
+</article>"""
+    return trs
 
 
 def featured():
@@ -800,6 +926,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
   <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
   <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
 </div></section>"""
+              + status_matrix()
               + bf_bar()
               + top3()
               + """<section class="guides"><div class="wrap">
@@ -1413,22 +1540,48 @@ PAGES["/polsat-box-go-za-granica"] = ("Jak oglądać Polsat Box Go za granicą |
                      [("/tvp-vod-za-granica", "TVP VOD za granicą"), ("/player-za-granica", "Player za granicą"), ("/porownanie-vpn", "Porównanie VPN")])),
     "article", [("/", "Polska telewizja za granicą"), ("/polsat-box-go-za-granica", "Polsat Box Go")])
 
+PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " + PRICED + " | Polski Streaming",
+    "Promocje VPN na Black Friday 2026: NordVPN, Surfshark, Proton VPN, CyberGhost i ExpressVPN. Cena w promocji, cena bez promocji, ile płacisz z góry i ile po pierwszym okresie.",
+    band('<a href="/">Polska telewizja za granicą</a> / Promocje VPN', "Promocje VPN: Black Friday 2026",
+         "Pięć VPN z serwerem w Polsce i ich oferty na Black Friday. Każdą cenę odczytaliśmy sami z polskiej strony dostawcy. Pokazujemy też to, czego reklama nie mówi: ile płacisz z góry i ile kosztuje odnowienie.",
+         f'<div class="when mono">{BYLINE}<span>Ceny odczytane: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>')
+    + f"""<section class="results"><div class="wrap narrowpad">
+  <div class="shead"><h2>Oferty Black Friday, stan na {PRICED}</h2><p>Kolejność jak w naszym <a href="/porownanie-vpn">rankingu punktowym</a>, nie według wielkości rabatu. Dostawcy nie podają daty końca promocji, więc oferta może się zmienić z dnia na dzień.</p></div>
+  {DISCLOSE}
+  <div class="deals">{deals_page()}</div>
+</div></section>"""
+    + prose(f"""
+<h2>Jak czytać te promocje</h2>
+<ul>
+  <li><b>Rabat liczy dostawca.</b> Zwykle porównuje cenę długiego planu z ceną planu na jeden miesiąc. Dlatego rabaty są tak duże.</li>
+  <li><b>Płacisz z góry za cały okres.</b> Cena „za miesiąc” to suma podzielona przez liczbę miesięcy. Przy NordVPN to 253,53 zł od razu, a nie 9,39 zł co miesiąc.</li>
+  <li><b>Po pierwszym okresie jest drożej.</b> Proton VPN odnawia się za 209,88 zł co 12 miesięcy, ExpressVPN za 79,95 € za rok. NordVPN i Surfshark pokazują cenę odnowienia dopiero przy zamówieniu.</li>
+  <li><b>Masz czas na zwrot.</b> Każdy z pięciu dostawców daje co najmniej 30 dni na zwrot pieniędzy w długim planie. To wystarczy, żeby sprawdzić VPN ze swoim serwisem.</li>
+</ul>
+<h2>Który VPN z promocji działa z polską telewizją</h2>
+<p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy NordVPN i Proton VPN Plus z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
+<div data-last>{last_rows_html()}</div>
+<p>Surfsharka, CyberGhost i ExpressVPN jeszcze nie testujemy. Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
+<h2>Skąd mamy ceny</h2>
+<p>{PRICED} otworzyliśmy polskie strony cenników wszystkich pięciu dostawców i zapisaliśmy to, co pokazują: cenę za miesiąc, sumę do zapłaty i rabat. Nie przepisujemy cen z innych serwisów. Ceny w euro przeliczamy po kursie {EUR}. Gdy cena się zmieni, poprawiamy ją tutaj i w <a href="/porownanie-vpn">rankingu</a>.</p>
+""", "prosec")
+    + faq([("Kiedy kończą się promocje VPN na Black Friday 2026?", f"Black Friday wypada 27 listopada 2026. Żaden z pięciu dostawców nie podaje na stronie cennika daty końca promocji. Ceny na tej stronie odczytaliśmy {PRICED}."),
+           ("Czy cena z promocji zostaje na zawsze?", "Nie. Cena z promocji dotyczy pierwszego okresu, zwykle 24 do 28 miesięcy. Potem plan odnawia się po wyższej cenie. Odnowienie można wyłączyć na koncie u dostawcy."),
+           ("Czy mogę oddać VPN kupiony w promocji?", "Tak. W długich planach NordVPN, Surfshark, Proton VPN i ExpressVPN dają 30 dni na zwrot pieniędzy, a CyberGhost 45 dni. ExpressVPN daje zwrot tylko nowym klientom."),
+           ("Który VPN z promocji jest najtańszy?", f"Na {PRICED} najniższą cenę za miesiąc ma Proton VPN: 6,29 zł w planie na 2 lata, razem 150,96 zł z góry."),
+           ("Jak zarabia ta strona?", "Część linków na stronie to linki partnerskie. Dziś partnerami są __PARTNERS__: gdy kupisz przez nasz link, dostajemy prowizję, a Ty płacisz tyle samo. Prowizja nie zmienia kolejności ani cen na tej stronie.")]),
+    "article", [("/", "Polska telewizja za granicą"), ("/promocje-vpn", "Promocje VPN")])
+
 PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
          "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. Dwóch z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
          f'<div class="when mono">{BYLINE}<span>Ceny sprawdzone: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
-    + featured()
+    + rank_top()
     + bf_box()
-    + f"""<section class="results"><div class="wrap narrowpad">
-  <div class="shead"><h2>Szybki wybór</h2><p>Pięć wyróżnień opartych na faktach ze stron dostawców.</p></div>
-  {highlights()}
-</div></section>"""
     + QUIZ
     + f"""<section class="guides"><div class="wrap">
-  <div class="shead"><h2>Ranking VPN do polskiej telewizji</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców: serwery w Polsce, cena, urządzenia, zwrot, aplikacje i waluta. <a href="#ranking">Zasady punktacji</a> są niżej.</p></div>
-  <p class="note">{tested_since_line()}</p>
-  {DISCLOSE}
+  <div class="shead"><h2>Każdy VPN z rankingu w szczegółach</h2><p>Zalety, wady, pełne warunki ceny i źródła danych. Kolejność jak w rankingu: serwery w Polsce, cena, urządzenia, zwrot, aplikacje i waluta. <a href="#ranking">Zasady punktacji</a> są niżej.</p></div>
   <div class="pblist">{provblocks()}</div>
   <p class="after">Ceny odczytaliśmy ze stron dostawców {PRICED}. To ceny promocyjne za pierwszy okres i mogą się zmienić. Po pierwszym okresie plan odnawia się zwykle drożej.</p>
 </div></section>"""
@@ -1448,6 +1601,7 @@ PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Str
   <li><b>Aplikacja na telewizor.</b> Jeśli oglądasz na TV, sprawdź, czy dostawca ma aplikację na Twoją platformę.</li>
 </ul>
 <h2 id="ranking">Jak liczymy ranking</h2>
+<p>Ocena w skali 10, którą widzisz przy każdym VPN, to te same punkty podzielone przez 19 i pomnożone przez 10. Nie jest to ocena użytkowników.</p>
 <p>Każdy dostawca dostaje punkty w sześciu kategoriach. Liczymy tylko fakty, które każdy może sprawdzić na stronie dostawcy. Prowizja partnerska nie daje punktów.</p>
 <ul>
   <li><b>Serwery w Polsce:</b> 6 punktów za podaną liczbę co najmniej 50 serwerów, 2 punkty za jedną lokalizację. Ta kategoria liczy się podwójnie. Serwisy blokują pojedyncze adresy VPN, więc przy większej liczbie serwerów łatwiej przełączyć się na inny.</li>
@@ -1600,6 +1754,36 @@ EXTRA_CSS = """
 .freecta .pcta .more{display:block;margin-top:12px;font-size:14px;color:var(--navy-muted)}
 .mlist .affn{margin-top:6px}.mcta{padding:0 0 16px;border-bottom:1px solid var(--line)}.mlist .mcta .btn{margin-top:0}
 .sbar{display:none}
+a.btn[data-aff]{background:#D9480F;color:#fff}
+.rrs5{border-top:2px solid var(--ink)}
+.rr{display:grid;grid-template-columns:44px minmax(180px,1.1fr) 92px minmax(0,1.5fr) minmax(0,1.2fr) minmax(110px,.8fr) auto;gap:10px 22px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+.rrn{font:600 20px var(--mono,monospace);color:var(--muted)}.rr:first-child .rrn{color:#B7791F}
+.rrb{display:flex;gap:12px;align-items:center}.rrb b{display:block;font-size:19px;line-height:1.2}
+.rrtag{display:inline-block;margin-top:5px;font-size:12px;font-weight:600;background:#FFF1CC;color:#6B4A00;border-radius:4px;padding:2px 8px}
+.rrs{text-align:center;line-height:1}.rrs b{font-size:30px;font-weight:700;color:var(--ok)}.rrs span{font-size:14px;color:var(--muted)}.rrs small{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+.rrp{list-style:none;margin:0;padding:0;font-size:13px;display:grid;gap:4px}.rrp li{display:flex;gap:7px;align-items:flex-start}.rrp svg{flex:none;color:var(--ok);margin-top:2px}
+.rrt{display:block;font-size:13px}.rrt.ok{color:var(--ok)}.rrt.unstable{color:var(--warn)}.rrt.blocked{color:var(--bad)}.rrt.none{color:var(--none);font-weight:500}
+.dbars{display:flex;gap:2px;margin-top:7px}.dbars i{flex:1;max-width:9px;height:20px;border-radius:2px;background:var(--ok)}.dbars i.unstable{background:var(--warn)}.dbars i.blocked{background:var(--bad)}.dbars i.none{background:var(--line)}
+.dbl{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+.rrpr{line-height:1.25}.rrpr b{display:block;font:600 19px var(--mono,monospace)}.rrpr span{display:block;font-size:12px;color:var(--muted)}.rrpr em{display:block;font-style:normal;font-size:12px;font-weight:600;color:#C2410C;margin-top:4px}
+.rr .pcta .btn{display:block;text-align:center}.rrmore{display:block;font-size:12px;margin-top:6px;color:var(--muted)}
+.brand{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:center;margin-top:28px;border:1px dashed var(--muted);border-radius:8px;padding:22px 24px;background:var(--surface)}
+.brandk{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.brand h3{display:flex;gap:10px;align-items:center;margin:8px 0;font-size:20px}.brand p{margin:0;font-size:14px;color:var(--muted);max-width:76ch}
+.brand .pcta b{display:block;font:600 20px var(--mono,monospace)}.brand .pcta span{display:block;font-size:12px;color:var(--muted);margin-bottom:10px}
+.smx{border-top:2px solid var(--ink)}
+.smrow{display:grid;grid-template-columns:minmax(190px,1.2fr) repeat(3,minmax(0,1fr)) minmax(120px,1fr) auto;gap:10px 22px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line)}
+.smn{display:flex;gap:12px;align-items:center}.smn b{font-size:16px}.smc em{display:block;font-style:normal;font-size:12px;color:var(--muted);margin-bottom:2px}.smfree{font-size:13px}.smc .st{display:inline-flex;flex-wrap:wrap}.smc .st .stn{flex-basis:100%;margin-left:22px}
+.deals{display:grid;gap:18px}.deal{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:20px 22px}
+.deal header{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:14px;align-items:center}.deal h3{margin:0;font-size:20px}
+.deal dl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:0;margin:16px 0;font-size:14px}.deal dt,.deal dd{margin:0;padding:9px 0;border-top:1px solid var(--line)}.deal dt{color:var(--muted)}.deal dd{font-weight:500;text-align:right}
+.deal .pcta .btn{display:block;text-align:center}
+.sidefig a,#shot a{position:relative;display:block}.stamp{position:absolute;left:8px;bottom:8px;right:8px;width:fit-content;max-width:calc(100% - 16px);background:rgba(23,35,45,.88);color:#fff;font:500 11px var(--mono,monospace);padding:4px 8px;border-radius:4px}
+@media (max-width:1180px){
+  .rr{grid-template-columns:38px minmax(0,1fr) auto;gap:10px 14px}.rrp{display:none}.rrtest,.rrpr,.rr .pcta{grid-column:1/-1}.rrpr{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.rrpr span,.rrpr em{margin:0}
+  .brand{grid-template-columns:minmax(0,1fr)}.brand .pcta{text-align:left}
+  .smrow{grid-template-columns:repeat(3,minmax(0,1fr))}.smn,.smb,.smrow .pcta{grid-column:1/-1}.smrow .pcta .btn{display:block;text-align:center}
+  .deal header{grid-template-columns:44px minmax(0,1fr)}.deal header .rrpr{grid-column:1/-1}
+}
 .bfbar{background:var(--navy,#17232D);color:#fff}.bfbar .wrap{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;padding-top:14px;padding-bottom:14px;font-size:15px}
 .bfbar b{background:#ffd77a;color:#17232D;padding:3px 9px;border-radius:4px;font-size:13px}.bfbar span{flex:1;min-width:220px;color:#dfe5ea}.bfbar a{color:#ffd77a;font-weight:600}
 @media (max-width:760px){
@@ -1895,7 +2079,7 @@ def build_js():
         "el.innerHTML=p&&p.tested?SVON.map(function(s){return '<span class=\"pst\">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join(''):st('none')});\n"
         "    all('[data-last]',function(el){var h='';RUN.providers.filter(function(p){return p.tested}).forEach(function(p){"
         "h+='<div class=\"lastrow\">'+logo(p.id)+'<b>'+esc(p.name)+(p.plan?' ('+esc(p.plan)+')':'')+'</b><span>'+SVON.map(function(s){return '<span class=\"pst\">'+esc(s.name)+':'+st(stat(p,s.id))+'</span>'}).join('')+'</span><span class=\"muted\">Test: '+fmtDT(RUN.finished_at)+'</span></div>'});el.innerHTML=h});\n"
-        "    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\" alt=\"Zrzut ekranu z testu\" loading=\"lazy\" width=\"1440\" height=\"900\"></a>':''});\n"
+        "    all('[data-shot]',function(el){var p=best(),r=p&&p.services&&p.services[el.dataset.shot];el.innerHTML=r&&r.shot?'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\" alt=\"Zrzut ekranu z testu\" loading=\"lazy\" width=\"1440\" height=\"900\"><span class=\"stamp\">Zweryfikowano: '+fmtDT(r.tested_at)+' · '+esc(nm(p))+', serwer w Polsce</span></a>':''});\n"
         "    render();\n  }")
     rep("get('data/latest.json'),get('data/history.json')", "get('/data/latest.json'),get('/data/history.json')")
     rep("proton:'https://cdn.simpleicons.org/protonvpn',nord:'https://cdn.simpleicons.org/nordvpn',surf:'https://cdn.simpleicons.org/surfshark',expr:'https://cdn.simpleicons.org/expressvpn'",
@@ -1903,6 +2087,7 @@ def build_js():
     rep("https://flagcdn.com/", "/flags/")
     for old in ["'logos/tvpvod.png'", "'logos/player.svg'", "'logos/polsat.svg'", "'logos/canal.svg'", "'logos/cyberghost-icon.png'"]:
         rep(old, "'/" + old[1:])
+    rep("' przez '+esc(top.name)+'\" width=\"1440\" height=\"900\"></a>'", "' przez '+esc(top.name)+'\" width=\"1440\" height=\"900\"><span class=\"stamp\">Zweryfikowano: '+fmtDT(r.tested_at)+' · '+esc(nm(top))+', serwer w Polsce</span></a>'")
     rep("'<img class=\"t\" src=\"'+esc(rr.shot)+'\"", "'<img class=\"t\" src=\"/'+esc(rr.shot)+'\"")
     rep("'<a href=\"'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"'+esc(r.shot)+'\"", "'<a href=\"/'+esc(r.shot)+'\" target=\"_blank\" rel=\"noopener\"><img src=\"/'+esc(r.shot)+'\"")
     s += """
