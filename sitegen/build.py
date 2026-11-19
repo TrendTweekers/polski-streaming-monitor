@@ -202,7 +202,6 @@ def layout(path, title, desc, body, kind="page", crumbs=None):
 <script type="application/ld+json">{ld}</script>
 </head>
 <body>
-<div class="disc"><div class="wrap">Strona zawiera linki partnerskie. <a href="/jak-testujemy#linki">Jak zarabiamy</a></div></div>
 <header class="top"><div class="wrap">
   <a class="logo" href="/"><i aria-hidden="true"></i>Polski Streaming</a>
   <nav class="cnav" aria-label="Główne">{nav}</nav>
@@ -686,7 +685,8 @@ def rank_rows(n=5):
         else:
             test = '<b class="rrt none">Jeszcze nie testujemy</b><small class="dbl">Miejsce wynika z danych ze strony dostawcy</small>'
         deal = f'<em>{BF[pid][0]}</em>' if BF_ON else ""
-        out += f"""<article class="rr">
+        first = RANK[pid] == 1
+        out += f"""<article class="rr{' first' if first else ''}">{'<span class="rrib">Nr 1 w rankingu</span>' if first else ''}
   <span class="rrn" aria-label="Miejsce {RANK[pid]}">#{RANK[pid]}</span>
   <div class="rrb"><img src="{LOGOS[pid]}" alt="" width="44" height="44"><div><b>{name}</b><span class="rrtag">{pr["tag"]}</span></div></div>
   <div class="rrs"><b>{score10(pid)}</b><span>/10</span><small>{sum(wpts(pid))} z {MAXPTS} pkt</small></div>
@@ -704,7 +704,7 @@ SCORE_NOTE = (f'<p class="after">Ocena to punkty z naszego rankingu przeliczone 
 
 def top3():
     """Short top 3 for the home page. The full ranking lives on /porownanie-vpn."""
-    return f"""<section class="results"><div class="wrap">
+    return f"""<section class="results soft"><div class="wrap narrowpad">
   <div class="shead"><h2>Top 3 VPN do polskiej telewizji</h2><p>Trzy pierwsze miejsca z naszego rankingu pięciu dostawców. Ceny z {PRICED}.</p></div>
   <p class="disc">Przyciski prowadzą przez linki partnerskie. Za zakup dostajemy prowizję, Twoja cena jest ta sama, a kolejność od niej nie zależy.</p>
   {rank_rows(3)}
@@ -715,7 +715,7 @@ def top3():
 
 def rank_top():
     """Top of the ranking page: all five rows, then the labelled brand highlight."""
-    return f"""<section class="results"><div class="wrap">
+    return f"""<section class="results soft"><div class="wrap narrowpad">
   <div class="shead"><h2>Ranking w skrócie</h2><p>Kolejność wynika z punktów za fakty ze stron dostawców. Obok oceny pokazujemy wynik naszego codziennego testu, jeśli dany VPN już testujemy.</p></div>
   <p class="note">{tested_since_line()}</p>
   {DISCLOSE}
@@ -741,6 +741,50 @@ def brand_slot():
 </aside>"""
 
 
+def home_hero():
+    chips = "".join(f'<a href="{h}">{t}</a>' for h, t in (
+        ("/tvp-vod-za-granica", '<img src="/logos/tvpvod.png" alt="" height="18">TVP VOD'), ("/player-za-granica", '<img src="/logos/player.svg" alt="" height="16">Player'),
+        ("/tvp-sport-za-granica", "TVP Sport"), ("/polsat-box-go-za-granica", '<img src="/logos/polsat.svg" alt="" height="18">Polsat Box Go'),
+        ("/darmowy-vpn-polska-telewizja", "Darmowy VPN")))
+    ps = [p for p in tested() if p.get("plan") == "plan płatny"]
+    return f"""<div class="open hh"><div class="wrap">
+  <div class="otext">
+    <div class="hhk">{CHECK}Ostatni test: {LAST}</div>
+    <h1>Polska telewizja za granicą: jak oglądać i który VPN wybrać</h1>
+    <p>Poradniki dla Polaków w Wielkiej Brytanii, Niemczech, Holandii i USA. Do tego codzienny test: sprawdzamy, czy film naprawdę gra przez VPN.</p>
+    <ul class="hhl">
+      <li>{CHECK}Test co rano: TVP VOD, Player i TVP Sport</li>
+      <li>{CHECK}Zrzut ekranu z każdej próby</li>
+      <li>{CHECK}Ranking według jawnych punktów</li>
+    </ul>
+    <div class="cta2"><a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a><a class="btn big ghost" href="#status">Wynik dzisiejszego testu</a></div>
+  </div>
+  <img class="hero" src="/hero-uk.webp" srcset="/hero-uk-sm.webp 887w, /hero-uk.webp 1774w" sizes="(max-width:820px) 100vw, 620px" width="1774" height="887" alt="Ilustracja: połączenie z zagranicy do Polski">
+</div><div class="credit">Ilustracja. To nie jest zrzut ekranu z testu.</div></div>
+<div class="pickw"><div class="wrap"><div class="pick"><b>Co chcesz oglądać?</b><div>{chips}</div></div></div></div>"""
+
+
+def guides_grid():
+    groups = [
+        ("Serwisy", [("/tvp-vod-za-granica", "Jak oglądać TVP VOD za granicą", "Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach."),
+                     ("/player-za-granica", "Jak oglądać Player za granicą", "Darmowe odcinki, pakiet Player International i test z VPN."),
+                     ("/tvp-sport-za-granica", "Jak oglądać TVP Sport za granicą", "Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów."),
+                     ("/polsat-box-go-za-granica", "Jak oglądać Polsat Box Go za granicą", "Co działa w Unii Europejskiej i pakiet dla widzów za granicą.")]),
+        ("Komunikaty błędów", [("/tvp-vod-material-niedostepny-w-twoim-kraju", "TVP VOD: „materiał jest niedostępny w Twoim kraju”", "Jak wygląda komunikat, skąd się bierze i trzy wyjścia."),
+                               ("/player-niedostepny-w-twojej-lokalizacji", "„Player jest niedostępny w Twojej lokalizacji”", "Blokada całego serwisu poza Unią i co da się zrobić."),
+                               ("/tvp-sport-material-niedostepny", "TVP Sport: „materiał jest niedostępny”", "Trzy wersje komunikatu i próba przed meczem.")]),
+        ("Kraje i VPN", [("/polska-telewizja-w-niemczech", "Polska telewizja w Niemczech", "Satelita, pakiety Vodafone i Telekom z cenami, polskie serwisy i VPN."),
+                         ("/polska-telewizja-w-uk", "Polska telewizja w UK", "Co działa po brexicie: satelita, Player International, TV Licence i VPN."),
+                         ("/darmowy-vpn-polska-telewizja", "Darmowy VPN do polskiej telewizji", "Jak ustawić darmowy serwer w Polsce i co pokazał nasz test."),
+                         ("/promocje-vpn", "Promocje VPN: Black Friday 2026", "Ceny z promocji, ceny bez promocji i ile płacisz z góry.")]),
+    ]
+    cols = "".join(f'<div class="ggc"><h3>{g}</h3>' + "".join(f'<a href="{h}"><b>{t}</b><span>{d}</span></a>' for h, t, d in items) + "</div>" for g, items in groups)
+    return f"""<section class="guides"><div class="wrap">
+  <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, komunikat albo kraj. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
+  <div class="gg">{cols}</div>
+</div></section>"""
+
+
 def status_matrix():
     """Home page: the last test as a status board (static copy of the bot data)."""
     order = {"nord": 0, "proton": 1, "protonfree": 2}
@@ -757,7 +801,7 @@ def status_matrix():
                  f'{cells}<div class="smb">{day_bars(pid)}</div><div class="pcta">{cta}</div></div>')
     if not rows:
         return ""
-    return f"""<section class="results sm" id="status"><div class="wrap">
+    return f"""<section class="results sm" id="status"><div class="wrap narrowpad">
   <div class="shead"><h2>Wynik testu z {LAST[:10]}</h2><p>Każdego ranka bot łączy się przez serwer VPN w Polsce, włącza film i sprawdza, czy gra 60 sekund. Ostatni test: {LAST}.</p></div>
   <div class="smx">{rows}</div>
   <p class="after"><a href="/wyniki-testow">Wszystkie wyniki, historia i zrzuty ekranu</a> · <a href="/jak-testujemy">Jak testujemy</a></p>
@@ -916,34 +960,11 @@ PAGES = {}
 
 PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
               "Jak oglądać TVP VOD, Player i TVP Sport za granicą. Poradniki, porównanie VPN z cenami i codzienny test z prawdziwymi zrzutami ekranu.",
-              band("Polska telewizja za granicą", "Polska telewizja za granicą: jak oglądać i który VPN wybrać",
-                   "Poradniki dla Polaków w Wielkiej Brytanii, Niemczech, Holandii i USA. Do tego codzienny test: sprawdzamy, czy film naprawdę gra przez VPN.",
-                   '<div class="cta2"><a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a><a class="btn big ghost" href="/tvp-vod-za-granica">Jak oglądać TVP VOD</a></div>', image=True)
-              + """<section class="svcbar"><div class="wrap">
-  <span>Poradniki i testy dla serwisów:</span>
-  <a href="/tvp-vod-za-granica"><span class="slogo"><img src="/logos/tvpvod.png" alt="TVP VOD"></span></a>
-  <a href="/player-za-granica"><span class="slogo"><img src="/logos/player.svg" alt="Player"></span></a>
-  <a href="/tvp-sport-za-granica"><span class="slogo stext">TVP Sport</span></a>
-  <a href="/polsat-box-go-za-granica"><span class="slogo"><img src="/logos/polsat.svg" alt="Polsat Box Go"></span></a>
-</div></section>"""
-              + status_matrix()
+              home_hero()
               + bf_bar()
               + top3()
-              + """<section class="guides"><div class="wrap">
-  <div class="shead"><h2>Poradniki</h2><p>Wybierz serwis, który chcesz oglądać. Każdy poradnik pokazuje legalne opcje bez VPN i sposób z VPN.</p></div>
-  <ul class="glist">
-    <li><a href="/tvp-vod-za-granica"><b>Jak oglądać TVP VOD za granicą</b><span>Trzy sposoby, wynik codziennego testu i to, na co uważać przy reklamach.</span></a></li>
-    <li><a href="/player-za-granica"><b>Jak oglądać Player za granicą</b><span>Darmowe odcinki, pakiet Player International i test z VPN.</span></a></li>
-    <li><a href="/tvp-sport-za-granica"><b>Jak oglądać TVP Sport za granicą</b><span>Materiały wideo a transmisje na żywo, wynik testu i liczby z pomiarów.</span></a></li>
-    <li><a href="/darmowy-vpn-polska-telewizja"><b>Darmowy VPN do polskiej telewizji</b><span>Jak ustawić darmowy serwer w Polsce i co pokazał nasz test.</span></a></li>
-    <li><a href="/polska-telewizja-w-niemczech"><b>Polska telewizja w Niemczech</b><span>Satelita, pakiety Vodafone i Telekom z cenami, polskie serwisy i VPN.</span></a></li>
-    <li><a href="/polska-telewizja-w-uk"><b>Polska telewizja w UK</b><span>Co działa po brexicie: satelita, Player International, TV Licence i VPN.</span></a></li>
-    <li><a href="/tvp-vod-material-niedostepny-w-twoim-kraju"><b>TVP VOD: „materiał jest niedostępny w Twoim kraju”</b><span>Jak wygląda komunikat, skąd się bierze i trzy wyjścia.</span></a></li>
-    <li><a href="/player-niedostepny-w-twojej-lokalizacji"><b>„Player jest niedostępny w Twojej lokalizacji”</b><span>Blokada całego serwisu poza Unią i co da się zrobić.</span></a></li>
-    <li><a href="/tvp-sport-material-niedostepny"><b>TVP Sport: „materiał jest niedostępny”</b><span>Trzy wersje komunikatu i próba przed meczem.</span></a></li>
-    <li><a href="/polsat-box-go-za-granica"><b>Jak oglądać Polsat Box Go za granicą</b><span>Co działa w Unii Europejskiej i pakiet dla widzów za granicą.</span></a></li>
-  </ul>
-</div></section>"""
+              + status_matrix()
+              + guides_grid()
               + f"""<section class="howflow"><div class="wrap narrowpad">
   <div class="shead"><h2>Jak to działa</h2><p>Polskie serwisy sprawdzają adres IP. VPN z serwerem w Polsce daje Ci polski adres, więc serwis traktuje Cię jak widza w kraju.</p></div>
   {flow("Polski serwis", "")}
@@ -2026,6 +2047,35 @@ table.facts td:last-child,table.facts th:last-child{text-align:right}
   .kv{grid-template-columns:minmax(0,1fr)}
   .kv dt{border-bottom:0;padding-bottom:0}
 }
+/* ---- 19.11.2026 structure pass: narrower page, cards, home hero ---- */
+.wrap{max-width:1240px}
+.disc{background:none;border:0;font-size:12px;color:var(--muted);margin:0 0 16px;max-width:86ch;padding:0}
+.results.soft{background:var(--bg)}
+.rrs5{border-top:0;display:grid;gap:12px}
+.rr{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 22px;box-shadow:0 1px 2px rgba(23,35,45,.05);position:relative;transition:box-shadow .2s,transform .2s}
+.rr:hover{box-shadow:0 10px 24px -16px rgba(23,35,45,.45);transform:translateY(-1px)}
+.rr.first{border:2px solid #E0A526;padding-top:26px}
+.rrib{position:absolute;top:-11px;left:20px;background:#E0A526;color:#17232D;font-size:12px;font-weight:700;border-radius:4px;padding:2px 10px}
+.smx{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:2px 22px;border-top:1px solid var(--line)}.smrow:last-child{border-bottom:0}
+.sm{background:var(--surface)}
+.hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:40px;min-height:0;padding-bottom:34px}
+.hh .otext{padding:44px 0 30px}.hh h1{font-size:40px}
+.hhk{display:inline-flex;gap:7px;align-items:center;font-size:13px;font-weight:600;color:var(--ok);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;margin-bottom:16px}
+.hhl{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:7px;font-size:15px}.hhl li{display:flex;gap:9px;align-items:center}.hhl svg{color:var(--ok);flex:none}
+.pickw{background:var(--cream);border-bottom:1px solid var(--line)}.hh{border-bottom:0}
+.rr{grid-template-columns:40px minmax(220px,1.3fr) 80px minmax(0,1.4fr) minmax(150px,1fr) 120px 176px!important}
+.pick{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 20px;box-shadow:0 8px 22px -18px rgba(23,35,45,.5);margin:0 0 26px}
+.pick b{font-size:15px}.pick div{display:flex;flex-wrap:wrap;gap:8px}
+.pick a{display:inline-flex;gap:8px;align-items:center;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:8px 12px;background:var(--surface);transition:border-color .15s,background .15s}
+.pick a:hover{border-color:var(--ink);background:var(--zebra)}.pick img{display:block;width:auto}
+.gg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:start}
+.ggc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 20px 8px}
+.ggc h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:16px 0 10px}
+.ggc a{display:block;padding:13px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.ggc a b{display:block;font-size:15px;line-height:1.35}.ggc a span{display:block;font-size:13px;color:var(--muted);margin-top:3px}.ggc a:hover b{color:var(--accent);text-decoration:underline}
+.deal,.brand,.today{border-radius:10px}
+@media (max-width:1180px){.rr{grid-template-columns:38px minmax(0,1fr) auto!important}.gg{grid-template-columns:minmax(0,1fr)}.hh .wrap{grid-template-columns:minmax(0,1fr) minmax(0,420px)}}
+@media (max-width:820px){.hh .wrap{grid-template-columns:minmax(0,1fr);padding-bottom:20px}.hh h1{font-size:30px}.hh .otext{padding:26px 0 8px}.pick{margin:0 0 16px}.rr{padding:16px}.rr.first{padding-top:24px}.smx{padding:2px 14px}}
 """
 
 
