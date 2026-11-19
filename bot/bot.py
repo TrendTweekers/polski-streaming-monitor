@@ -119,7 +119,10 @@ class OvpnTunnel:
         for f in ("client.ovpn", "auth.txt"):
             (d / f).chmod(0o644)
         if subprocess.run(["docker", "image", "inspect", self.IMAGE], capture_output=True).returncode != 0:
-            subprocess.run(["docker", "build", "-q", "-t", self.IMAGE, str(ROOT / "ovpn")], check=True, capture_output=True)
+            b = subprocess.run(["docker", "build", "-t", self.IMAGE, str(ROOT / "ovpn")], capture_output=True, text=True)
+            if b.returncode != 0:
+                log("  docker build failed:", (b.stdout + b.stderr)[-1500:])
+                raise RuntimeError("docker build failed")
         self.name = f"psovpn{os.getpid()}{int(time.time()) % 100000}"
         subprocess.run(["docker", "run", "-d", "--rm", "--name", self.name, "--cap-add=NET_ADMIN", "--device", "/dev/net/tun",
                         "-e", "DNS=" + CFG["dns"], "-p", f"127.0.0.1:{PORT}:1080", "-v", f"{d}:/vpn:ro", self.IMAGE],
