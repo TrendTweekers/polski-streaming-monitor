@@ -80,7 +80,7 @@
       m+='<details><summary>'+logo(p.id)+'<b>'+esc(nm(p))+'<small>'+sub+'</small></b><span class="st '+sum+'">'+(sum==='unstable'?'Częściowo':LABEL[sum])+'</span></summary><div class="rows">';
       SVON.forEach(function(s){m+='<div>'+slogo(s)+st(stat(p,s.id))+'</div>'});
       m+='<div><span>Pobieranie</span><span class="mono">'+(p.speed_mbps?p.speed_mbps+' Mb/s':'—')+'</span></div><div><span>Plan w teście</span><span class="mono">'+(pr?pr[0]:'—')+'</span></div></div>'+
-         '</details>'+(p.id==='protonfree'?'':'<div class="mcta">'+offer(p,'Zobacz ofertę '+esc(nm(p)))+'<small class="affn">Link partnerski</small></div>');
+         '</details>'+(p.id==='protonfree'?'':'<div class="mcta">'+offer(p,'Zobacz ofertę '+esc(nm(p)))+'</div>');
     });
     $('rows').innerHTML=h;$('mlist').innerHTML=m;
     all('[data-c]',function(b){b.setAttribute('aria-pressed',b.dataset.c===cur)});

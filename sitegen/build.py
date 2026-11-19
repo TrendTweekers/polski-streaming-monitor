@@ -532,7 +532,7 @@ def plink(pid, url):
 def aff_note(pid):
     """Small line under a button: refund time, and the partner label when the link is a partner link."""
     refund = REFUND.get(pid, "")
-    bits = ([f"{refund} na zwrot pieniędzy"] if refund else []) + (["Link partnerski"] if pid in AFF else [])
+    bits = ([f"{refund} na zwrot pieniędzy"] if refund else []) + []
     return f'<small class="affn">{" · ".join(bits)}</small>' if bits else ""
 
 
@@ -586,7 +586,7 @@ def today_box(sid=None, kicker=""):
     return (f'<div class="today">{k}<div class="todayh"><img src="{LOGOS[pid]}" alt="" width="34" height="34">'
             f'<p><b>{name} działa z {join_pl([SVC_INS[x] for x in ok])}</b><span>Nasz test: {when}, serwer w Polsce{shot}</span></p></div>'
             f'<div class="todayc"><a class="btn big" {plink(pid, url)}>Zobacz ofertę {name}</a>'
-            f'<small>{pr["price"]} {pr["unit"]} · {REFUND[pid]} na zwrot pieniędzy · Link partnerski</small></div></div>')
+            f'<small>{pr["price"]} {pr["unit"]} · {REFUND[pid]} na zwrot pieniędzy</small></div></div>')
 
 
 def sticky_bar(sid=None):
@@ -597,7 +597,7 @@ def sticky_bar(sid=None):
     pid, name = p["id"], p["name"]
     url = next(f[2] for f in FACTS if f[0] == pid)
     what = SVC_INS[sid] if sid else "polską telewizją"
-    return (f'<div class="sbar" id="sbar"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span><b>{name} działa z {what}</b><small>Nasz test: {LAST[:10]} · Link partnerski</small></span>'
+    return (f'<div class="sbar" id="sbar"><img src="{LOGOS[pid]}" alt="" width="30" height="30"><span><b>{name} działa z {what}</b><small>Nasz test: {LAST[:10]}</small></span>'
             f'<a class="btn" {plink(pid, url)}>Zobacz ofertę</a><button type="button" aria-label="Zamknij">×</button></div>')
 
 
@@ -1615,7 +1615,7 @@ def live_box():
     return (f'<div class="today"><div class="todayh"><img src="{LOGOS["nord"]}" alt="" width="34" height="34">'
             f'<p><b>NordVPN: TVP 1, TVP 2 i TVP Info zagrały na żywo</b><span>Nasz test: 19.11.2026, 12:20–12:45, serwer w Warszawie. To test jednorazowy, a nie codzienny.</span></p></div>'
             f'<div class="todayc"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>'
-            f'<small>{pr["price"]} {pr["unit"]} · {REFUND["nord"]} na zwrot pieniędzy · Link partnerski</small></div></div>')
+            f'<small>{pr["price"]} {pr["unit"]} · {REFUND["nord"]} na zwrot pieniędzy</small></div></div>')
 
 
 PAGES["/tvp-na-zywo-za-granica"] = ("TVP 1 i TVP 2 na żywo za granicą: test z USA i przez VPN | Polski Streaming",
@@ -2508,7 +2508,7 @@ def build_js():
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td>'+offer(p,'Zobacz ofertę')+'</td></tr>'")
     rep("'<button class=\"btn\" type=\"button\" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>'",
-        "'</details>'+(p.id==='protonfree'?'':'<div class=\"mcta\">'+offer(p,'Zobacz ofertę '+esc(nm(p)))+'<small class=\"affn\">Link partnerski</small></div>')")
+        "'</details>'+(p.id==='protonfree'?'':'<div class=\"mcta\">'+offer(p,'Zobacz ofertę '+esc(nm(p)))+'</div>')")
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
     rep("$('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.';",
