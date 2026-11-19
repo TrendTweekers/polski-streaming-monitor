@@ -476,7 +476,8 @@ AFF = {
     "nord": "https://www.jdoqocy.com/click-101925411-13382109",  # CJ link suggested by the NordVPN manager 2026-11-11 (lands on /special/, Polish page for visitors from Poland). Before: 15078184
     "surf": "https://www.dpbolvw.net/click-101925411-15438560",  # CJ advertiser 6282055, text link "Get Surfshark VPN right away" (home page)
     "proton": "https://www.dpbolvw.net/click-101925411-15834536",  # CJ advertiser 5227916, text link "Proton VPN - Special Offer" (Polish offer page)
-    "expr": "https://go.expressvpn.com/c/8234307/1636009/16063",  # Impact, link from Ana 2026-11-19, lands on the Polish page (program 16063); page tag goes in subId1
+    "expr": "https://go.expressvpn.com/c/8234307/1636009/16063",
+    "cybr": "https://www.dpbolvw.net/click-101925411-17379867",  # CJ advertiser 4996371, approved 19.11.2026 via Ana (Kape). "Black Friday & Cyber Monday 2026" page; after the offers end use 15735261 (Evergreen, home page)  # Impact, link from Ana 2026-11-19, lands on the Polish page (program 16063); page tag goes in subId1
 }
 AFF_NAMES = {"surf": "Surfshark", "nord": "NordVPN", "proton": "Proton VPN", "cybr": "CyberGhost", "expr": "ExpressVPN"}
 
@@ -2373,7 +2374,7 @@ def build_js():
 
     rep("var $=function(id){return document.getElementById(id)};",
         "var DUMMY=document.createElement('div');var $=function(id){return document.getElementById(id)||DUMMY};\n"
-        "  var LINK=" + json.dumps({**AFF, "protonfree": AFF["proton"], "cybr": "https://www.cyberghostvpn.com"}) + ";\n"
+        "  var LINK=" + json.dumps({"cybr": "https://www.cyberghostvpn.com", **AFF, "protonfree": AFF["proton"]}) + ";\n"
         "  var SHORT={nord:'NordVPN',proton:'Proton VPN Plus',protonfree:'Proton VPN, darmowy'};function nm(p){return SHORT[p.id]||p.name}\n"
         "  var ORD=['nord','proton','protonfree'];function ord(p){var i=ORD.indexOf(p.id);return i<0?9:i}\n"
         "  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"sponsored nofollow noopener\" data-aff=\"'+a+'\">'+t+'</a>'}")
