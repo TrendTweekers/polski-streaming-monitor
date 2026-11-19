@@ -62,10 +62,31 @@ def tested_companies():
     return out
 
 
-TEST_SINCE = {"nord": "11.11.2026", "proton": "13.11.2026", "protonfree": "10.11.2026"}
-TEST_NAME = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "darmowy serwer Proton VPN"}
+TEST_SINCE = {"nord": "11.11.2026", "proton": "13.11.2026", "protonfree": "10.11.2026", "cybr": "20.11.2026"}
+TEST_NAME = {"nord": "NordVPN", "proton": "Proton VPN Plus", "protonfree": "darmowy serwer Proton VPN", "cybr": "CyberGhost"}
 _hist = SITE / "data" / "history.json"
 HIST = json.loads(_hist.read_text()) if _hist.exists() else {"days": {}}
+
+
+def paid_tested_names():
+    names = []
+    for p in tested():
+        if p.get("plan") == "plan płatny":
+            n = TEST_NAME.get(p["id"], p["name"])
+            if n not in names:
+                names.append(n)
+    return names
+
+
+NUM_PL = {1: "Jednego", 2: "Dwóch", 3: "Trzech", 4: "Czterech", 5: "Pięciu"}
+
+
+def untested_line():
+    """'Surfsharka i ExpressVPN jeszcze nie testujemy.' from the last run (accusative names)."""
+    acc = {"Surfshark": "Surfsharka", "ExpressVPN": "ExpressVPN", "CyberGhost": "CyberGhost"}
+    names = set(tested_companies())
+    todo = [acc[n] for n in ("Surfshark", "ExpressVPN", "CyberGhost") if n not in names]
+    return (join_pl(todo) + " jeszcze nie testujemy.") if todo else ""
 
 
 def tested_since_line():
@@ -1083,7 +1104,7 @@ PAGES["/tvp-vod-za-granica"] = ("Jak oglądać TVP VOD za granicą: test VPN | P
 </ul>
 <h3>Wyniki TVP VOD dzień po dniu</h3>
 """ + svc_days("tvpvod", "Jeden wynik dziennie dla TVP VOD. Kreska: dostawcy nie było jeszcze w teście."), "prosec")
-    + tested_cta("TVP VOD", "Te dwa płatne VPN sprawdzamy z TVP VOD każdego ranka. Surfsharka, ExpressVPN i CyberGhost jeszcze nie testujemy, są w <a href=\"/porownanie-vpn\">rankingu</a>.")
+    + tested_cta("TVP VOD", "Te dwa płatne VPN sprawdzamy z TVP VOD każdego ranka, razem z ich partnerskimi ofertami. " + untested_line() + " Wszystkie są w <a href=\"/porownanie-vpn\">rankingu</a>.")
     + svc_result("tvpvod", "TVP VOD", "Bot włącza najnowszy odcinek programu „Jeden z dziesięciu” i sprawdza, czy gra 60 sekund.")
     + steps("Jak włączyć TVP VOD przez VPN", "Kolejność ma znaczenie: najpierw VPN, potem strona.", [
         ("Połącz VPN z serwerem w Polsce", "Zrób to przed otwarciem strony. Jeśli strona była już otwarta, odśwież ją po połączeniu."),
@@ -1711,9 +1732,9 @@ PAGES["/promocje-vpn"] = ("Promocje VPN na Black Friday 2026: ceny sprawdzone " 
   <li><b>Masz czas na zwrot.</b> Każdy z pięciu dostawców daje co najmniej 30 dni na zwrot pieniędzy w długim planie. To wystarczy, żeby sprawdzić VPN ze swoim serwisem.</li>
 </ul>
 <h2>Który VPN z promocji działa z polską telewizją</h2>
-<p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy NordVPN i Proton VPN Plus z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
+<p>Promocja nic nie da, jeśli film nie ruszy. Codziennie rano sprawdzamy """ + join_pl(paid_tested_names() or ["NordVPN"]) + """ z TVP VOD, Playerem i TVP Sport. Wynik z {LAST[:10]}:</p>
 <div data-last>{last_rows_html()}</div>
-<p>Surfsharka, CyberGhost i ExpressVPN jeszcze nie testujemy. Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
+<p>""" + untested_line() + """ Ich ceny są sprawdzone, ale działania z polskimi serwisami nie potwierdziliśmy. <a href="/wyniki-testow">Wyniki dzień po dniu</a>.</p>
 <h2>Skąd mamy ceny</h2>
 <p>{PRICED} otworzyliśmy polskie strony cenników wszystkich pięciu dostawców i zapisaliśmy to, co pokazują: cenę za miesiąc, sumę do zapłaty i rabat. Nie przepisujemy cen z innych serwisów. Ceny w euro przeliczamy po kursie {EUR}. Gdy cena się zmieni, poprawiamy ją tutaj i w <a href="/porownanie-vpn">rankingu</a>.</p>
 """, "prosec")
@@ -1806,7 +1827,7 @@ PAGES["/odznaka"] = ("Odznaka z wynikiem testu VPN dla Twojej strony | Polski St
 PAGES["/porownanie-vpn"] = ("Ranking VPN do polskiej telewizji 2026 | Polski Streaming",
     "Ranking pięciu VPN z serwerem w Polsce: ceny w złotówkach, zwrot pieniędzy, liczba urządzeń, zalety i wady. Jawne zasady punktacji.",
     band('<a href="/">Polska telewizja za granicą</a> / Porównanie VPN', "Ranking VPN do polskiej telewizji",
-         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. Dwóch z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
+         "Pięciu dostawców, te same pytania do każdego: ile kosztuje, czy ma serwer w Polsce i ile daje czasu na zwrot. " + NUM_PL.get(len(tested_companies()), str(len(tested_companies()))) + " z nich testujemy codziennie z TVP VOD, Playerem i TVP Sport.",
          f'<div class="when mono">{BYLINE}<span>Ceny sprawdzone: <b>{PRICED}</b></span><span>Ostatni test: <b id="last">{LAST}</b></span></div>', image="shield")
     + rank_top()
     + bf_box()
@@ -1914,6 +1935,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <h2>Dziennik zmian</h2>
 <ul>
   <li><b>19.11.2026:</b> nowe ceny Black Friday. CyberGhost (1,99 €) i ExpressVPN (2,39 €) dostały po jednym punkcie więcej za cenę i mają teraz równo po 12 punktów. Przy równej liczbie punktów wyżej jest tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
+  <li><b>20.11.2026:</b> do codziennego testu dochodzi CyberGhost (konto testowe od dostawcy, serwer w Polsce, połączenie OpenVPN).</li>
   <li><b>19.11.2026:</b> jednorazowy test kanałów na żywo w TVP VOD (TVP 1, TVP 2, TVP Info) z USA, bez VPN i przez NordVPN. Opis jest na stronie <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo za granicą</a>. Nie jest to część codziennego testu.</li>
   <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
   <li><b>13.11.2026:</b> testujemy też płatny plan Proton VPN Plus (serwer PL#213, Warszawa). Darmowy serwer PL-FREE#1 testujemy dalej, osobno.</li>

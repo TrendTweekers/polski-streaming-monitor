@@ -47,11 +47,11 @@
       "id": "cybr",
       "name": "CyberGhost",
       "secret_env": "CYBERGHOST_PL_OVPN",
-      "enabled": false,
+      "enabled": true,
       "plan": "plan płatny",
       "server": "87-1-PL (Polska)",
       "auth_env": "CYBERGHOST_AUTH",
-      "note": "OpenVPN through bot/ovpn Docker image. Turn on after the GitHub test run passes."
+      "note": "OpenVPN through bot/ovpn Docker image. vpn-check passed 19.11.2026 (Warsaw, 80 Mb/s)."
     },
     {
       "id": "pia",
