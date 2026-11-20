@@ -23,6 +23,5 @@ module.exports = async (req, res) => {
   try { last = (await (await fetch('https://polskistreaming.pl/data/latest.json', { cache: 'no-store' })).json()).date; } catch (e) {}
   const out = { today, last };
   out.daily = last === today ? 'already done' : await dispatch('daily.yml', token);
-  out.sales = await dispatch('sales.yml', token);
   return res.status(200).json(out);
 };
