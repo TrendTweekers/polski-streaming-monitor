@@ -1,5 +1,5 @@
 // Daily timer (Vercel Cron). GitHub starts its own timed jobs hours late, so this starts them on time.
-// Starts the daily test only when today's result is not published yet. Also starts the CJ sales check.
+// Starts the daily test only when today's result is not published yet.
 // Needs GITHUB_DISPATCH_TOKEN (fine-grained token, this repo only, Actions: read and write).
 const REPO = 'TrendTweekers/polski-streaming-monitor';
 
