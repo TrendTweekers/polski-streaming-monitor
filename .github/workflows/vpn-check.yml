@@ -21,6 +21,8 @@ jobs:
         env:
           CYBERGHOST_PL_OVPN: ${{ secrets.CYBERGHOST_PL_OVPN }}
           CYBERGHOST_AUTH: ${{ secrets.CYBERGHOST_AUTH }}
+          EXPRESS_PL_OVPN: ${{ secrets.EXPRESS_PL_OVPN }}
+          EXPRESS_AUTH: ${{ secrets.EXPRESS_AUTH }}
           PIA_USER: ${{ secrets.PIA_USER }}
           PIA_PASS: ${{ secrets.PIA_PASS }}
         run: python bot/vpn_check.py "${{ github.event.inputs.provider }}"
