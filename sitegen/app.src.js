@@ -135,7 +135,7 @@
       cn+='<button type="button" data-c="'+k+'">'+C[k].short+'</button>';
       cs+='<button type="button" data-c="'+k+'"><img src="https://flagcdn.com/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
     });
-    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Cena za miesiąc</th><th>Oferta partnera</th>';
+    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+esc(x.name)+'</th>'}).join('')+'<th>Pobieranie</th><th>Cena za miesiąc</th><th>Oferta partnera</th>';
     $('cnav').innerHTML=cn;$('countries').innerHTML=cs;
     $('hprov').innerHTML=RUN.providers.map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(p.name)+'</button>'}).join('');
     $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');

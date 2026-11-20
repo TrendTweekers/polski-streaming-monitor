@@ -338,6 +338,30 @@ EVIDENCE = """<section class="evidence" id="dowod"><div class="wrap">
 </div></section>"""
 
 
+def today_card():
+    """Hero box on /wyniki-testow: every tested VPN with one dot per service, from the last run."""
+    ps = tested()
+    svcs = [x for x in RUN.get("services", []) if x.get("enabled")]
+    if not ps or not svcs:
+        return ""
+    good = ("ok", "okr")
+    sv = lambda p, x: (p["services"].get(x["id"]) or {}).get("status")
+    allok = sum(1 for p in ps if all(sv(p, x) in good for x in svcs))
+    word = {"ok": "działa", "okr": "działa", "unstable": "niestabilny", "blocked": "nie działa"}
+    head = "".join(f'<span>{x["name"]}</span>' for x in svcs)
+    rows = ""
+    for p in ps:
+        dots = "".join(f'<i class="tdot {"ok" if sv(p, x) in good else (sv(p, x) or "none")}" '
+                       f'title="{x["name"]}: {word.get(sv(p, x), "nie przetestowano")}"></i>' for x in svcs)
+        name = p["name"] + (' <small>darmowy</small>' if p["id"] == "protonfree" else "")
+        rows += f'<div class="trow"><img src="{LOGOS.get(p["id"], "")}" alt="" width="22" height="22"><b>{name}</b>{dots}</div>'
+    return f"""<div class="tdy">
+  <div class="tbig"><b>{allok}<span>/{len(ps)}</span></b><p>VPN-ów odtworzyło dziś film we wszystkich {len(svcs)} serwisach</p></div>
+  <div class="tgrid"><div class="thead"><span></span><span></span>{head}</div>{rows}</div>
+  <p class="tleg"><i class="tdot ok"></i>działa <i class="tdot unstable"></i>niestabilny <i class="tdot blocked"></i>nie działa</p>
+</div>"""
+
+
 def access_checks():
     """WP Pilot and Polsat Box Go: access check without playback (no account). Empty until the bot has a result."""
     names = [c for c in RUN.get("checks", [])]
@@ -1125,7 +1149,7 @@ PAGES["/"] = ("Polska telewizja za granicą i VPN | Polski Streaming",
 PAGES["/wyniki-testow"] = ("Wyniki testów VPN z polskimi serwisami | Polski Streaming",
     "Wyniki ostatniego testu, historia 30 dni i zrzuty ekranu: które VPN działają z TVP VOD, Playerem i TVP Sport.",
     band('<a href="/">Polska telewizja za granicą</a> / Wyniki testów', "Wyniki testów",
-         f"Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Testujemy dziś: {tested_phrase()}.", WHEN)
+         "Każdego ranka bot sprawdza, czy film gra przez VPN z serwerem w Polsce. Tu jest wynik z dziś, historia 30 dni i zrzuty ekranu z każdego testu.", WHEN, figure=today_card())
     + RESULTS.replace('<a class="btn big" href="/porownanie-vpn">Zobacz ranking VPN</a>',
                       f'<div class="pcta"><a class="btn big" {plink("nord", "https://nordvpn.com")}>Zobacz ofertę NordVPN</a>{aff_note("nord")}<a class="more" href="/porownanie-vpn">Zobacz ranking 6 VPN</a></div>')
     + HISTORY + access_checks() + EVIDENCE)
@@ -2106,6 +2130,23 @@ PAGES["/prywatnosc"] = ("Prywatność | Polski Streaming",
     "page", [("/", "Polska telewizja za granicą"), ("/prywatnosc", "Prywatność")])
 
 EXTRA_CSS = """
+/* today box on /wyniki-testow */
+.tdy{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:22px 24px}
+.tbig{display:flex;align-items:center;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tbig b{font:600 44px/1 var(--mono);color:var(--ok);white-space:nowrap}.tbig b span{color:var(--muted);font-size:24px}
+.tbig p{margin:0;font-size:14px;line-height:1.4;color:var(--muted);max-width:260px}
+.tgrid .thead,.tgrid .trow{display:grid;grid-template-columns:22px minmax(0,1fr) repeat(3,72px);align-items:center;gap:10px}
+.tgrid .thead{font-size:11px;color:var(--muted);text-align:center;padding:4px 0}
+.tgrid .trow{padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.tgrid .trow b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tgrid .trow small{font-weight:400;color:var(--muted)}
+.tgrid img{border-radius:4px;object-fit:contain}
+.tdot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--line);justify-self:center}
+.tdot.ok{background:var(--ok)}.tdot.unstable{background:var(--warn)}.tdot.blocked{background:var(--bad)}
+.tleg{margin:12px 0 0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tleg .tdot{width:9px;height:9px;margin-left:8px}.tleg .tdot:first-child{margin-left:0}
+@media (max-width:640px){.tdy{padding:16px}.tgrid .thead,.tgrid .trow{grid-template-columns:22px minmax(0,1fr) repeat(3,44px);gap:6px}.tgrid .thead{font-size:10px}.tbig b{font-size:36px}}
+table.mini3 th{text-align:left}
+#wyniki thead th{height:48px}
+
 .today{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--ok);background:var(--surface);border-radius:6px;padding:18px 20px;margin:0 0 28px}
 .today.none{display:block;border-left-color:var(--warn)}.today.none p{margin:0}
 .todayk{grid-column:1/-1;margin:0!important;font-size:14px;color:var(--muted)}
@@ -2499,7 +2540,7 @@ def build_js():
         "  var ORD=['nord','proton','protonfree'];function ord(p){var i=ORD.indexOf(p.id);return i<0?9:i}\n"
         "  var AFFS=" + json.dumps(sorted(set(AFF) | {"protonfree"})) + ";\n"
         "  function offer(p,t){var a=p.id==='protonfree'?'proton':p.id;if(AFFS.indexOf(p.id)<0)return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"nofollow noopener\">'+t+'</a>';return '<a class=\"btn\" href=\"'+LINK[p.id]+'\" target=\"_blank\" rel=\"sponsored nofollow noopener\" data-aff=\"'+a+'\">'+t+'</a>'}")
-    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};")
+    rep("var PRICE={proton:['0 zł','plan darmowy']};", "var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe'],cybr:['płatny','konto testowe'],pia:['płatny','konto testowe'],expr:['płatny','konto testowe'],surf:['płatny','konto testowe']};")
     rep("'<td><button class=\"btn\" type=\"button\" data-cta aria-label=\"Sprawdź ofertę '+esc(p.name)+'\">Sprawdź ofertę</button></td></tr>'",
         "'<td>'+offer(p,'Zobacz ofertę')+'</td></tr>'")
     rep("'<button class=\"btn\" type=\"button\" data-cta>Sprawdź ofertę '+esc(p.name)+'</button></details>'",
@@ -2507,7 +2548,7 @@ def build_js():
     rep("<th>Cena za miesiąc</th><th>Oferta partnera</th>", "<th>Plan w teście</th><th>Oferta</th>")
     rep("<div><span>Cena za miesiąc</span>", "<div><span>Plan w teście</span>")
     rep("$('scope').textContent='Testujemy na razie '+tested.length+' z '+RUN.providers.length+' dostawców i '+SVON.length+' darmowe serwisy. Płatnych serwisów (Polsat Box Go, Canal+ Online) jeszcze nie testujemy.';",
-        "$('scope').textContent='Każdego ranka sprawdzamy '+tested.length+' plany VPN z '+SVON.length+' serwisami: '+SVON.map(function(s){return s.name}).join(', ')+'. Polsat Box Go i Canal+ Online wymagają płatnego konta i nie są jeszcze w teście.';")
+        "$('scope').textContent='Każdego ranka sprawdzamy '+tested.length+' plany VPN z '+SVON.length+' serwisami: '+SVON.map(function(s){return s.name}).join(', ')+'. WP Pilot i Polsat Box Go sprawdzamy osobno, niżej na tej stronie.';")
     rep("'<span>'+esc(p.name)+'<small>'+sub+'</small></span></button></td>'", "'<span>'+esc(nm(p))+'<small>'+sub+'</small></span></button></td>'")
     rep("'<b>'+esc(p.name)+'<small>'+sub+'</small></b><span", "'<b>'+esc(nm(p))+'<small>'+sub+'</small></b><span")
     rep("return works(b)-works(a)||(b.speed_mbps||0)-(a.speed_mbps||0);", "return works(b)-works(a)||ord(a)-ord(b);")

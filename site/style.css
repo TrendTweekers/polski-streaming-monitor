@@ -362,6 +362,23 @@ footer a{color:var(--navy-muted)}
   .mcols li{grid-template-columns:minmax(0,1fr);gap:2px}
 }
 
+/* today box on /wyniki-testow */
+.tdy{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:22px 24px}
+.tbig{display:flex;align-items:center;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.tbig b{font:600 44px/1 var(--mono);color:var(--ok);white-space:nowrap}.tbig b span{color:var(--muted);font-size:24px}
+.tbig p{margin:0;font-size:14px;line-height:1.4;color:var(--muted);max-width:260px}
+.tgrid .thead,.tgrid .trow{display:grid;grid-template-columns:22px minmax(0,1fr) repeat(3,72px);align-items:center;gap:10px}
+.tgrid .thead{font-size:11px;color:var(--muted);text-align:center;padding:4px 0}
+.tgrid .trow{padding:7px 0;border-top:1px solid var(--line);font-size:14px}
+.tgrid .trow b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tgrid .trow small{font-weight:400;color:var(--muted)}
+.tgrid img{border-radius:4px;object-fit:contain}
+.tdot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--line);justify-self:center}
+.tdot.ok{background:var(--ok)}.tdot.unstable{background:var(--warn)}.tdot.blocked{background:var(--bad)}
+.tleg{margin:12px 0 0;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}.tleg .tdot{width:9px;height:9px;margin-left:8px}.tleg .tdot:first-child{margin-left:0}
+@media (max-width:640px){.tdy{padding:16px}.tgrid .thead,.tgrid .trow{grid-template-columns:22px minmax(0,1fr) repeat(3,44px);gap:6px}.tgrid .thead{font-size:10px}.tbig b{font-size:36px}}
+table.mini3 th{text-align:left}
+#wyniki thead th{height:48px}
+
 .today{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 28px;align-items:center;border:1px solid var(--line);border-left:4px solid var(--ok);background:var(--surface);border-radius:6px;padding:18px 20px;margin:0 0 28px}
 .today.none{display:block;border-left-color:var(--warn)}.today.none p{margin:0}
 .todayk{grid-column:1/-1;margin:0!important;font-size:14px;color:var(--muted)}

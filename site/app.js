@@ -1,7 +1,7 @@
 (function(){
   var LOGO={proton:'/logos/proton.svg',protonfree:'/logos/proton.svg',nord:'/logos/nord.svg',surf:'/logos/surf.svg',expr:'/logos/expr.svg',pia:'/logos/pia.svg',cybr:'/logos/cyberghost-icon.png'};
   var SLOGO={tvpvod:'/logos/tvpvod.png',player:'/logos/player.svg',polsat:'/logos/polsat.svg',canal:'/logos/canal.svg'};
-  var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe']};
+  var PRICE={proton:['płatny','konto testowe'],protonfree:['darmowy','0 zł'],nord:['płatny','konto testowe'],cybr:['płatny','konto testowe'],pia:['płatny','konto testowe'],expr:['płatny','konto testowe'],surf:['płatny','konto testowe']};
   var C={
     uk:{label:'Wielka Brytania',short:'UK',where:'w UK',flag:'gb'},
     de:{label:'Niemcy',short:'Niemcy',where:'w Niemczech',flag:'de'},
@@ -56,7 +56,7 @@
     $('s1').textContent=tested.filter(function(p){var x=stat(p,'tvpvod');return x==='ok'||x==='okr'}).length+'/'+tested.length;var sb=document.querySelector('.sortbar');if(sb&&tested.length<2)sb.style.display='none';
     var tried=0;tested.forEach(function(p){SVON.forEach(function(s){if(stat(p,s.id)!=='none')tried++})});
     $('s2').textContent=tried;$('s3').textContent=Object.keys(HIST.days).length;
-    $('scope').textContent='Każdego ranka sprawdzamy '+tested.length+' plany VPN z '+SVON.length+' serwisami: '+SVON.map(function(s){return s.name}).join(', ')+'. Polsat Box Go i Canal+ Online wymagają płatnego konta i nie są jeszcze w teście.';
+    $('scope').textContent='Każdego ranka sprawdzamy '+tested.length+' plany VPN z '+SVON.length+' serwisami: '+SVON.map(function(s){return s.name}).join(', ')+'. WP Pilot i Polsat Box Go sprawdzamy osobno, niżej na tej stronie.';
     var CN={PL:'Polska',US:'USA',GB:'Wielka Brytania',DE:'Niemcy',NL:'Holandia',IE:'Irlandia'};var where=RUN.runner&&RUN.runner.country?(CN[RUN.runner.country]||RUN.runner.country):'—';
     var h='',m='';
     data.forEach(function(p){
@@ -140,7 +140,7 @@
       cn+='<button type="button" data-c="'+k+'">'+C[k].short+'</button>';
       cs+='<button type="button" data-c="'+k+'"><img src="/flags/'+C[k].flag+'.svg" alt="" width="66" height="44"><span><b>'+C[k].label+'</b><span>ten sam wynik testu</span></span></button>';
     });
-    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+slogo(x)+'<span class="sname">'+esc(x.name)+'</span></th>'}).join('')+'<th>Pobieranie</th><th>Plan w teście</th><th>Oferta</th>';
+    $('thead').innerHTML='<th>Dostawca VPN</th>'+SVON.map(function(x){return '<th>'+esc(x.name)+'</th>'}).join('')+'<th>Pobieranie</th><th>Plan w teście</th><th>Oferta</th>';
     $('cnav').innerHTML=cn;$('countries').innerHTML=cs;
     $('hprov').innerHTML=RUN.providers.filter(function(p){return p.tested}).map(function(p){return '<button type="button" data-hp="'+p.id+'">'+esc(nm(p))+'</button>'}).join('');
     $('hserv').innerHTML=SVON.map(function(s){return '<button type="button" data-hs="'+s.id+'">'+esc(s.name)+'</button>'}).join('');
