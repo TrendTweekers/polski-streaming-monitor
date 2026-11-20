@@ -1,6 +1,6 @@
 {
- "date": "2026-11-19",
- "started_at": "2026-11-19T18:44:02+01:00",
+ "date": "2026-11-20",
+ "started_at": "2026-11-20T06:40:29+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,38 +16,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T18:44:22+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3650,S01E3650,3541827",
-     "played_seconds": 60.7,
-     "wait_seconds": 186,
+     "tested_at": "2026-11-20T06:40:52+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "played_seconds": 61.0,
+     "wait_seconds": 177,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-20/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T18:48:42+01:00",
+     "tested_at": "2026-11-20T06:45:02+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
+     "played_seconds": 60.9,
      "wait_seconds": 30,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-19/nord-player.webp"
+     "shot": "data/shots/2026-11-20/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T18:50:27+01:00",
-     "url": "https://sport.tvp.pl/96565037/michal-pasiut-nominowany-w-92-plebiscycie-przegladu-sportowego-to-wymagalo-wielu-lez-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-20T06:46:45+01:00",
+     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
+     "played_seconds": 60.8,
+     "wait_seconds": 45,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-20/nord-tvpsport.webp"
     }
    },
    "checks": {
@@ -55,27 +55,27 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T19:02:26+01:00",
+     "tested_at": "2026-11-20T06:51:06+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-19/nord-wppilot.webp"
+     "shot": "data/shots/2026-11-20/nord-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T19:02:40+01:00",
+     "tested_at": "2026-11-20T06:51:21+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-19/nord-polsat.webp"
+     "shot": "data/shots/2026-11-20/nord-polsat.webp"
     }
    },
    "exit": {
-    "ip": "187.15.162.x",
+    "ip": "187.15.161.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS137409 GSL Networks Pty LTD"
+    "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 51.1
+   "speed_mbps": 67.4
   },
   {
    "id": "proton",
@@ -87,40 +87,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:03:17+01:00",
+     "tested_at": "2026-11-20T06:51:54+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "kind": null,
-     "reloaded": true,
-     "played_seconds": 60.7,
-     "wait_seconds": 196,
+     "played_seconds": 60.9,
+     "wait_seconds": 176,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-19/proton-tvpvod.webp"
+     "kind": null,
+     "shot": "data/shots/2026-11-20/proton-tvpvod.webp"
     },
     "player": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-19T19:17:50+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T06:56:20+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 59.0,
-     "wait_seconds": 30,
-     "resolution": "512x288",
+     "played_seconds": 60.6,
+     "wait_seconds": 25,
+     "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-19/proton-player.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-20/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:19:49+01:00",
-     "url": "https://sport.tvp.pl/96567894/tadeusz-pietrzykowski-i-jego-niezwykla-historia-kulisy-powstania-filmu-teddy-byc-to-byc-najlepszym-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 105,
+     "tested_at": "2026-11-20T06:58:13+01:00",
+     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
+     "played_seconds": 60.8,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-20/proton-tvpsport.webp"
     }
    },
    "checks": {
@@ -128,18 +126,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T19:32:49+01:00",
+     "tested_at": "2026-11-20T07:03:31+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-19/proton-wppilot.webp"
+     "shot": "data/shots/2026-11-20/proton-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T19:33:04+01:00",
+     "tested_at": "2026-11-20T07:03:45+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-19/proton-polsat.webp"
+     "shot": "data/shots/2026-11-20/proton-polsat.webp"
     }
    },
    "exit": {
@@ -148,17 +146,79 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 54.4
+   "speed_mbps": 79.1
   },
   {
    "id": "protonfree",
    "name": "Proton VPN",
    "plan": "plan darmowy",
    "server": "PL-FREE#1",
-   "tested": false,
-   "services": {},
-   "checks": {},
-   "note": "Adres IP serwera VPN nie jest polski"
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T07:04:45+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "played_seconds": 61.0,
+     "wait_seconds": 176,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/protonfree-tvpvod.webp"
+    },
+    "player": {
+     "status": "unstable",
+     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
+     "tested_at": "2026-11-20T07:14:40+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "played_seconds": 60.8,
+     "wait_seconds": 40,
+     "resolution": "640x360",
+     "drm": true,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/protonfree-player.webp",
+     "attempts": 2
+    },
+    "tvpsport": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T07:16:33+01:00",
+     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
+     "played_seconds": 60.9,
+     "wait_seconds": 50,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/protonfree-tvpsport.webp"
+    }
+   },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-20T07:21:00+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-20/protonfree-wppilot.webp"
+    },
+    "polsat": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-20T07:21:15+01:00",
+     "country": "PL",
+     "vpn_flag": true,
+     "shot": "data/shots/2026-11-20/protonfree-polsat.webp"
+    }
+   },
+   "exit": {
+    "ip": "149.102.244.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS212238 Datacamp Limited"
+   },
+   "speed_mbps": 76.3
   },
   {
    "id": "surf",
@@ -188,39 +248,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:34:15+01:00",
+     "tested_at": "2026-11-20T07:21:53+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "kind": null,
-     "reloaded": true,
-     "played_seconds": 60.9,
-     "wait_seconds": 96,
+     "played_seconds": 61.1,
+     "wait_seconds": 36,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-19/cybr-tvpvod.webp"
+     "kind": null,
+     "shot": "data/shots/2026-11-20/cybr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:40:24+01:00",
+     "tested_at": "2026-11-20T07:23:43+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
-     "wait_seconds": 50,
+     "played_seconds": 60.9,
+     "wait_seconds": 31,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-19/cybr-player.webp"
+     "shot": "data/shots/2026-11-20/cybr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:42:35+01:00",
-     "url": "https://sport.tvp.pl/96568243/jasmina-zapotoczna-powalczy-o-cztery-pasy-mistrzowskie-cala-kariere-czekalam-na-ten-moment-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 5,
+     "tested_at": "2026-11-20T07:25:28+01:00",
+     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 35,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/cybr-tvpsport.webp"
+     "shot": "data/shots/2026-11-20/cybr-tvpsport.webp"
     }
    },
    "checks": {
@@ -228,16 +287,16 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T19:50:12+01:00",
+     "tested_at": "2026-11-20T07:29:35+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-19/cybr-wppilot.webp"
+     "shot": "data/shots/2026-11-20/cybr-wppilot.webp"
     },
     "polsat": {
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-19T19:50:52+01:00",
-     "shot": "data/shots/2026-11-19/cybr-polsat.webp",
+     "tested_at": "2026-11-20T07:30:13+01:00",
+     "shot": "data/shots/2026-11-20/cybr-polsat.webp",
      "attempts": 2
     }
    },
@@ -247,7 +306,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 68.1
+   "speed_mbps": 99.2
   },
   {
    "id": "pia",
@@ -259,35 +318,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T19:51:32+01:00",
+     "tested_at": "2026-11-20T07:30:48+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "played_seconds": 60.6,
-     "wait_seconds": 45,
+     "played_seconds": 61.0,
+     "wait_seconds": 91,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/pia-tvpvod.webp"
+     "shot": "data/shots/2026-11-20/pia-tvpvod.webp"
     },
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-19T19:59:15+01:00",
+     "tested_at": "2026-11-20T07:39:15+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
-     "shot": "data/shots/2026-11-19/pia-player.webp",
+     "shot": "data/shots/2026-11-20/pia-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-19T20:05:00+01:00",
-     "url": "https://sport.tvp.pl/96568243/jasmina-zapotoczna-powalczy-o-cztery-pasy-mistrzowskie-cala-kariere-czekalam-na-ten-moment-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 5,
+     "tested_at": "2026-11-20T07:44:59+01:00",
+     "url": "https://sport.tvp.pl/96571680/sebastian-chmara-o-naturalizacji-sama-blaskowskiego-robimy-wszystko-zeby-otrzymal-obywatelstwo-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 15,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-19/pia-tvpsport.webp"
+     "shot": "data/shots/2026-11-20/pia-tvpsport.webp"
     }
    },
    "checks": {
@@ -295,18 +354,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T20:16:29+01:00",
+     "tested_at": "2026-11-20T07:52:33+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-19/pia-wppilot.webp"
+     "shot": "data/shots/2026-11-20/pia-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-19T20:16:44+01:00",
+     "tested_at": "2026-11-20T07:52:47+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-19/pia-polsat.webp"
+     "shot": "data/shots/2026-11-20/pia-polsat.webp"
     }
    },
    "exit": {
@@ -315,7 +374,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 49.5
+   "speed_mbps": 68.5
   }
  ],
  "services": [
@@ -350,5 +409,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-19T20:17:06+01:00"
+ "finished_at": "2026-11-20T07:53:09+01:00"
 }
