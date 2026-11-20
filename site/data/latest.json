@@ -1,6 +1,6 @@
 {
  "date": "2026-11-20",
- "started_at": "2026-11-20T06:40:29+01:00",
+ "started_at": "2026-11-20T12:03:26+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,10 +16,10 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:40:52+01:00",
+     "tested_at": "2026-11-20T12:03:43+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
      "played_seconds": 61.0,
-     "wait_seconds": 177,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -28,10 +28,10 @@
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:45:02+01:00",
+     "tested_at": "2026-11-20T12:08:04+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.9,
-     "wait_seconds": 30,
+     "wait_seconds": 40,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
@@ -40,10 +40,10 @@
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:46:45+01:00",
-     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 45,
+     "tested_at": "2026-11-20T12:09:59+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 60.9,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -55,7 +55,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T06:51:06+01:00",
+     "tested_at": "2026-11-20T12:14:27+01:00",
      "country": "PL",
      "shot": "data/shots/2026-11-20/nord-wppilot.webp"
     },
@@ -63,19 +63,19 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T06:51:21+01:00",
+     "tested_at": "2026-11-20T12:14:42+01:00",
      "country": "PL",
      "vpn_flag": true,
      "shot": "data/shots/2026-11-20/nord-polsat.webp"
     }
    },
    "exit": {
-    "ip": "187.15.161.x",
+    "ip": "187.15.162.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS212238 Datacamp Limited"
+    "org": "AS137409 GSL Networks Pty LTD"
    },
-   "speed_mbps": 67.4
+   "speed_mbps": 48.7
   },
   {
    "id": "proton",
@@ -87,10 +87,10 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:51:54+01:00",
+     "tested_at": "2026-11-20T12:15:19+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "played_seconds": 60.9,
-     "wait_seconds": 176,
+     "played_seconds": 60.7,
+     "wait_seconds": 181,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -99,10 +99,10 @@
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:56:20+01:00",
+     "tested_at": "2026-11-20T12:19:51+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
-     "wait_seconds": 25,
+     "played_seconds": 60.7,
+     "wait_seconds": 30,
      "resolution": "960x540",
      "drm": true,
      "kind": null,
@@ -111,8 +111,8 @@
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T06:58:13+01:00",
-     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
+     "tested_at": "2026-11-20T12:21:50+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
      "played_seconds": 60.8,
      "wait_seconds": 50,
      "resolution": "1920x1080",
@@ -126,7 +126,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:03:31+01:00",
+     "tested_at": "2026-11-20T12:26:58+01:00",
      "country": "PL",
      "shot": "data/shots/2026-11-20/proton-wppilot.webp"
     },
@@ -134,7 +134,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:03:45+01:00",
+     "tested_at": "2026-11-20T12:27:13+01:00",
      "country": "PL",
      "vpn_flag": true,
      "shot": "data/shots/2026-11-20/proton-polsat.webp"
@@ -146,7 +146,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 79.1
+   "speed_mbps": 54.5
   },
   {
    "id": "protonfree",
@@ -158,34 +158,33 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:04:45+01:00",
+     "tested_at": "2026-11-20T12:28:19+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "played_seconds": 61.0,
-     "wait_seconds": 176,
+     "played_seconds": 60.9,
+     "wait_seconds": 201,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
      "shot": "data/shots/2026-11-20/protonfree-tvpvod.webp"
     },
     "player": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-20T07:14:40+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T12:33:01+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.8,
-     "wait_seconds": 40,
+     "played_seconds": 60.9,
+     "wait_seconds": 30,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-20/protonfree-player.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-20/protonfree-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:16:33+01:00",
+     "tested_at": "2026-11-20T12:34:46+01:00",
      "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
-     "played_seconds": 60.9,
+     "played_seconds": 60.8,
      "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
@@ -198,7 +197,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:21:00+01:00",
+     "tested_at": "2026-11-20T12:51:09+01:00",
      "country": "PL",
      "shot": "data/shots/2026-11-20/protonfree-wppilot.webp"
     },
@@ -206,7 +205,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:21:15+01:00",
+     "tested_at": "2026-11-20T12:51:24+01:00",
      "country": "PL",
      "vpn_flag": true,
      "shot": "data/shots/2026-11-20/protonfree-polsat.webp"
@@ -218,7 +217,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 76.3
+   "speed_mbps": 42.1
   },
   {
    "id": "surf",
@@ -232,11 +231,73 @@
   {
    "id": "expr",
    "name": "ExpressVPN",
-   "plan": null,
-   "server": null,
-   "tested": false,
-   "services": {},
-   "checks": {}
+   "plan": "plan płatny",
+   "server": "ExpressVPN Polska",
+   "tested": true,
+   "services": {
+    "tvpvod": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T12:52:06+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
+     "played_seconds": 60.7,
+     "wait_seconds": 40,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/expr-tvpvod.webp"
+    },
+    "player": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T12:54:19+01:00",
+     "url": "https://player.pl/programy-online/fakty-odcinki,516",
+     "played_seconds": 60.8,
+     "wait_seconds": 30,
+     "resolution": "960x540",
+     "drm": true,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/expr-player.webp"
+    },
+    "tvpsport": {
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-20T12:56:18+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 61.0,
+     "wait_seconds": 5,
+     "resolution": "1920x1080",
+     "drm": false,
+     "kind": null,
+     "shot": "data/shots/2026-11-20/expr-tvpsport.webp"
+    }
+   },
+   "checks": {
+    "wppilot": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-20T13:03:51+01:00",
+     "country": "PL",
+     "shot": "data/shots/2026-11-20/expr-wppilot.webp"
+    },
+    "polsat": {
+     "status": "ok",
+     "reason": null,
+     "kind": null,
+     "tested_at": "2026-11-20T13:04:06+01:00",
+     "country": "PL",
+     "vpn_flag": true,
+     "shot": "data/shots/2026-11-20/expr-polsat.webp"
+    }
+   },
+   "exit": {
+    "ip": "188.212.135.x",
+    "city": "Warsaw",
+    "country": "PL",
+    "org": "AS206092 F.N.S. HOLDINGS LIMITED"
+   },
+   "speed_mbps": 62.5
   },
   {
    "id": "cybr",
@@ -248,10 +309,10 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:21:53+01:00",
+     "tested_at": "2026-11-20T13:04:44+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "played_seconds": 61.1,
-     "wait_seconds": 36,
+     "played_seconds": 61.9,
+     "wait_seconds": 56,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -260,10 +321,10 @@
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:23:43+01:00",
+     "tested_at": "2026-11-20T13:06:56+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.9,
-     "wait_seconds": 31,
+     "wait_seconds": 50,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
@@ -272,10 +333,10 @@
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:25:28+01:00",
-     "url": "https://sport.tvp.pl/96572178/ostatnie-chwile-przed-startem-pucharu-swiata-treningi-i-rejestracja-kombinezonow-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 35,
+     "tested_at": "2026-11-20T13:09:00+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 61.1,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -287,7 +348,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:29:35+01:00",
+     "tested_at": "2026-11-20T13:17:16+01:00",
      "country": "PL",
      "shot": "data/shots/2026-11-20/cybr-wppilot.webp"
     },
@@ -295,7 +356,7 @@
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-20T07:30:13+01:00",
+     "tested_at": "2026-11-20T13:17:56+01:00",
      "shot": "data/shots/2026-11-20/cybr-polsat.webp",
      "attempts": 2
     }
@@ -306,7 +367,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 99.2
+   "speed_mbps": 69.8
   },
   {
    "id": "pia",
@@ -318,10 +379,10 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:30:48+01:00",
+     "tested_at": "2026-11-20T13:18:37+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3651,S01E3651,3545058",
-     "played_seconds": 61.0,
-     "wait_seconds": 91,
+     "played_seconds": 60.9,
+     "wait_seconds": 45,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -330,7 +391,7 @@
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-20T07:39:15+01:00",
+     "tested_at": "2026-11-20T13:26:20+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
      "shot": "data/shots/2026-11-20/pia-player.webp",
@@ -339,10 +400,10 @@
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-20T07:44:59+01:00",
-     "url": "https://sport.tvp.pl/96571680/sebastian-chmara-o-naturalizacji-sama-blaskowskiego-robimy-wszystko-zeby-otrzymal-obywatelstwo-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 15,
+     "tested_at": "2026-11-20T13:32:06+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 60.8,
+     "wait_seconds": 30,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
@@ -354,7 +415,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:52:33+01:00",
+     "tested_at": "2026-11-20T13:39:54+01:00",
      "country": "PL",
      "shot": "data/shots/2026-11-20/pia-wppilot.webp"
     },
@@ -362,7 +423,7 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-20T07:52:47+01:00",
+     "tested_at": "2026-11-20T13:40:08+01:00",
      "country": "PL",
      "vpn_flag": true,
      "shot": "data/shots/2026-11-20/pia-polsat.webp"
@@ -374,7 +435,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 68.5
+   "speed_mbps": 50.1
   }
  ],
  "services": [
@@ -409,5 +470,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-20T07:53:09+01:00"
+ "finished_at": "2026-11-20T13:40:31+01:00"
 }
