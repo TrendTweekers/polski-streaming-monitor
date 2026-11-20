@@ -262,16 +262,23 @@ def long_enough(page):
     return False  # only short videos, or no playable video, on this clip page
 
 
+CLIP = {}  # service id -> clip page that was long enough earlier in this run
+
+
 def test_service(browser, svc, shot_path):
     """Return a result dict. status: ok | unstable | blocked | none."""
     res = {"status": "none", "reason": None, "tested_at": now().isoformat(timespec="seconds")}
     ctx = browser.new_context(viewport={"width": 1440, "height": 900}, locale="pl-PL", timezone_id="Europe/Warsaw")
     page = ctx.new_page()
     try:
-        urls = listing_urls(page, svc) if svc.get("listing") else [svc["url"]]
+        cached = CLIP.get(svc["id"]) if svc.get("listing") else None
+        urls = [cached] if cached else (listing_urls(page, svc) if svc.get("listing") else [svc["url"]])
         if not urls:
             raise RuntimeError("no video link on the listing page")
-        for url in urls[:4]:
+        tried = 0
+        while urls and tried < 4:
+            url = urls.pop(0)
+            tried += 1
             page.goto(url, wait_until="domcontentloaded", timeout=90000)
             page.wait_for_timeout(6000)
             click_first(page, CONSENT)
@@ -283,7 +290,14 @@ def test_service(browser, svc, shot_path):
             good = long_enough(page)
             log("    clip", url.rsplit("/", 1)[-1][:50], "long enough" if good else "skipped", f"({int(time.time() - t_clip)} s)")
             if good:
+                # all VPNs in this run watch the same clip: fair, and no new search for each VPN
+                CLIP[svc["id"]] = url
                 break
+            if url == cached:  # today's clip stopped working: search the listing again
+                CLIP.pop(svc["id"], None)
+                cached = None
+                urls = [u for u in listing_urls(page, svc) if u != url]
+                tried = 0
         res["url"] = page.url
         t0 = time.time()
         start = None       # (wall time, video time) when the real programme began
