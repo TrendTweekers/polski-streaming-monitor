@@ -40,8 +40,12 @@
     {
       "id": "expr",
       "name": "ExpressVPN",
-      "secret_env": "EXPRESS_PL_WG",
-      "enabled": false
+      "secret_env": "EXPRESS_PL_OVPN",
+      "auth_env": "EXPRESS_AUTH",
+      "enabled": true,
+      "plan": "plan płatny",
+      "server": "ExpressVPN Polska",
+      "note": "OpenVPN (manual config, no WireGuard offered). Test account from ExpressVPN, 20.11.2026."
     },
     {
       "id": "cybr",

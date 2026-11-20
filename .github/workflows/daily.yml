@@ -47,7 +47,8 @@ jobs:
           PROTON_PLUS_PL_WG: ${{ secrets.PROTON_PLUS_PL_WG }}
           NORD_PL_WG: ${{ secrets.NORD_PL_WG }}
           SURFSHARK_PL_WG: ${{ secrets.SURFSHARK_PL_WG }}
-          EXPRESS_PL_WG: ${{ secrets.EXPRESS_PL_WG }}
+          EXPRESS_PL_OVPN: ${{ secrets.EXPRESS_PL_OVPN }}
+          EXPRESS_AUTH: ${{ secrets.EXPRESS_AUTH }}
           CYBERGHOST_PL_WG: ${{ secrets.CYBERGHOST_PL_WG }}
           CYBERGHOST_PL_OVPN: ${{ secrets.CYBERGHOST_PL_OVPN }}
           CYBERGHOST_AUTH: ${{ secrets.CYBERGHOST_AUTH }}
