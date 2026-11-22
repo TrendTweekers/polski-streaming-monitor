@@ -1,6 +1,6 @@
 {
- "date": "2026-11-21",
- "started_at": "2026-11-21T06:39:52+01:00",
+ "date": "2026-11-22",
+ "started_at": "2026-11-22T06:40:21+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,38 +16,40 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T06:40:10+01:00",
+     "tested_at": "2026-11-22T06:40:47+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
+     "kind": null,
+     "reloaded": true,
      "played_seconds": 60.8,
-     "wait_seconds": 181,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-21/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-22/nord-tvpvod.webp"
     },
     "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-21T06:44:24+01:00",
+     "status": "unstable",
+     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
+     "tested_at": "2026-11-22T06:54:56+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.7,
-     "wait_seconds": 30,
+     "wait_seconds": 35,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-21/nord-player.webp"
+     "shot": "data/shots/2026-11-22/nord-player.webp",
+     "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T06:46:06+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-22T06:56:44+01:00",
+     "url": "https://sport.tvp.pl/96613648/knockout-boxing-night-47-kamil-szeremeta-shon-ortiz-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 106,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/nord-tvpsport.webp"
     }
    },
    "checks": {
@@ -55,27 +57,27 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T06:54:15+01:00",
+     "tested_at": "2026-11-22T07:02:06+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/nord-wppilot.webp"
+     "shot": "data/shots/2026-11-22/nord-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T06:54:30+01:00",
+     "tested_at": "2026-11-22T07:02:21+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-21/nord-polsat.webp"
+     "shot": "data/shots/2026-11-22/nord-polsat.webp"
     }
    },
    "exit": {
-    "ip": "187.15.161.x",
+    "ip": "187.15.160.x",
     "city": "Warsaw",
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 61.5
+   "speed_mbps": 45.2
   },
   {
    "id": "proton",
@@ -87,38 +89,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T06:55:04+01:00",
+     "tested_at": "2026-11-22T07:02:59+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.6,
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.7,
      "wait_seconds": 181,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-21/proton-tvpvod.webp"
+     "shot": "data/shots/2026-11-22/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T06:59:34+01:00",
+     "tested_at": "2026-11-22T07:11:03+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
-     "wait_seconds": 25,
+     "played_seconds": 60.5,
+     "wait_seconds": 30,
      "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-21/proton-player.webp"
+     "shot": "data/shots/2026-11-22/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:01:29+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-22T07:13:02+01:00",
+     "url": "https://sport.tvp.pl/96613648/knockout-boxing-night-47-kamil-szeremeta-shon-ortiz-wideo",
+     "played_seconds": 60.5,
+     "wait_seconds": 105,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/proton-tvpsport.webp"
     }
    },
    "checks": {
@@ -126,18 +129,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:05:07+01:00",
+     "tested_at": "2026-11-22T07:17:37+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/proton-wppilot.webp"
+     "shot": "data/shots/2026-11-22/proton-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:05:21+01:00",
+     "tested_at": "2026-11-22T07:17:52+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-21/proton-polsat.webp"
+     "shot": "data/shots/2026-11-22/proton-polsat.webp"
     }
    },
    "exit": {
@@ -146,7 +149,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 70.2
+   "speed_mbps": 50.3
   },
   {
    "id": "protonfree",
@@ -158,39 +161,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:06:21+01:00",
+     "tested_at": "2026-11-22T07:18:56+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
+     "kind": null,
+     "reloaded": true,
      "played_seconds": 60.7,
-     "wait_seconds": 176,
+     "wait_seconds": 181,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-21/protonfree-tvpvod.webp"
+     "shot": "data/shots/2026-11-22/protonfree-tvpvod.webp"
     },
     "player": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-21T07:16:15+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-22T07:26:54+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.7,
-     "wait_seconds": 35,
+     "wait_seconds": 37,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-21/protonfree-player.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-22/protonfree-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:18:03+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
+     "tested_at": "2026-11-22T07:28:44+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
      "played_seconds": 60.6,
-     "wait_seconds": 55,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/protonfree-tvpsport.webp"
     }
    },
    "checks": {
@@ -198,18 +201,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:20:17+01:00",
+     "tested_at": "2026-11-22T07:41:15+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/protonfree-wppilot.webp"
+     "shot": "data/shots/2026-11-22/protonfree-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:20:31+01:00",
+     "tested_at": "2026-11-22T07:41:30+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-21/protonfree-polsat.webp"
+     "shot": "data/shots/2026-11-22/protonfree-polsat.webp"
     }
    },
    "exit": {
@@ -218,7 +221,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 67.0
+   "speed_mbps": 49.8
   },
   {
    "id": "surf",
@@ -239,38 +242,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:21:11+01:00",
+     "tested_at": "2026-11-22T07:42:13+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.8,
-     "wait_seconds": 40,
-     "resolution": "1920x1080",
-     "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/expr-tvpvod.webp"
+     "reloaded": true,
+     "played_seconds": 60.8,
+     "wait_seconds": 141,
+     "resolution": "960x540",
+     "drm": false,
+     "shot": "data/shots/2026-11-22/expr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:23:06+01:00",
+     "tested_at": "2026-11-22T07:47:00+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.7,
-     "wait_seconds": 40,
+     "wait_seconds": 45,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-21/expr-player.webp"
+     "shot": "data/shots/2026-11-22/expr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:24:59+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-22T07:48:58+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 60.5,
+     "wait_seconds": 35,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/expr-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/expr-tvpsport.webp"
     }
    },
    "checks": {
@@ -278,18 +282,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:27:16+01:00",
+     "tested_at": "2026-11-22T07:51:03+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/expr-wppilot.webp"
+     "shot": "data/shots/2026-11-22/expr-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:27:30+01:00",
+     "tested_at": "2026-11-22T07:51:18+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-21/expr-polsat.webp"
+     "shot": "data/shots/2026-11-22/expr-polsat.webp"
     }
    },
    "exit": {
@@ -298,7 +302,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 74.3
+   "speed_mbps": 60.3
   },
   {
    "id": "cybr",
@@ -310,38 +314,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:28:03+01:00",
+     "tested_at": "2026-11-22T07:52:03+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.8,
-     "wait_seconds": 156,
+     "played_seconds": 60.7,
+     "wait_seconds": 95,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/cybr-tvpvod.webp"
+     "shot": "data/shots/2026-11-22/cybr-tvpvod.webp"
     },
     "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-21T07:31:52+01:00",
+     "status": "unstable",
+     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
+     "tested_at": "2026-11-22T08:00:39+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.7,
-     "wait_seconds": 40,
+     "wait_seconds": 45,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-21/cybr-player.webp"
+     "shot": "data/shots/2026-11-22/cybr-player.webp",
+     "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:33:46+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
-     "played_seconds": 60.6,
-     "wait_seconds": 30,
+     "tested_at": "2026-11-22T08:02:37+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 60.5,
+     "wait_seconds": 35,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/cybr-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/cybr-tvpsport.webp"
     }
    },
    "checks": {
@@ -349,16 +354,16 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:35:40+01:00",
+     "tested_at": "2026-11-22T08:04:38+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/cybr-wppilot.webp"
+     "shot": "data/shots/2026-11-22/cybr-wppilot.webp"
     },
     "polsat": {
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-21T07:36:18+01:00",
-     "shot": "data/shots/2026-11-21/cybr-polsat.webp",
+     "tested_at": "2026-11-22T08:05:18+01:00",
+     "shot": "data/shots/2026-11-22/cybr-polsat.webp",
      "attempts": 2
     }
    },
@@ -368,7 +373,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 82.7
+   "speed_mbps": 63.5
   },
   {
    "id": "pia",
@@ -380,35 +385,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:36:56+01:00",
+     "tested_at": "2026-11-22T08:05:58+01:00",
      "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.7,
-     "wait_seconds": 116,
+     "played_seconds": 60.6,
+     "wait_seconds": 106,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/pia-tvpvod.webp"
+     "shot": "data/shots/2026-11-22/pia-tvpvod.webp"
     },
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-21T07:45:47+01:00",
+     "tested_at": "2026-11-22T08:14:41+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
-     "shot": "data/shots/2026-11-21/pia-player.webp",
+     "shot": "data/shots/2026-11-22/pia-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-21T07:51:32+01:00",
-     "url": "https://sport.tvp.pl/96596793/aleksandar-vukovic-przed-debiutem-w-cracovii-mamy-teraz-najtrudniejsze-mecze-wideo",
-     "played_seconds": 60.6,
+     "tested_at": "2026-11-22T08:20:27+01:00",
+     "url": "https://sport.tvp.pl/96584776/jakub-blaszczykowski-dopiero-po-karierze-zaczalem-ja-doceniac-wideo",
+     "played_seconds": 60.5,
      "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-21/pia-tvpsport.webp"
+     "shot": "data/shots/2026-11-22/pia-tvpsport.webp"
     }
    },
    "checks": {
@@ -416,18 +421,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:52:54+01:00",
+     "tested_at": "2026-11-22T08:21:56+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-21/pia-wppilot.webp"
+     "shot": "data/shots/2026-11-22/pia-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-21T07:53:09+01:00",
+     "tested_at": "2026-11-22T08:22:11+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-21/pia-polsat.webp"
+     "shot": "data/shots/2026-11-22/pia-polsat.webp"
     }
    },
    "exit": {
@@ -436,7 +441,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 62.4
+   "speed_mbps": 47.4
   }
  ],
  "services": [
@@ -471,5 +476,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-21T07:53:30+01:00"
+ "finished_at": "2026-11-22T08:22:32+01:00"
 }
