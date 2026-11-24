@@ -1,6 +1,6 @@
 {
- "date": "2026-11-23",
- "started_at": "2026-11-23T06:40:03+01:00",
+ "date": "2026-11-24",
+ "started_at": "2026-11-24T01:47:06+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,38 +16,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T06:40:21+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 61.0,
-     "wait_seconds": 146,
+     "tested_at": "2026-11-24T01:47:24+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
+     "played_seconds": 60.8,
+     "wait_seconds": 191,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-24/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T06:44:02+01:00",
+     "tested_at": "2026-11-24T01:51:49+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
+     "played_seconds": 60.7,
      "wait_seconds": 40,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-23/nord-player.webp"
+     "shot": "data/shots/2026-11-24/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T06:45:56+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.9,
+     "tested_at": "2026-11-24T01:53:42+01:00",
+     "url": "https://sport.tvp.pl/96645552/natalia-bukowiecka-nominowana-w-plebiscycie-przegladu-sportowego-sylwetka-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/nord-tvpsport.webp"
     }
    },
    "checks": {
@@ -55,27 +55,27 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T06:58:09+01:00",
+     "tested_at": "2026-11-24T01:58:14+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/nord-wppilot.webp"
+     "shot": "data/shots/2026-11-24/nord-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T06:58:24+01:00",
+     "tested_at": "2026-11-24T01:58:29+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-23/nord-polsat.webp"
+     "shot": "data/shots/2026-11-24/nord-polsat.webp"
     }
    },
    "exit": {
-    "ip": "187.15.161.x",
+    "ip": "187.15.162.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS212238 Datacamp Limited"
+    "org": "AS137409 GSL Networks Pty LTD"
    },
-   "speed_mbps": 50.1
+   "speed_mbps": 48.2
   },
   {
    "id": "proton",
@@ -87,40 +87,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T06:59:01+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "kind": null,
-     "reloaded": true,
+     "tested_at": "2026-11-24T01:59:03+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
      "played_seconds": 60.7,
-     "wait_seconds": 166,
+     "wait_seconds": 180,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-23/proton-tvpvod.webp"
+     "kind": null,
+     "shot": "data/shots/2026-11-24/proton-tvpvod.webp"
     },
     "player": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-23T07:12:45+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-24T02:03:34+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
-     "wait_seconds": 30,
+     "played_seconds": 60.5,
+     "wait_seconds": 25,
      "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-23/proton-player.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-24/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:14:44+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 55,
+     "tested_at": "2026-11-24T02:05:27+01:00",
+     "url": "https://sport.tvp.pl/96645552/natalia-bukowiecka-nominowana-w-plebiscycie-przegladu-sportowego-sylwetka-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 50,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/proton-tvpsport.webp"
     }
    },
    "checks": {
@@ -128,18 +126,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:18:37+01:00",
+     "tested_at": "2026-11-24T02:09:05+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/proton-wppilot.webp"
+     "shot": "data/shots/2026-11-24/proton-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:18:51+01:00",
+     "tested_at": "2026-11-24T02:09:20+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-23/proton-polsat.webp"
+     "shot": "data/shots/2026-11-24/proton-polsat.webp"
     }
    },
    "exit": {
@@ -148,7 +146,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 55.0
+   "speed_mbps": 67.1
   },
   {
    "id": "protonfree",
@@ -158,41 +156,35 @@
    "tested": true,
    "services": {
     "tvpvod": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-23T07:19:54+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "kind": null,
+     "status": "blocked",
+     "reason": "Serwis pokazał komunikat o blokowaniu reklam",
+     "tested_at": "2026-11-24T02:16:41+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
+     "kind": "adblock",
      "reloaded": true,
-     "played_seconds": 60.8,
-     "wait_seconds": 176,
-     "resolution": "1920x1080",
-     "drm": false,
-     "shot": "data/shots/2026-11-23/protonfree-tvpvod.webp"
+     "shot": "data/shots/2026-11-24/protonfree-tvpvod.webp",
+     "attempts": 2
     },
     "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-23T07:27:57+01:00",
+     "status": "blocked",
+     "reason": "Film nie ruszył w ciągu 330 s",
+     "tested_at": "2026-11-24T02:27:38+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 41,
-     "resolution": "640x360",
-     "drm": true,
-     "kind": null,
-     "shot": "data/shots/2026-11-23/protonfree-player.webp"
+     "kind": "timeout",
+     "shot": "data/shots/2026-11-24/protonfree-player.webp",
+     "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:29:51+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 55,
+     "tested_at": "2026-11-24T02:34:09+01:00",
+     "url": "https://sport.tvp.pl/96645552/natalia-bukowiecka-nominowana-w-plebiscycie-przegladu-sportowego-sylwetka-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/protonfree-tvpsport.webp"
     }
    },
    "checks": {
@@ -200,18 +192,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:32:11+01:00",
+     "tested_at": "2026-11-24T02:37:20+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/protonfree-wppilot.webp"
+     "shot": "data/shots/2026-11-24/protonfree-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:32:26+01:00",
+     "tested_at": "2026-11-24T02:37:35+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-23/protonfree-polsat.webp"
+     "shot": "data/shots/2026-11-24/protonfree-polsat.webp"
     }
    },
    "exit": {
@@ -220,7 +212,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 55.7
+   "speed_mbps": null
   },
   {
    "id": "surf",
@@ -241,38 +233,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:33:08+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.7,
-     "wait_seconds": 20,
+     "tested_at": "2026-11-24T02:38:17+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
+     "played_seconds": 60.8,
+     "wait_seconds": 131,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/expr-tvpvod.webp"
+     "shot": "data/shots/2026-11-24/expr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:34:43+01:00",
+     "tested_at": "2026-11-24T02:41:43+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.8,
-     "wait_seconds": 56,
+     "played_seconds": 60.7,
+     "wait_seconds": 51,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-23/expr-player.webp"
+     "shot": "data/shots/2026-11-24/expr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:36:52+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 15,
+     "tested_at": "2026-11-24T02:43:53+01:00",
+     "url": "https://sport.tvp.pl/96644300/aleksandar-vukovic-widzisz-tak-zaangazowana-druzyne-i-wierzysz-wideo",
+     "played_seconds": 60.5,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/expr-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/expr-tvpsport.webp"
     }
    },
    "checks": {
@@ -280,18 +272,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:38:32+01:00",
+     "tested_at": "2026-11-24T02:51:35+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/expr-wppilot.webp"
+     "shot": "data/shots/2026-11-24/expr-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:38:47+01:00",
+     "tested_at": "2026-11-24T02:51:50+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-23/expr-polsat.webp"
+     "shot": "data/shots/2026-11-24/expr-polsat.webp"
     }
    },
    "exit": {
@@ -300,7 +292,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 64.2
+   "speed_mbps": 72.6
   },
   {
    "id": "cybr",
@@ -312,39 +304,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:39:33+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
-     "played_seconds": 60.9,
-     "wait_seconds": 157,
+     "tested_at": "2026-11-24T02:52:23+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.7,
+     "wait_seconds": 15,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-23/cybr-tvpvod.webp"
+     "shot": "data/shots/2026-11-24/cybr-tvpvod.webp"
     },
     "player": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Film nie ruszył w ciągu 330 s), druga udana",
-     "tested_at": "2026-11-23T07:49:09+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-24T02:55:33+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 46,
+     "played_seconds": 60.6,
+     "wait_seconds": 51,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-23/cybr-player.webp",
-     "attempts": 2
+     "shot": "data/shots/2026-11-24/cybr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:51:08+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 30,
+     "tested_at": "2026-11-24T02:57:44+01:00",
+     "url": "https://sport.tvp.pl/96644300/aleksandar-vukovic-widzisz-tak-zaangazowana-druzyne-i-wierzysz-wideo",
+     "played_seconds": 60.5,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/cybr-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/cybr-tvpsport.webp"
     }
    },
    "checks": {
@@ -352,16 +344,16 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T07:53:03+01:00",
+     "tested_at": "2026-11-24T02:59:13+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/cybr-wppilot.webp"
+     "shot": "data/shots/2026-11-24/cybr-wppilot.webp"
     },
     "polsat": {
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-23T07:53:42+01:00",
-     "shot": "data/shots/2026-11-23/cybr-polsat.webp",
+     "tested_at": "2026-11-24T02:59:51+01:00",
+     "shot": "data/shots/2026-11-24/cybr-polsat.webp",
      "attempts": 2
     }
    },
@@ -371,7 +363,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 65.5
+   "speed_mbps": 83.1
   },
   {
    "id": "pia",
@@ -383,35 +375,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T07:54:23+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3652,S01E3652,3548171",
+     "tested_at": "2026-11-24T03:00:29+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3653,S01E3653,3556884",
      "played_seconds": 60.7,
-     "wait_seconds": 151,
+     "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/pia-tvpvod.webp"
+     "shot": "data/shots/2026-11-24/pia-tvpvod.webp"
     },
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-23T08:03:51+01:00",
+     "tested_at": "2026-11-24T03:08:20+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
-     "shot": "data/shots/2026-11-23/pia-player.webp",
+     "shot": "data/shots/2026-11-24/pia-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-23T08:09:37+01:00",
-     "url": "https://sport.tvp.pl/96625055/trener-polakow-rozczarowany-po-inauguracji-ps-nie-tego-oczekiwalismy-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 30,
+     "tested_at": "2026-11-24T03:14:05+01:00",
+     "url": "https://sport.tvp.pl/96644300/aleksandar-vukovic-widzisz-tak-zaangazowana-druzyne-i-wierzysz-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-23/pia-tvpsport.webp"
+     "shot": "data/shots/2026-11-24/pia-tvpsport.webp"
     }
    },
    "checks": {
@@ -419,18 +411,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T08:11:31+01:00",
+     "tested_at": "2026-11-24T03:15:32+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-23/pia-wppilot.webp"
+     "shot": "data/shots/2026-11-24/pia-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-23T08:11:46+01:00",
+     "tested_at": "2026-11-24T03:15:47+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-23/pia-polsat.webp"
+     "shot": "data/shots/2026-11-24/pia-polsat.webp"
     }
    },
    "exit": {
@@ -439,7 +431,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 50.6
+   "speed_mbps": 58.5
   }
  ],
  "services": [
@@ -474,5 +466,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-23T08:12:08+01:00"
+ "finished_at": "2026-11-24T03:16:08+01:00"
 }
