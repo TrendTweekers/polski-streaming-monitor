@@ -309,6 +309,38 @@
     "player": "blocked",
     "tvpsport": "ok"
    }
+  },
+  "2026-11-25": {
+   "nord": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "proton": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "protonfree": {
+    "tvpvod": "unstable",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "expr": {
+    "tvpvod": "okr",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "cybr": {
+    "tvpvod": "ok",
+    "player": "ok",
+    "tvpsport": "ok"
+   },
+   "pia": {
+    "tvpvod": "ok",
+    "player": "blocked",
+    "tvpsport": "ok"
+   }
   }
  },
  "checks": {
@@ -435,6 +467,32 @@
    }
   },
   "2026-11-24": {
+   "nord": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "proton": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "protonfree": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "expr": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   },
+   "cybr": {
+    "wppilot": "ok",
+    "polsat": "none"
+   },
+   "pia": {
+    "wppilot": "ok",
+    "polsat": "ok"
+   }
+  },
+  "2026-11-25": {
    "nord": {
     "wppilot": "ok",
     "polsat": "ok"
