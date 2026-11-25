@@ -530,6 +530,7 @@ AFF = {
     "surf": "https://www.dpbolvw.net/click-101925411-15438560",  # CJ advertiser 6282055, text link "Get Surfshark VPN right away" (home page)
     "proton": "https://www.dpbolvw.net/click-101925411-15834536",  # CJ advertiser 5227916, text link "Proton VPN - Special Offer" (Polish offer page)
     "expr": "https://go.expressvpn.com/c/8234307/1636009/16063",
+    "pia": "https://www.dpbolvw.net/click-101925411-15559960",  # CJ advertiser 5483733, approved 25.11.2026 via Ana (Kape). Polish text link "Save now- 82% off 2 years plan + 2 months for free"
     "cybr": "https://www.dpbolvw.net/click-101925411-17379867",  # CJ advertiser 4996371, approved 19.11.2026 via Ana (Kape). "Black Friday & Cyber Monday 2026" page; after the offers end use 15735261 (Evergreen, home page)  # Impact, link from Ana 2026-11-19, lands on the Polish page (program 16063); page tag goes in subId1
 }
 AFF_NAMES = {"surf": "Surfshark", "nord": "NordVPN", "proton": "Proton VPN", "cybr": "CyberGhost", "expr": "ExpressVPN", "pia": "PIA"}
