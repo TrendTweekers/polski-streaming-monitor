@@ -1,6 +1,6 @@
 {
- "date": "2026-11-25",
- "started_at": "2026-11-25T06:39:57+01:00",
+ "date": "2026-11-26",
+ "started_at": "2026-11-26T06:39:55+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,38 +16,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:40:12+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "played_seconds": 61.0,
-     "wait_seconds": 181,
+     "tested_at": "2026-11-26T06:40:13+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3655,S01E3655,3562716",
+     "played_seconds": 60.8,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-26/nord-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:44:26+01:00",
+     "tested_at": "2026-11-26T06:44:33+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 35,
+     "played_seconds": 60.7,
+     "wait_seconds": 40,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-25/nord-player.webp"
+     "shot": "data/shots/2026-11-26/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:46:15+01:00",
-     "url": "https://sport.tvp.pl/96666108/to-byl-rok-mai-chwalinskiej-wideo",
-     "played_seconds": 60.9,
+     "tested_at": "2026-11-26T06:46:27+01:00",
+     "url": "https://sport.tvp.pl/96689024/luis-enrique-po-remisie-z-roma-byl-to-nasz-najtrudniejszy-mecz-w-sezonie-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-26/nord-tvpsport.webp"
     }
    },
    "checks": {
@@ -55,18 +55,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T06:50:49+01:00",
+     "tested_at": "2026-11-26T06:51:07+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-25/nord-wppilot.webp"
+     "shot": "data/shots/2026-11-26/nord-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T06:51:04+01:00",
+     "tested_at": "2026-11-26T06:51:22+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-25/nord-polsat.webp"
+     "shot": "data/shots/2026-11-26/nord-polsat.webp"
     }
    },
    "exit": {
@@ -75,7 +75,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 68.5
+   "speed_mbps": 47.3
   },
   {
    "id": "proton",
@@ -87,38 +87,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:51:37+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "played_seconds": 60.9,
-     "wait_seconds": 181,
+     "tested_at": "2026-11-26T06:51:59+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3655,S01E3655,3562716",
+     "played_seconds": 60.6,
+     "wait_seconds": 186,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/proton-tvpvod.webp"
+     "shot": "data/shots/2026-11-26/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:56:08+01:00",
+     "tested_at": "2026-11-26T06:56:35+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.7,
-     "wait_seconds": 25,
+     "played_seconds": 60.5,
+     "wait_seconds": 30,
      "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-25/proton-player.webp"
+     "shot": "data/shots/2026-11-26/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T06:58:01+01:00",
-     "url": "https://sport.tvp.pl/96666108/to-byl-rok-mai-chwalinskiej-wideo",
-     "played_seconds": 60.7,
+     "tested_at": "2026-11-26T06:58:36+01:00",
+     "url": "https://sport.tvp.pl/96689024/luis-enrique-po-remisie-z-roma-byl-to-nasz-najtrudniejszy-mecz-w-sezonie-wideo",
+     "played_seconds": 60.5,
      "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-26/proton-tvpsport.webp"
     }
    },
    "checks": {
@@ -126,18 +126,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T07:01:39+01:00",
+     "tested_at": "2026-11-26T07:02:28+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-25/proton-wppilot.webp"
+     "shot": "data/shots/2026-11-26/proton-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T07:01:58+01:00",
+     "tested_at": "2026-11-26T07:02:43+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-25/proton-polsat.webp"
+     "shot": "data/shots/2026-11-26/proton-polsat.webp"
     }
    },
    "exit": {
@@ -146,7 +146,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 78.1
+   "speed_mbps": 53.9
   },
   {
    "id": "protonfree",
@@ -156,41 +156,35 @@
    "tested": true,
    "services": {
     "tvpvod": {
-     "status": "unstable",
-     "reason": "Pierwsza próba nieudana (Serwis pokazał błąd odtwarzania), druga udana",
-     "tested_at": "2026-11-25T07:10:03+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "played_seconds": 61.0,
-     "wait_seconds": 181,
-     "resolution": "1920x1080",
-     "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-25/protonfree-tvpvod.webp",
+     "status": "blocked",
+     "reason": "Serwis pokazał komunikat o blokowaniu reklam",
+     "tested_at": "2026-11-26T07:10:05+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3655,S01E3655,3562716",
+     "kind": "adblock",
+     "reloaded": true,
+     "shot": "data/shots/2026-11-26/protonfree-tvpvod.webp",
      "attempts": 2
     },
     "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-25T07:14:18+01:00",
+     "status": "blocked",
+     "reason": "Film nie ruszył w ciągu 330 s",
+     "tested_at": "2026-11-26T07:21:02+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 35,
-     "resolution": "640x360",
-     "drm": true,
-     "kind": null,
-     "shot": "data/shots/2026-11-25/protonfree-player.webp"
+     "kind": "timeout",
+     "shot": "data/shots/2026-11-26/protonfree-player.webp",
+     "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:16:05+01:00",
-     "url": "https://sport.tvp.pl/96666070/liga-mistrzow-paris-saint-germain-powalczy-o-kolejna-wygrana-raport-z-paryza-roberta-podolinskiego-i-huberta-bugaja-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-26T07:27:33+01:00",
+     "url": "https://sport.tvp.pl/96689024/luis-enrique-po-remisie-z-roma-byl-to-nasz-najtrudniejszy-mecz-w-sezonie-wideo",
+     "played_seconds": 60.4,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-26/protonfree-tvpsport.webp"
     }
    },
    "checks": {
@@ -198,18 +192,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T07:24:28+01:00",
+     "tested_at": "2026-11-26T07:30:44+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-25/protonfree-wppilot.webp"
+     "shot": "data/shots/2026-11-26/protonfree-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T07:24:48+01:00",
+     "tested_at": "2026-11-26T07:30:59+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-25/protonfree-polsat.webp"
+     "shot": "data/shots/2026-11-26/protonfree-polsat.webp"
     }
    },
    "exit": {
@@ -218,7 +212,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 79.4
+   "speed_mbps": null
   },
   {
    "id": "surf",
@@ -234,72 +228,10 @@
    "name": "ExpressVPN",
    "plan": "plan płatny",
    "server": "ExpressVPN Polska",
-   "tested": true,
-   "services": {
-    "tvpvod": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-25T07:25:27+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "kind": null,
-     "reloaded": true,
-     "played_seconds": 61.0,
-     "wait_seconds": 15,
-     "resolution": "1920x1080",
-     "drm": false,
-     "shot": "data/shots/2026-11-25/expr-tvpvod.webp"
-    },
-    "player": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-25T07:29:18+01:00",
-     "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.9,
-     "wait_seconds": 41,
-     "resolution": "640x360",
-     "drm": true,
-     "kind": null,
-     "shot": "data/shots/2026-11-25/expr-player.webp"
-    },
-    "tvpsport": {
-     "status": "ok",
-     "reason": null,
-     "tested_at": "2026-11-25T07:31:11+01:00",
-     "url": "https://sport.tvp.pl/96666070/liga-mistrzow-paris-saint-germain-powalczy-o-kolejna-wygrana-raport-z-paryza-roberta-podolinskiego-i-huberta-bugaja-wideo",
-     "played_seconds": 60.8,
-     "wait_seconds": 5,
-     "resolution": "1920x1080",
-     "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-25/expr-tvpsport.webp"
-    }
-   },
-   "checks": {
-    "wppilot": {
-     "status": "ok",
-     "reason": null,
-     "kind": null,
-     "tested_at": "2026-11-25T07:32:40+01:00",
-     "country": "PL",
-     "shot": "data/shots/2026-11-25/expr-wppilot.webp"
-    },
-    "polsat": {
-     "status": "ok",
-     "reason": null,
-     "kind": null,
-     "tested_at": "2026-11-25T07:32:54+01:00",
-     "country": "PL",
-     "vpn_flag": true,
-     "shot": "data/shots/2026-11-25/expr-polsat.webp"
-    }
-   },
-   "exit": {
-    "ip": "188.212.135.x",
-    "city": "Warsaw",
-    "country": "PL",
-    "org": "AS206092 F.N.S. HOLDINGS LIMITED"
-   },
-   "speed_mbps": 85.2
+   "tested": false,
+   "services": {},
+   "checks": {},
+   "note": "Adres IP serwera VPN nie jest polski"
   },
   {
    "id": "cybr",
@@ -311,38 +243,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:33:27+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "played_seconds": 61.0,
-     "wait_seconds": 121,
+     "tested_at": "2026-11-26T07:32:10+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3655,S01E3655,3562716",
+     "played_seconds": 60.6,
+     "wait_seconds": 171,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/cybr-tvpvod.webp"
+     "shot": "data/shots/2026-11-26/cybr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:36:42+01:00",
+     "tested_at": "2026-11-26T07:36:16+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.8,
-     "wait_seconds": 40,
+     "played_seconds": 60.7,
+     "wait_seconds": 55,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-25/cybr-player.webp"
+     "shot": "data/shots/2026-11-26/cybr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:38:35+01:00",
-     "url": "https://sport.tvp.pl/96666070/liga-mistrzow-paris-saint-germain-powalczy-o-kolejna-wygrana-raport-z-paryza-roberta-podolinskiego-i-huberta-bugaja-wideo",
-     "played_seconds": 60.8,
+     "tested_at": "2026-11-26T07:38:24+01:00",
+     "url": "https://sport.tvp.pl/96689024/luis-enrique-po-remisie-z-roma-byl-to-nasz-najtrudniejszy-mecz-w-sezonie-wideo",
+     "played_seconds": 60.6,
      "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/cybr-tvpsport.webp"
+     "shot": "data/shots/2026-11-26/cybr-tvpsport.webp"
     }
    },
    "checks": {
@@ -350,16 +282,16 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T07:39:59+01:00",
+     "tested_at": "2026-11-26T07:39:53+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-25/cybr-wppilot.webp"
+     "shot": "data/shots/2026-11-26/cybr-wppilot.webp"
     },
     "polsat": {
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-25T07:40:37+01:00",
-     "shot": "data/shots/2026-11-25/cybr-polsat.webp",
+     "tested_at": "2026-11-26T07:40:33+01:00",
+     "shot": "data/shots/2026-11-26/cybr-polsat.webp",
      "attempts": 2
     }
    },
@@ -369,7 +301,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 82.8
+   "speed_mbps": 60.8
   },
   {
    "id": "pia",
@@ -381,35 +313,35 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:41:13+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3654,S01E3654,3559715",
-     "played_seconds": 60.7,
-     "wait_seconds": 90,
+     "tested_at": "2026-11-26T07:41:13+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3655,S01E3655,3562716",
+     "played_seconds": 60.6,
+     "wait_seconds": 101,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/pia-tvpvod.webp"
+     "shot": "data/shots/2026-11-26/pia-tvpvod.webp"
     },
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-25T07:49:39+01:00",
+     "tested_at": "2026-11-26T07:49:50+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
-     "shot": "data/shots/2026-11-25/pia-player.webp",
+     "shot": "data/shots/2026-11-26/pia-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-25T07:55:23+01:00",
-     "url": "https://sport.tvp.pl/96666108/to-byl-rok-mai-chwalinskiej-wideo",
-     "played_seconds": 60.7,
-     "wait_seconds": 5,
+     "tested_at": "2026-11-26T07:55:35+01:00",
+     "url": "https://sport.tvp.pl/96689024/luis-enrique-po-remisie-z-roma-byl-to-nasz-najtrudniejszy-mecz-w-sezonie-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 35,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-25/pia-tvpsport.webp"
+     "shot": "data/shots/2026-11-26/pia-tvpsport.webp"
     }
    },
    "checks": {
@@ -417,18 +349,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T08:02:47+01:00",
+     "tested_at": "2026-11-26T07:57:34+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-25/pia-wppilot.webp"
+     "shot": "data/shots/2026-11-26/pia-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-25T08:03:01+01:00",
+     "tested_at": "2026-11-26T07:57:48+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-25/pia-polsat.webp"
+     "shot": "data/shots/2026-11-26/pia-polsat.webp"
     }
    },
    "exit": {
@@ -437,7 +369,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 71.8
+   "speed_mbps": 49.8
   }
  ],
  "services": [
@@ -472,5 +404,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-25T08:03:22+01:00"
+ "finished_at": "2026-11-26T07:58:10+01:00"
 }
