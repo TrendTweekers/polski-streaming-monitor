@@ -494,7 +494,7 @@ FACTS = [
      "https://protonvpn.com/pricing", "protonvpn.com/pricing", ""),
     ("cybr", "CyberGhost", "https://www.cyberghostvpn.com", "Tak, 1 lokalizacja", "45 dni (14 dni w planie miesięcznym)", "7", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.cyberghostvpn.com/vpn-server", "cyberghostvpn.com/vpn-server", ""),
-    ("pia", "PIA", "https://www.privateinternetaccess.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV",
+    ("pia", "PIA", "https://www.privateinternetaccess.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Bez limitu", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.privateinternetaccess.com/vpn-server", "privateinternetaccess.com/vpn-server", ""),
     ("expr", "ExpressVPN", "https://www.expressvpn.com", "Tak, Warszawa", "30 dni (dla nowych klientów)", "Do 14", "Windows, macOS, Linux, Android, iOS, Android TV, Apple TV, Fire TV",
      "https://www.expressvpn.com/vpn-server/poland-vpn", "expressvpn.com/vpn-server/poland-vpn", ""),
@@ -503,7 +503,7 @@ FACTS = [
 # Ranking: points for published facts only (no test results, no commission). Columns:
 # serwery w Polsce, cena, urządzenia, zwrot, aplikacje TV, płatność w zł
 REFUND = {f[0]: re.match(r"\d+ dni", f[4]).group(0) for f in FACTS}
-POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 3, 1, 3, 3, 0), "expr": (1, 2, 3, 2, 3, 0), "pia": (1, 3, 3, 2, 2, 0)}  # 19.11.2026: Black Friday prices moved both one price step up
+POINTS = {"surf": (1, 3, 3, 2, 3, 1), "nord": (3, 2, 2, 2, 3, 1), "proton": (1, 3, 2, 2, 3, 1), "cybr": (1, 3, 1, 3, 3, 0), "expr": (1, 2, 3, 2, 3, 0), "pia": (1, 3, 3, 2, 3, 0)}  # 19.11.2026: Black Friday prices moved both one price step up
 WEIGHTS = (2, 1, 1, 1, 1, 1)  # servers in Poland count double: the most important fact for Polish TV
 MAXPTS = 19
 
@@ -512,7 +512,7 @@ def wpts(pid):
     return [x * w for x, w in zip(POINTS[pid], WEIGHTS)]
 
 
-RANK = {pid: i + 1 for i, pid in enumerate(["nord", "surf", "proton", "pia", "cybr", "expr"])}  # ties (12 points): cheaper plan first
+RANK = {pid: i + 1 for i, pid in enumerate(["nord", "surf", "proton", "pia", "cybr", "expr"])}  # ties (proton/pia 13, cybr/expr 12): cheaper plan first
 assert sorted(RANK, key=lambda p: -sum(wpts(p)))[:3] == ["nord", "surf", "proton"]
 EUR = "4,3895 zł (kurs średni NBP z 10.11.2026)"
 
@@ -664,8 +664,8 @@ PROFILE = {
                  cons=["Cena tylko w euro", "Zwrot w 30 dni tylko dla nowych klientów"]),
     "pia": dict(tag="Private Internet Access: bez limitu urządzeń", badge="", price="ok. 7,42 zł", unit="za miesiąc (1,69 €)",
                 terms="67,60 € za pierwsze 40 miesięcy (3 lata i 4 miesiące), potem 67,60 € co 3 lata. Cena z oferty Black Friday, sprawdzona 19.11.2026. Plan na 1 miesiąc: 11,69 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
-                pros=["Bez limitu urządzeń", "Odnowienie w tej samej cenie co 3 lata", "Aplikacje na Android TV i Apple TV"],
-                cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro", "Na stronie dostawcy nie znaleźliśmy aplikacji na Fire TV"]),
+                pros=["Bez limitu urządzeń", "Odnowienie w tej samej cenie co 3 lata", "Aplikacje na Android TV, Apple TV i Fire TV"],
+                cons=["Jedna lokalizacja w Polsce", "Cena tylko w euro"]),
     "cybr": dict(tag="Najdłuższy zwrot pieniędzy: 45 dni", badge="", price="ok. 8,74 zł", unit="za miesiąc (1,99 €)",
                  terms="55,72 € za pierwsze 28 miesięcy. Cena z oferty Black Friday, sprawdzona 19.11.2026. Plan na 1 miesiąc: 11,99 €. Przeliczenie na złote po kursie NBP z 10.11.2026 (4,3895 zł). Bank może policzyć inaczej.",
                  pros=["45 dni na zwrot (14 dni w planie miesięcznym)", "7 urządzeń jednocześnie", "Jest plan na jeden miesiąc"],
@@ -1087,9 +1087,9 @@ DEVICES = """<section class="devsec"><div class="wrap">
     <h2>Na komputerze, telefonie i telewizorze</h2>
     <p>Wszyscy dostawcy z rankingu mają aplikacje na Windows, macOS, Linux, Android i iOS oraz na trzy główne platformy telewizyjne.</p>
     <ul class="devlist">
-      <li><b>Android TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost</span></li>
-      <li><b>Apple TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost</span></li>
-      <li><b>Fire TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost</span></li>
+      <li><b>Android TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost, PIA</span></li>
+      <li><b>Apple TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost, PIA</span></li>
+      <li><b>Fire TV</b><span>Proton VPN, NordVPN, Surfshark, ExpressVPN, CyberGhost, PIA</span></li>
     </ul>
     <p class="muted small">Według stron dostawców, sprawdzone """ + CHECKED + """.</p>
   </div>
@@ -2068,6 +2068,7 @@ PAGES["/jak-testujemy"] = ("Jak testujemy VPN z polskimi serwisami | Polski Stre
 <ul>
   <li><b>19.11.2026:</b> nowe ceny Black Friday. CyberGhost (1,99 €) i ExpressVPN (2,39 €) dostały po jednym punkcie więcej za cenę i mają teraz równo po 12 punktów. Przy równej liczbie punktów wyżej jest tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
   <li><b>20.11.2026:</b> do rankingu i codziennego testu dochodzi PIA (Private Internet Access, konto testowe od dostawcy). Ma 12 punktów, tyle co CyberGhost i ExpressVPN, i jest przed nimi, bo ma tańszy plan. Dopisaliśmy regułę: 2 punkty za aplikacje na dwie z trzech platform telewizyjnych.</li>
+  <li><b>27.11.2026:</b> PIA ma aplikację na Fire TV w Amazon Appstore. Wcześniej jej nie znaleźliśmy. PIA dostaje 3 punkty za aplikacje na telewizor i ma teraz 13 punktów, tyle co Proton VPN. Proton VPN jest wyżej, bo ma tańszy plan. Kolejność w rankingu się nie zmieniła.</li>
   <li><b>20.11.2026:</b> do codziennego testu dochodzi CyberGhost (konto testowe od dostawcy, serwer w Polsce, połączenie OpenVPN).</li>
   <li><b>19.11.2026:</b> jednorazowy test kanałów na żywo w TVP VOD (TVP 1, TVP 2, TVP Info) z USA, bez VPN i przez NordVPN. Opis jest na stronie <a href="/tvp-na-zywo-za-granica">TVP 1 i TVP 2 na żywo za granicą</a>. Nie jest to część codziennego testu.</li>
   <li><b>15.11.2026:</b> jedno odświeżenie strony po błędzie odtwarzacza i dopisek „po odświeżeniu” dla płatnych planów.</li>
