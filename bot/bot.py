@@ -240,9 +240,13 @@ def start_playback(page, svc):
                 pass
         return
     loc = page.locator("a,button").filter(has_text=re.compile(svc["play"], re.I))
-    cands = [e for e in loc.all() if e.is_visible() and (e.bounding_box() or {}).get("y", 0) > 100]
+    # "Oglądaj na TV" opens the page for pairing a TV, not the video: never click it
+    cands = [e for e in loc.all() if e.is_visible() and (e.bounding_box() or {}).get("y", 0) > 100
+             and "zaloguj" not in (e.get_attribute("href") or "") and not re.search(r"na tv", e.inner_text(), re.I)]
     if cands:
         cands[0].click(timeout=8000)
+        return True
+    return False
 
 
 def long_enough(page):
@@ -283,7 +287,13 @@ def test_service(browser, svc, shot_path):
             page.wait_for_timeout(6000)
             click_first(page, CONSENT)
             page.wait_for_timeout(2500)
-            start_playback(page, svc)
+            clicked = start_playback(page, svc)
+            if clicked is False and not svc.get("listing"):
+                try:  # no play button: Player shows only a log-in button to this VPN, other VPNs see "Oglądaj"
+                    if page.get_by_role("button", name=re.compile(r"^\s*zaloguj się\s*$", re.I)).first.is_visible():
+                        res.update(status="blocked", reason="Serwis pokazał tylko przycisk logowania, bez przycisku odtwarzania", kind="login_wall")
+                except Exception:
+                    pass
             if not svc.get("listing"):
                 break
             t_clip = time.time()
