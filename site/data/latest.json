@@ -1,6 +1,6 @@
 {
- "date": "2026-11-27",
- "started_at": "2026-11-27T06:39:55+01:00",
+ "date": "2026-11-28",
+ "started_at": "2026-11-28T06:40:13+01:00",
  "runner": {
   "country": "US"
  },
@@ -16,35 +16,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T06:40:10+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "played_seconds": 60.7,
-     "wait_seconds": 181,
+     "tested_at": "2026-11-28T06:40:35+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "played_seconds": 60.8,
+     "wait_seconds": 182,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/nord-tvpvod.webp"
+     "shot": "data/shots/2026-11-28/nord-tvpvod.webp"
     },
     "player": {
-     "status": "blocked",
-     "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-27T06:50:07+01:00",
+     "status": "ok",
+     "reason": null,
+     "tested_at": "2026-11-28T06:44:51+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "kind": "timeout",
-     "shot": "data/shots/2026-11-27/nord-player.webp",
-     "attempts": 2
+     "played_seconds": 60.7,
+     "wait_seconds": 40,
+     "resolution": "640x360",
+     "drm": true,
+     "kind": null,
+     "shot": "data/shots/2026-11-28/nord-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T06:55:52+01:00",
-     "url": "https://sport.tvp.pl/96709760/tomasz-fornal-nominowany-w-plebiscycie-przegladu-sportowego-sylwetka-wideo",
-     "played_seconds": 60.5,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-28T06:46:45+01:00",
+     "url": "https://sport.tvp.pl/96749690/andrzej-pluta-motywacja-jest-wielka-bo-nie-ma-wiekszej-imprezy-od-ms-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 40,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/nord-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/nord-tvpsport.webp"
     }
    },
    "checks": {
@@ -52,27 +55,27 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:00:18+01:00",
+     "tested_at": "2026-11-28T06:51:01+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/nord-wppilot.webp"
+     "shot": "data/shots/2026-11-28/nord-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:00:32+01:00",
+     "tested_at": "2026-11-28T06:51:16+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-27/nord-polsat.webp"
+     "shot": "data/shots/2026-11-28/nord-polsat.webp"
     }
    },
    "exit": {
-    "ip": "187.15.162.x",
+    "ip": "187.15.161.x",
     "city": "Warsaw",
     "country": "PL",
-    "org": "AS137409 GSL Networks Pty LTD"
+    "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 64.6
+   "speed_mbps": 43.9
   },
   {
    "id": "proton",
@@ -84,38 +87,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:01:07+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "played_seconds": 60.5,
-     "wait_seconds": 161,
+     "tested_at": "2026-11-28T06:51:55+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.6,
+     "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-27/proton-tvpvod.webp"
+     "shot": "data/shots/2026-11-28/proton-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:05:17+01:00",
+     "tested_at": "2026-11-28T06:57:24+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "played_seconds": 60.5,
-     "wait_seconds": 25,
+     "wait_seconds": 30,
      "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-27/proton-player.webp"
+     "shot": "data/shots/2026-11-28/proton-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:07:10+01:00",
-     "url": "https://sport.tvp.pl/96709610/50-lat-od-premiery-filmu-rocky-to-kanon-wideo",
+     "tested_at": "2026-11-28T06:59:23+01:00",
+     "url": "https://sport.tvp.pl/96749690/andrzej-pluta-motywacja-jest-wielka-bo-nie-ma-wiekszej-imprezy-od-ms-wideo",
      "played_seconds": 60.5,
-     "wait_seconds": 55,
+     "wait_seconds": 10,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/proton-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/proton-tvpsport.webp"
     }
    },
    "checks": {
@@ -123,18 +127,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:15:16+01:00",
+     "tested_at": "2026-11-28T07:02:39+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/proton-wppilot.webp"
+     "shot": "data/shots/2026-11-28/proton-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:15:31+01:00",
+     "tested_at": "2026-11-28T07:02:54+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-27/proton-polsat.webp"
+     "shot": "data/shots/2026-11-28/proton-polsat.webp"
     }
    },
    "exit": {
@@ -143,7 +147,7 @@
     "country": "PL",
     "org": "AS208172 Proton AG"
    },
-   "speed_mbps": 68.4
+   "speed_mbps": 45.5
   },
   {
    "id": "protonfree",
@@ -155,38 +159,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:16:31+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "played_seconds": 60.5,
-     "wait_seconds": 181,
+     "tested_at": "2026-11-28T07:03:41+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.7,
+     "wait_seconds": 146,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-27/protonfree-tvpvod.webp"
+     "shot": "data/shots/2026-11-28/protonfree-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:20:46+01:00",
+     "tested_at": "2026-11-28T07:10:01+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
-     "wait_seconds": 40,
-     "resolution": "640x360",
+     "played_seconds": 60.5,
+     "wait_seconds": 30,
+     "resolution": "960x540",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-27/protonfree-player.webp"
+     "shot": "data/shots/2026-11-28/protonfree-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:22:38+01:00",
-     "url": "https://sport.tvp.pl/96709760/tomasz-fornal-nominowany-w-plebiscycie-przegladu-sportowego-sylwetka-wideo",
-     "played_seconds": 60.5,
-     "wait_seconds": 55,
+     "tested_at": "2026-11-28T07:12:00+01:00",
+     "url": "https://sport.tvp.pl/96749690/andrzej-pluta-motywacja-jest-wielka-bo-nie-ma-wiekszej-imprezy-od-ms-wideo",
+     "played_seconds": 60.6,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/protonfree-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/protonfree-tvpsport.webp"
     }
    },
    "checks": {
@@ -194,18 +199,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:31:18+01:00",
+     "tested_at": "2026-11-28T07:15:11+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/protonfree-wppilot.webp"
+     "shot": "data/shots/2026-11-28/protonfree-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:31:33+01:00",
+     "tested_at": "2026-11-28T07:15:25+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-27/protonfree-polsat.webp"
+     "shot": "data/shots/2026-11-28/protonfree-polsat.webp"
     }
    },
    "exit": {
@@ -214,7 +219,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 67.8
+   "speed_mbps": 50.6
   },
   {
    "id": "surf",
@@ -235,39 +240,38 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:32:18+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "kind": null,
-     "reloaded": true,
-     "played_seconds": 60.6,
-     "wait_seconds": 60,
+     "tested_at": "2026-11-28T07:16:10+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "played_seconds": 60.8,
+     "wait_seconds": 41,
      "resolution": "1920x1080",
      "drm": false,
-     "shot": "data/shots/2026-11-27/expr-tvpvod.webp"
+     "kind": null,
+     "shot": "data/shots/2026-11-28/expr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:37:24+01:00",
+     "tested_at": "2026-11-28T07:18:08+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
-     "wait_seconds": 40,
+     "played_seconds": 60.7,
+     "wait_seconds": 55,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-27/expr-player.webp"
+     "shot": "data/shots/2026-11-28/expr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:39:17+01:00",
-     "url": "https://sport.tvp.pl/96709610/50-lat-od-premiery-filmu-rocky-to-kanon-wideo",
-     "played_seconds": 60.5,
+     "tested_at": "2026-11-28T07:20:23+01:00",
+     "url": "https://sport.tvp.pl/96749550/mateusz-ponitka-ciezko-zapanowac-nad-emocjami-gdy-wiesz-o-awansie-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/expr-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/expr-tvpsport.webp"
     }
    },
    "checks": {
@@ -275,18 +279,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:46:38+01:00",
+     "tested_at": "2026-11-28T07:28:03+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/expr-wppilot.webp"
+     "shot": "data/shots/2026-11-28/expr-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:46:53+01:00",
+     "tested_at": "2026-11-28T07:28:18+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-27/expr-polsat.webp"
+     "shot": "data/shots/2026-11-28/expr-polsat.webp"
     }
    },
    "exit": {
@@ -295,7 +299,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 68.7
+   "speed_mbps": 63.8
   },
   {
    "id": "cybr",
@@ -307,38 +311,39 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:47:26+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "played_seconds": 60.6,
-     "wait_seconds": 105,
+     "tested_at": "2026-11-28T07:28:55+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.8,
+     "wait_seconds": 95,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-27/cybr-tvpvod.webp"
+     "shot": "data/shots/2026-11-28/cybr-tvpvod.webp"
     },
     "player": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:50:25+01:00",
+     "tested_at": "2026-11-28T07:33:02+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
-     "played_seconds": 60.6,
+     "played_seconds": 60.7,
      "wait_seconds": 40,
      "resolution": "640x360",
      "drm": true,
      "kind": null,
-     "shot": "data/shots/2026-11-27/cybr-player.webp"
+     "shot": "data/shots/2026-11-28/cybr-player.webp"
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:52:18+01:00",
-     "url": "https://sport.tvp.pl/96709610/50-lat-od-premiery-filmu-rocky-to-kanon-wideo",
-     "played_seconds": 60.5,
-     "wait_seconds": 50,
+     "tested_at": "2026-11-28T07:35:02+01:00",
+     "url": "https://sport.tvp.pl/96749690/andrzej-pluta-motywacja-jest-wielka-bo-nie-ma-wiekszej-imprezy-od-ms-wideo",
+     "played_seconds": 60.7,
+     "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/cybr-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/cybr-tvpsport.webp"
     }
    },
    "checks": {
@@ -346,16 +351,16 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T07:54:32+01:00",
+     "tested_at": "2026-11-28T07:44:32+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/cybr-wppilot.webp"
+     "shot": "data/shots/2026-11-28/cybr-wppilot.webp"
     },
     "polsat": {
      "status": "none",
      "reason": "Serwis nie podał lokalizacji",
      "kind": "bot",
-     "tested_at": "2026-11-27T07:55:10+01:00",
-     "shot": "data/shots/2026-11-27/cybr-polsat.webp",
+     "tested_at": "2026-11-28T07:45:13+01:00",
+     "shot": "data/shots/2026-11-28/cybr-polsat.webp",
      "attempts": 2
     }
    },
@@ -365,7 +370,7 @@
     "country": "PL",
     "org": "AS212238 Datacamp Limited"
    },
-   "speed_mbps": 89.8
+   "speed_mbps": 61.0
   },
   {
    "id": "pia",
@@ -377,35 +382,36 @@
     "tvpvod": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T07:55:47+01:00",
-     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3656,S01E3656,3565530",
-     "played_seconds": 60.5,
+     "tested_at": "2026-11-28T07:45:54+01:00",
+     "url": "https://vod.tvp.pl/programy,88/jeden-z-dziesieciu-odcinki,274174/odcinek-3657,S01E3657,3568187",
+     "kind": null,
+     "reloaded": true,
+     "played_seconds": 60.6,
      "wait_seconds": 55,
      "resolution": "1920x1080",
      "drm": false,
-     "kind": null,
-     "shot": "data/shots/2026-11-27/pia-tvpvod.webp"
+     "shot": "data/shots/2026-11-28/pia-tvpvod.webp"
     },
     "player": {
      "status": "blocked",
      "reason": "Film nie ruszył w ciągu 330 s",
-     "tested_at": "2026-11-27T08:03:37+01:00",
+     "tested_at": "2026-11-28T07:55:28+01:00",
      "url": "https://player.pl/programy-online/fakty-odcinki,516",
      "kind": "timeout",
-     "shot": "data/shots/2026-11-27/pia-player.webp",
+     "shot": "data/shots/2026-11-28/pia-player.webp",
      "attempts": 2
     },
     "tvpsport": {
      "status": "ok",
      "reason": null,
-     "tested_at": "2026-11-27T08:09:22+01:00",
-     "url": "https://sport.tvp.pl/96709610/50-lat-od-premiery-filmu-rocky-to-kanon-wideo",
-     "played_seconds": 60.5,
+     "tested_at": "2026-11-28T08:01:13+01:00",
+     "url": "https://sport.tvp.pl/96749690/andrzej-pluta-motywacja-jest-wielka-bo-nie-ma-wiekszej-imprezy-od-ms-wideo",
+     "played_seconds": 60.7,
      "wait_seconds": 5,
      "resolution": "1920x1080",
      "drm": false,
      "kind": null,
-     "shot": "data/shots/2026-11-27/pia-tvpsport.webp"
+     "shot": "data/shots/2026-11-28/pia-tvpsport.webp"
     }
    },
    "checks": {
@@ -413,18 +419,18 @@
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T08:10:49+01:00",
+     "tested_at": "2026-11-28T08:02:41+01:00",
      "country": "PL",
-     "shot": "data/shots/2026-11-27/pia-wppilot.webp"
+     "shot": "data/shots/2026-11-28/pia-wppilot.webp"
     },
     "polsat": {
      "status": "ok",
      "reason": null,
      "kind": null,
-     "tested_at": "2026-11-27T08:11:04+01:00",
+     "tested_at": "2026-11-28T08:02:56+01:00",
      "country": "PL",
      "vpn_flag": true,
-     "shot": "data/shots/2026-11-27/pia-polsat.webp"
+     "shot": "data/shots/2026-11-28/pia-polsat.webp"
     }
    },
    "exit": {
@@ -433,7 +439,7 @@
     "country": "PL",
     "org": "AS206092 F.N.S. HOLDINGS LIMITED"
    },
-   "speed_mbps": 59.3
+   "speed_mbps": 47.8
   }
  ],
  "services": [
@@ -468,5 +474,5 @@
    "name": "Polsat Box Go"
   }
  ],
- "finished_at": "2026-11-27T08:11:26+01:00"
+ "finished_at": "2026-11-28T08:03:18+01:00"
 }
